@@ -1,0 +1,104 @@
+{if condition="input('param.hisi_iframe') || cookie('hisi_iframe')"}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$hisiCurMenu['title']} -  Powered by {:config('hisiphp.name')}</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="__PUBLIC_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/theme.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}" media="all">
+    <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    {$hisiHead|raw}
+</head>
+<body class="hisi-theme-{:cookie('hisi_admin_theme')} pb50">
+{else /}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{if condition="$hisiCurMenu['url'] eq 'system/index/index'"}管理控制台{else /}{$hisiCurMenu['title']}{/if} -  Powered by {:config('hisiphp.name')}</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="__PUBLIC_JS__/layui/css/layui.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/theme.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}" media="all">
+    <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    {$hisiHead|raw}
+</head>
+<body class="layui-layout-body hisi-theme-{:cookie('hisi_admin_theme')}">
+{php}
+$ca = strtolower(request()->controller().'/'.request()->action());
+{/php}
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" style="z-index:999!important;">
+        <div class="fl header-logo">后台管理中心</div>
+        <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-shouqicaidan" id="foldSwitch"></a></div>
+        <ul class="layui-nav fl nobg main-nav">
+            {volist name="hisiMenus" id="vo"}
+                {if condition="($hisiCurParents['pid'] eq $vo['id'] and $ca neq 'plugins/run') or ($ca eq 'plugins/run' and $vo['id'] eq 3)"}
+               <li class="layui-nav-item layui-this">
+                {else /}
+                <li class="layui-nav-item">
+                {/if} 
+                <a href="javascript:;">{$vo['title']}</a></li>
+            {/volist}
+        </ul>
+        <ul class="layui-nav fr nobg head-info">
+            <li class="layui-nav-item">
+                <a href="javascript:void(0);" class="aicon ai-qingchu" id="hisi-clear-cache" title="清缓存"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:void(0);">{$login['nick']}&nbsp;&nbsp;</a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a data-id="00" class="admin-nav-item top-nav-item" href="{:url('system/user/info')}">个人设置</a>
+                    </dd>
+                    <dd>
+                        <a href="{:url('system/user/iframe')}" class="hisi-ajax" refresh="true">{:input('cookie.hisi_iframe') ? '单页布局' : '框架布局' }</a>
+                    </dd>
+                    <dd>
+                        <a href="{:url('system/publics/logout')}">退出登陆</a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+  
+    <script type="text/html" id="hisi-theme-tpl">
+        <ul class="hisi-themes">
+            {volist name=":session('hisi_admin_themes')" id="vo"}
+            <li data-theme="{$vo}" class="hisi-theme-item-{$vo}"></li>
+            {/volist}
+        </ul>
+    </script>
+    <script type="text/html" id="hisi-clear-cache-tpl">
+        <form class="layui-form" style="padding:10px 0 0 30px;" action="{:url('system/index/clear')}" method="post">
+            <div class="layui-form-item">
+                <input type="checkbox" name="cache" value="1" title="数据缓存" />
+            </div>
+            <div class="layui-form-item">
+                <input type="checkbox" name="log" value="1" title="日志缓存" />
+            </div>
+            <div class="layui-form-item">
+                <input type="checkbox" name="temp" value="1" title="模板缓存" />
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">执行删除</button>
+            </div>
+        </form>
+    </script>
+    <!-- 修改此处的class属性layui-body改成layui-j-body -->
+    <div class="layui-j-body" id="switchBody">
+     
+        <div style="padding:0 10px;" class="mcolor"></div>
+            <div class="page-body">
+{/if}

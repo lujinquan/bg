@@ -28,12 +28,34 @@ class Index extends Admin
      */
     public function index()
     {
-        if (cookie('hisi_iframe')) {
-            $this->view->engine->layout(false);
-            return $this->fetch('iframe');
-        } else {
-            return $this->fetch();
+        if(session('admin_user_lead')){
+            if (cookie('hisi_iframe')) {
+                $this->view->engine->layout(false);
+                return $this->fetch('iframe');
+            } else {
+                return $this->fetch();
+            }
+        }else{
+           
+           return $this->fetch('lead'); 
         }
+        
+    }
+
+    /**
+     * 首页
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function lead()
+    {
+
+        if(session('admin_user_lead')){
+            return true;
+        }
+        //halt(1);
+        
+        
     }
 
     /**

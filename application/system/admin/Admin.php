@@ -48,6 +48,7 @@ class Admin extends Common
         if (!$login['uid']) {
             return $this->error('请登陆之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
+
         
         if (!defined('ADMIN_ID')) {
             define('ADMIN_ID', $login['uid']);
@@ -84,7 +85,7 @@ class Admin extends Common
                 } else {
                     $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
                 }
-                
+
                 $this->assign('hisiBreadcrumb', $breadCrumbs);
                 // 获取当前访问的菜单信息
                 $this->assign('hisiCurMenu', $curMenu);

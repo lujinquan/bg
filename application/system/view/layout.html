@@ -1,4 +1,8 @@
+
+{if condition="session('admin_user_lead')"}
 {include file="block/header" /}
+
+
 {switch name="$hisiTabType"}
     {case value="1"}
         {/* 单个分组 */}
@@ -77,3 +81,9 @@
         </div>
 {/switch}
 {include file="block/footer" /}
+{else /}
+{include file="block/lead" /}
+<div class="page-tab-content">
+            {__CONTENT__}
+        </div>
+{/if}
