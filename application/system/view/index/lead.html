@@ -1,2 +1,158 @@
-
+<style>
+	.layui-layout-body{overflow: auto;}
+	.j-hide{ display: none;}
+	.page-tab-content{ background: none;}
+	.j-guide-box .j-guide-list{ background: #fff; padding: 25px; border-radius: 5px;min-height:135px;color: #4A4A4A;}
+	.j-guide-box .j-guide-list.j-guide-total{ background:url(../../../../static/system/image/j-guide-bj.jpg);    min-height: 160px;}
+	.j-guide-box .j-guide-list.j-guide-total{ color: #fff;}
+	.j-guide-box .j-guide-list.j-guide-total .j-project{font:bold 22px/30px 'MicrosoftYaHei'; margin-bottom: 20px;}
+	.j-guide-statistics li{font: 14px/30px 'MicrosoftYaHei';}
+	.j-guide-box .j-guide-list .j-guide-name{margin-bottom: 10px;}
+	.j-guide-box .j-guide-list .j-guide-name .j-title{font:bold 22px/30px 'MicrosoftYaHei';}
+	.j-guide-box .j-guide-list .j-guide-name .j-address{font: 14px/30px 'MicrosoftYaHei';}
+	.j-guide-list.j-add{ text-align:center;}
+	.j-guide-list.j-add i{ font-size:126px; color: #B6B9BE;}
+	.j-guide-list.j-add p{ font: 18px 'MicrosoftYaHei'; color: #B6B9BE;}
+	.j-add-project .layui-form{ padding: 20px;}
+</style>
+<div class="j-guide-box">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-md3">
+			<div class="j-guide-list j-guide-total">
+				<div class="j-project">
+					项目总况（4）
+				</div>
+				<div class="j-guide-statistics">
+					 <ul>
+						 <li>入驻企业数量：40</li>
+						 <li>入驻人员数量：4800</li>
+						 <li>空闲工位数量：32</li>
+					 </ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row layui-col-space15 j-guide-project">
+		<div class="layui-col-md3">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">项目1</div>
+				 <div class="j-address">地址：武昌区公正路18号</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：10</li>
+					 <li>入驻人员数量：1200</li>
+					 <li>空闲工位数量：8</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		<div class="layui-col-md3">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">项目1</div>
+				 <div class="j-address">地址：武昌区公正路18号</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：10</li>
+					 <li>入驻人员数量：1200</li>
+					 <li>空闲工位数量：8</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		<div class="layui-col-md3">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">项目1</div>
+				 <div class="j-address">地址：武昌区公正路18号</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：10</li>
+					 <li>入驻人员数量：1200</li>
+					 <li>空闲工位数量：8</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		<div class="layui-col-md3">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">项目1</div>
+				 <div class="j-address">地址：武昌区公正路18号</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：10</li>
+					 <li>入驻人员数量：1200</li>
+					 <li>空闲工位数量：8</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		<div class="layui-col-md3">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">项目1</div>
+				 <div class="j-address">地址：武昌区公正路18号</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：10</li>
+					 <li>入驻人员数量：1200</li>
+					 <li>空闲工位数量：8</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		<div class="layui-col-md3" id="j-add-guide">
+				<div class="j-guide-list j-add">
+				<i class="layui-icon layui-icon-add-1"></i>
+				<p>添加新项目</p>
+				</div>
+		</div>
+  </div>
+</div>
+<div  class="j-add-project j-hide">
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><i class="red">*</i>项目名称:</label>
+			<div class="layui-input-block">
+			  <input type="text" name="guide_name" id="guide_name" lay-verify="required"  placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><i class="red">*</i>项目地址:</label>
+			<div class="layui-input-block">
+			  <input type="text" name="guide_address" id="guide_address" lay-verify="required"  placeholder="请输入项目地址" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</form>
+</div>
 {include file="block/layui" /}
+<script type="text/javascript">
+	layui.use(['layer','jquery'], function(){
+		var layer = layui.layer
+		    $ = layui.$;
+		$(".j-add").click(function () {
+		    layer.open({
+				type: 1,
+				title:'添加项目',
+				area: ['500px', '300px'],
+				offset: 'auto',
+				btn: ['提交', '取消'],
+				content:  $(".j-add-project"),
+				yes: function(index, layero){
+					var name = $("#guide_name").val();
+					var address = $("#guide_address").val();
+                    $("#j-add-guide").before("<div class='layui-col-md3'><div class='j-guide-list'><div class='j-guide-name'><div class='j-title'>"+ name +"</div><div class='j-address'>"+ address +"</div></div><div class='j-guide-statistics'><ul><li>入驻企业数量：0</li><li>入驻人员数量：0</li><li>空闲工位数量：0</li></ul></div></div></div>");
+                    
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+				}
+			});
+		});
+	});
+</script>
