@@ -18,6 +18,7 @@ use app\system\model\SystemUser as UserModel;
 use app\system\model\SystemLog as LogModel;
 use app\system\model\SystemLanguage as LangModel;
 use app\common\model\Cparam as ParamModel;
+use app\common\model\Project;
 use think\Db;
 
 /**
@@ -50,75 +51,90 @@ class Admin extends Common
             return $this->error('请登陆之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
 
-        //session('admin_user_lead',true);
-        
-        if (!defined('ADMIN_ID')) {
-            define('ADMIN_ID', $login['uid']);
-            define('ADMIN_ROLE', $login['role_id']);
-        
-            $curMenu = MenuModel::getInfo();
-            if ($curMenu) {
+        $this->assign('fillwords','站位');
 
-                if (!RoleModel::checkAuth($curMenu['id']) && 
-                    $curMenu['url'] != 'system/index/index') {
-                    return $this->error('['.$curMenu['title'].'] 访问权限不足');
-                }
-                
-            } else if (config('sys.admin_whitelist_verify')) {
+        //if(!session('curr_project_id')){
+            //halt(session('curr_project_id'));
+            $projectModel = new Project;
+            $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
+            
+            //halt($projectArr);
+            $this->assign('projectArr',$projectArr);
+            //$this->view->engine->layout(true);
+            //return $this->fetch('index/lead');
 
-                return $this->error('节点不存在或者已禁用！');
+        //}else{
 
-            } else {
+            if (!defined('ADMIN_ID')) {
+                define('ADMIN_ID', $login['uid']);
+                define('ADMIN_ROLE', $login['role_id']);
+            
+                $curMenu = MenuModel::getInfo();
+                if ($curMenu) {
 
-                $curMenu = ['title' => '', 'url' => '', 'id' => 0];
+                    if (!RoleModel::checkAuth($curMenu['id']) && 
+                        $curMenu['url'] != 'system/index/index') {
+                        return $this->error('['.$curMenu['title'].'] 访问权限不足');
+                    }
+                    
+                } else if (config('sys.admin_whitelist_verify')) {
 
-            }
+                    return $this->error('节点不存在或者已禁用！');
 
-            $this->_systemLog($curMenu['title']);
-
-            // 如果不是ajax请求，则读取菜单
-            if (!$this->request->isAjax()) {
-                $breadCrumbs = [];
-                $menuParents = ['pid' => 1];
-
-                if ($curMenu['id']) {
-                    $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
-                    $menuParents = current($breadCrumbs);
                 } else {
-                    $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
+
+                    $curMenu = ['title' => '', 'url' => '', 'id' => 0];
+
                 }
 
-                $this->assign('fillwords','站位');
+                $this->_systemLog($curMenu['title']);
 
-                // 获取所有参数
-                $params = ParamModel::getCparams();
-                $this->assign('params',$params);
-                $this->assign('paramsJson',json_encode($params));
+                // 如果不是ajax请求，则读取菜单
+                if (!$this->request->isAjax()) {
+                    $breadCrumbs = [];
+                    $menuParents = ['pid' => 1];
 
-                $this->assign('hisiBreadcrumb', $breadCrumbs);
-                // 获取当前访问的菜单信息
-                $this->assign('hisiCurMenu', $curMenu);
-                // 获取当前菜单的顶级节点
-                $this->assign('hisiCurParents', $menuParents);
-                // 获取导航菜单
-                $this->assign('hisiMenus', MenuModel::getMainMenu());
-                // 分组切换类型 0无需分组切换，1单个分组，2分组切换[无链接]，3分组切换[有链接]，具体请看后台layout.html
-                $this->assign('hisiTabType', 0);
-                // tab切换数据
-                // $hisiTabData = [
-                //     ['title' => '后台首页', 'url' => 'system/index/index'],
-                // ];
-                // current 可不传
-                // $this->assign('hisiTabData', ['menu' => $hisiTabData, 'current' => 'system/index/index']);
-                $this->assign('hisiTabData', '');
-                // 表单数据默认变量名
-                $this->assign('formData', '');
-                $this->assign('login', $login);
-                $this->assign('languages', (new LangModel)->lists());
-                $this->assign('hisiHead', '');
-                $this->view->engine->layout(true);
+                    if ($curMenu['id']) {
+                        $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
+                        $menuParents = current($breadCrumbs);
+                    } else {
+                        $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
+                    }
+
+                    
+
+                    // 获取所有参数
+                    $params = ParamModel::getCparams();
+                    $this->assign('params',$params);
+                    $this->assign('paramsJson',json_encode($params));
+
+                    $this->assign('hisiBreadcrumb', $breadCrumbs);
+                    // 获取当前访问的菜单信息
+                    $this->assign('hisiCurMenu', $curMenu);
+                    // 获取当前菜单的顶级节点
+                    $this->assign('hisiCurParents', $menuParents);
+                    // 获取导航菜单
+                    $this->assign('hisiMenus', MenuModel::getMainMenu());
+                    // 分组切换类型 0无需分组切换，1单个分组，2分组切换[无链接]，3分组切换[有链接]，具体请看后台layout.html
+                    $this->assign('hisiTabType', 0);
+                    // tab切换数据
+                    // $hisiTabData = [
+                    //     ['title' => '后台首页', 'url' => 'system/index/index'],
+                    // ];
+                    // current 可不传
+                    // $this->assign('hisiTabData', ['menu' => $hisiTabData, 'current' => 'system/index/index']);
+                    $this->assign('hisiTabData', '');
+                    // 表单数据默认变量名
+                    $this->assign('formData', '');
+                    $this->assign('login', $login);
+                    $this->assign('languages', (new LangModel)->lists());
+                    $this->assign('hisiHead', '');
+                    $this->view->engine->layout(true);
+                    //return $this->fetch('index/lead');
+                }
             }
-        }
+        //}
+
     }
 
     /**

@@ -30,27 +30,15 @@ class Index extends Admin
      */
     public function index()
     {
-       //halt(session('curr_project_row.project_name'));
-         //halt($row[]);
-        //halt(session('admin_user_lead'));
-        if(session('curr_project_id')){
-            if (cookie('hisi_iframe')) {
-                $this->view->engine->layout(false);
-                return $this->fetch('iframe');
-            } else {
 
-                return $this->fetch();
-            }
-        }else{         
-            $projectModel = new Project;
-            $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
-            if(ADMIN_ROLE == 1){ //如果是超管
+        if (cookie('hisi_iframe')) {
+            $this->view->engine->layout(false);
+            return $this->fetch('iframe');
+        } else {
 
-            }
-            //halt($projectArr);
-            $this->assign('projectArr',$projectArr);
-           return $this->fetch('lead'); 
+            return $this->fetch();
         }
+        
         
     }
 
@@ -75,6 +63,12 @@ class Index extends Admin
                     //halt($curr_project_row);
                     session('curr_project_id',$project_id);
                     session('curr_project_row',$curr_project_row);
+                    // $result = [];
+                    // $result['msg'] = '项目选择成功';
+                    // $result['code'] = 1;
+                    // $result['flag'] = $project_id;
+                    // $result['url'] = 
+                    // return jsons();
                     $this->success('项目选择成功');
                 }else{
                     $this->error('项目选择失败');
@@ -100,10 +94,12 @@ class Index extends Admin
             }
             // 入库
             $projectModel = new Project;
-            if (!$projectModel->allowField(true)->create($data)) {
+            $row = $projectModel->allowField(true)->create($data);
+            //halt($res);
+            if (!$row) {
                 return $this->error('添加失败');
             }
-            return $this->success('添加成功');
+            return $this->success('添加成功','',['id'=>$row['id']]);
         }
         
     }

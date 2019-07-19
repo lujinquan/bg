@@ -151,9 +151,10 @@
 					var name = $("#guide_name").val();
 					var address = $("#guide_address").val();
 					$.post("/admin.php/system/index/projectAdd", { project_name: name, project_address: address },function(res){
-				      	console.log(res.msg);
+				      	//console.log(res.msg);
+				      	//console.log(res.data.id);
 		                if (res.code) {
-		                	$("#j-add-guide").before("<div class='layui-col-md3'><div class='j-guide-list'><div class='j-guide-name'><div class='j-title'>"+ name +"</div><div class='j-address'>"+ address +"</div></div><div class='j-guide-statistics'><ul><li>入驻企业数量：0</li><li>入驻人员数量：0</li><li>空闲工位数量：0</li></ul></div></div></div>");
+		                	$("#j-add-guide").before("<div class='layui-col-md3 j-login-project' project-id='"+ res.data.id +"'><div class='j-guide-list'><div class='j-guide-name'><div class='j-title'>"+ name +"</div><div class='j-address'>"+ address +"</div></div><div class='j-guide-statistics'><ul><li>入驻企业数量：0</li><li>入驻人员数量：0</li><li>空闲工位数量：0</li></ul></div></div></div>");
 		                    layer.close(index); //如果设定了yes回调，需进行手工关闭
 		                }else{
 		                	layer.msg(res.msg);
@@ -164,7 +165,7 @@
 		});
 		
 
-		$(".j-login-project").click(function () {
+		$(".j-guide-project").on('click','.j-login-project',function () {
 			var project_id = $(this).attr('project-id'); 
 			var href = '/admin.php/system/index/projectLogin?project_id='+project_id;
 			$.get(href, function(res) {
