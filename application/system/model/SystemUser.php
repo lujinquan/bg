@@ -268,6 +268,7 @@ class SystemUser extends Model
     {
         session('admin_user', null);
         session('admin_user_sign', null);
+        session('curr_project_id', null); 
     }
 
     /**

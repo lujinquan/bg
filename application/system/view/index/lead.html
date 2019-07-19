@@ -33,7 +33,24 @@
 		</div>
 	</div>
 	<div class="layui-row layui-col-space15 j-guide-project">
-		<div class="layui-col-md3">
+		{volist name="projectArr" id="vo"}
+		<div class="layui-col-md3 j-login-project" project-id="{$vo['id']}">
+		  <div class="j-guide-list">
+			 <div class="j-guide-name">
+				 <div class="j-title">{$vo['project_name']}</div>
+				 <div class="j-address">{$vo['project_address']}</div>
+			 </div>
+			 <div class="j-guide-statistics">
+				 <ul>
+					 <li>入驻企业数量：{$fillwords}</li>
+					 <li>入驻人员数量：{$fillwords}</li>
+					 <li>空闲工位数量：{$fillwords}</li>
+				 </ul>
+			 </div>
+		  </div>
+		</div>
+		{/volist}
+<!-- 		<div class="layui-col-md3">
 		  <div class="j-guide-list">
 			 <div class="j-guide-name">
 				 <div class="j-title">项目1</div>
@@ -92,22 +109,7 @@
 				 </ul>
 			 </div>
 		  </div>
-		</div>
-		<div class="layui-col-md3">
-		  <div class="j-guide-list">
-			 <div class="j-guide-name">
-				 <div class="j-title">项目1</div>
-				 <div class="j-address">地址：武昌区公正路18号</div>
-			 </div>
-			 <div class="j-guide-statistics">
-				 <ul>
-					 <li>入驻企业数量：10</li>
-					 <li>入驻人员数量：1200</li>
-					 <li>空闲工位数量：8</li>
-				 </ul>
-			 </div>
-		  </div>
-		</div>
+		</div> -->
 		<div class="layui-col-md3" id="j-add-guide">
 				<div class="j-guide-list j-add">
 				<i class="layui-icon layui-icon-add-1"></i>
@@ -148,11 +150,29 @@
 				yes: function(index, layero){
 					var name = $("#guide_name").val();
 					var address = $("#guide_address").val();
-                    $("#j-add-guide").before("<div class='layui-col-md3'><div class='j-guide-list'><div class='j-guide-name'><div class='j-title'>"+ name +"</div><div class='j-address'>"+ address +"</div></div><div class='j-guide-statistics'><ul><li>入驻企业数量：0</li><li>入驻人员数量：0</li><li>空闲工位数量：0</li></ul></div></div></div>");
-                    
-					layer.close(index); //如果设定了yes回调，需进行手工关闭
+					$.post("/admin.php/system/index/projectAdd", { project_name: name, project_address: address },function(res){
+				      	console.log(res.msg);
+		                if (res.code) {
+		                	$("#j-add-guide").before("<div class='layui-col-md3'><div class='j-guide-list'><div class='j-guide-name'><div class='j-title'>"+ name +"</div><div class='j-address'>"+ address +"</div></div><div class='j-guide-statistics'><ul><li>入驻企业数量：0</li><li>入驻人员数量：0</li><li>空闲工位数量：0</li></ul></div></div></div>");
+		                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+		                }else{
+		                	layer.msg(res.msg);
+		                }
+				   	});
 				}
 			});
+		});
+		
+
+		$(".j-login-project").click(function () {
+			var project_id = $(this).attr('project-id'); 
+			var href = '/admin.php/system/index/projectLogin?project_id='+project_id;
+			$.get(href, function(res) {
+				console.log(res.msg);
+                if (res.code) {
+                    location.href = res.url;
+                }
+            });
 		});
 	});
 </script>

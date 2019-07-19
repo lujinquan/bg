@@ -17,6 +17,7 @@ use app\system\model\SystemRole as RoleModel;
 use app\system\model\SystemUser as UserModel;
 use app\system\model\SystemLog as LogModel;
 use app\system\model\SystemLanguage as LangModel;
+use app\common\model\Cparam as ParamModel;
 use think\Db;
 
 /**
@@ -49,6 +50,7 @@ class Admin extends Common
             return $this->error('请登陆之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
 
+        //session('admin_user_lead',true);
         
         if (!defined('ADMIN_ID')) {
             define('ADMIN_ID', $login['uid']);
@@ -85,6 +87,13 @@ class Admin extends Common
                 } else {
                     $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
                 }
+
+                $this->assign('fillwords','站位');
+
+                // 获取所有参数
+                $params = ParamModel::getCparams();
+                $this->assign('params',$params);
+                $this->assign('paramsJson',json_encode($params));
 
                 $this->assign('hisiBreadcrumb', $breadCrumbs);
                 // 获取当前访问的菜单信息

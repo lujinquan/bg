@@ -13,6 +13,8 @@ namespace app\system\admin;
 
 use Env;
 use hisi\Dir;
+use app\common\model\Cparam;
+use app\common\model\Project;
 
 /**
  * 后台默认首页控制器
@@ -28,15 +30,25 @@ class Index extends Admin
      */
     public function index()
     {
-        if(session('admin_user_lead')){
+       //halt(session('curr_project_row.project_name'));
+         //halt($row[]);
+        //halt(session('admin_user_lead'));
+        if(session('curr_project_id')){
             if (cookie('hisi_iframe')) {
                 $this->view->engine->layout(false);
                 return $this->fetch('iframe');
             } else {
+
                 return $this->fetch();
             }
-        }else{
-           
+        }else{         
+            $projectModel = new Project;
+            $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
+            if(ADMIN_ROLE == 1){ //如果是超管
+
+            }
+            //halt($projectArr);
+            $this->assign('projectArr',$projectArr);
            return $this->fetch('lead'); 
         }
         
@@ -47,14 +59,52 @@ class Index extends Admin
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */
-    public function lead()
+    public function projectLogin()
     {
 
-        if(session('admin_user_lead')){
-            return true;
+        if(!session('curr_project_id')){
+            if ($this->request->isAjax()) {
+                $project_id = input('project_id/d');
+                $projectModel = new Project;
+                $projectRow = $projectModel->get($project_id);
+                if($projectRow){
+                    $curr_project_row = [];
+                    $curr_project_row['id'] = $projectRow->id;
+                    $curr_project_row['project_name'] = $projectRow->project_name;
+                    $curr_project_row['project_address'] = $projectRow->project_address;
+                    //halt($curr_project_row);
+                    session('curr_project_id',$project_id);
+                    session('curr_project_row',$curr_project_row);
+                    $this->success('项目选择成功');
+                }else{
+                    $this->error('项目选择失败');
+                }
+            }
         }
-        //halt(1);
         
+    }
+
+    /**
+     * 首页
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function projectAdd()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            // 数据验证
+            $result = $this->validate($data, 'SystemProject.sceneForm');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            // 入库
+            $projectModel = new Project;
+            if (!$projectModel->allowField(true)->create($data)) {
+                return $this->error('添加失败');
+            }
+            return $this->success('添加成功');
+        }
         
     }
 
