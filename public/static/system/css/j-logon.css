@@ -1,0 +1,123 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+}
+body {
+	width: 100%;
+	height: 100vh;	
+	background: url(../image/bg.png) no-repeat;
+	font-family: "microsoft yahei";
+    background-size: cover;
+	overflow: auto; 
+}
+a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 12px;
+}
+.clearfix:before,
+.clearfix:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+.hide{display: none;}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;/* 去除谷歌input框默认背景 */
+}
+.f-left {
+	float: left;
+}
+.f-right {
+	float: right;
+}
+.blue-color {
+	color: #4794FF;
+}
+.container {
+	width: 55%;
+	height: 552px;
+	background-color: rgba(255, 255, 255, 1);
+	background-image: url(../image/logo.png);
+	background-repeat: no-repeat;
+	border-radius: 14px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.form-area {
+	width: 35%;
+	height: inherit;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 60%;
+}
+fieldset legend {
+	font-size: 34px;
+	margin-left: 8px;
+	margin-bottom: 30px;
+}
+.register-legend {
+	margin-bottom: 0;
+}
+.text-input {
+	display: flex;
+	border-bottom: #D8D8D8 solid 2px;
+	font-size: 15px;
+	line-height:40px;
+}
+.text-input input{ border:0;background: none;}
+.input-focus {
+	border-bottom: #4794FF solid 2px;
+}
+.text-input i {
+	font-size: 28px;
+	padding: 0 18px 0 5px;
+}
+.text-input input {
+	flex-grow: 1;
+}
+.text-input~.text-input {
+	margin-top: 20px;
+}
+div#hint {
+	margin-top: 6px;
+	margin-bottom: 46px;
+}
+a.j-btn-old{
+	display: block;
+	font-size: 16px;
+	margin: 16px 0 29px 8px;
+}
+input[type="submit"] {
+	display: block;
+	width: 100%;
+	height: 56px;
+	font-size: 20px;
+	border-radius: 28px;
+	background-color: #4794FF;
+	color: white;
+}
+input[type="submit"]:hover {
+	cursor: pointer;
+	background-color: #007DDB;
+	box-shadow: 0 0 10px #01AAED;
+}
+.register-submit {
+	margin-top: 32px;
+}
+button#get-code {
+	background: none;
+	padding-right: 20px;
+}
+button#get-code:hover {
+	cursor: pointer;
+}
+.j-logon-box{font-family:MicrosoftYaHei;}
+.j-logon-title{ margin-bottom: 30px;}
+.j-logon-title li{float: left; padding: 10px 20px; border-bottom: #fff 2px solid; color: #9B9B9B; font-size: 16px; cursor: pointer;}
+.j-logon-title li.on{border-bottom: #4794FF 2px solid; color: #4794FF;}

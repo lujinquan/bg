@@ -1,2 +1,27 @@
 {:runhook('system_admin_index')}
 {include file="block/layui" /}
+<div class="j-setting-box">
+	<div class="j-setting-pass">
+		<h1 class="j-setting-title">设置密码</h1>
+		<form class="layui-form" action="">
+		  <div class="j-from-input">
+			<div class="layui-form-item">
+				<input type="password" name="password" id="pass" lay-verify="required|pass" lay-verType="msg" placeholder="请输入密码" autocomplete="off" class="layui-input">
+			 </div>
+			 <div class="layui-form-item">
+				<input type="password" name="password" id="passcertain"  lay-verify="required|passcertain" placeholder="请确认密码" autocomplete="off" class="layui-input">
+			  </div>
+			  <input type="submit" value="确认" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal j-pass-but">
+		  </div>
+		</form>
+	</div>
+	<div class="j-foot">
+		<a href="{:config('hisiphp.url')}" target="_blank">{:config('hisiphp.copyright')}</a> All Rights Reserved.
+	</div>
+</div>
+<script type="text/javascript">
+layui.use(['form', 'layer', 'jquery'], function() {
+	var $ = layui.jquery, layer = layui.layer, form = layui.form;
+
+ });	
+ </script>

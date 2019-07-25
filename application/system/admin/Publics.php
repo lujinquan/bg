@@ -38,7 +38,7 @@ class Publics extends Common
             $captcha    = $this->request->post('captcha/s');
             $data       = [];
 
-            if ($loginError >= 3) {
+            /* if ($loginError >= 3) {
 
                 if (empty($captcha)) {
                     return $this->error('请输入验证码');
@@ -47,7 +47,7 @@ class Publics extends Common
                 if (!captcha_check($captcha)) {
                     return $this->error('验证码错误');
                 }
-            }
+            } */
             
             if (!$model->login($username, $password)) {
 

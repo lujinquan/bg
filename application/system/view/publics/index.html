@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>后台管理登录 -  Powered by {:config('hisiphp.name')}</title>
+    <title>得月办公管理后台 -  Powered by {:config('hisiphp.name')}</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="__PUBLIC_JS__/layui/css/layui.css">
-    <style type="text/css">
+	<link rel="stylesheet" href="__ADMIN_CSS__/j-logon.css">
+    <!-- <style type="text/css">
         body{background:radial-gradient(200% 100% at bottom center,#0070aa,#0b2570,#000035,#000);background:radial-gradient(220% 105% at top center,#000 10%,#000035 40%,#0b2570 65%,#0070aa);background-attachment:fixed;overflow:hidden}
         @keyframes rotate{0%{transform:perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(0)}100%{transform:perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(-360deg)}}
         #particles-js {position: absolute;width: 100%;height: 100%;}
@@ -26,10 +27,11 @@
             .login-box{width:350px;margin:-200px 0 0 -205px!important}
             .login-box input[name="captcha"]{width:165px;}
         }
-    </style>
+    </style> -->
 </head>
 <body>
-<div id="particles-js">
+
+<div id="particles-js" class="hide">
     <div class="login-box">
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <fieldset class="layui-elem-field layui-field-title">
@@ -58,9 +60,54 @@
             <input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal">
         </form>
         <div class="copyright">
-            © 2018-2020 <a href="{:config('hisiphp.url')}" target="_blank">{:config('hisiphp.copyright')}</a> All Rights Reserved.
+            ? 2018-2020 <a href="{:config('hisiphp.url')}" target="_blank">{:config('hisiphp.copyright')}</a> All Rights Reserved.
         </div>
     </div>
+</div>
+
+<div class="container j-old-logon">
+	<div class="form-area">
+		
+			<fieldset>
+				<legend>得月办公管理后台</legend>
+				<div class="j-logon-title clearfix">
+					<ul>
+						<li class="on">账号登录</li>
+						<li>手机登录</li>
+					</ul>
+				</div>
+				<div class="j-logon-con">
+					<div class="j-logon-box">
+					  <form action="{:url()}" method="post" class="layui-form layui-form-pane">
+						<div class="text-input">
+							<i class="layui-icon layui-icon-cellphone blue-color"></i>
+							<input type="text" name="username" class="layui-input" lay-verify="required" placeholder="请输入手机号" autofocus="autofocus" />
+						</div>
+						<div class="text-input">
+							<i class="layui-icon layui-icon-password blue-color"></i>
+							<input type="password" name="password" class="layui-input" lay-verify="required" placeholder="请输入密码" />
+						</div>
+						<input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal  register-submit">
+					</form>
+				  </div>
+				  <div class="j-logon-box hide">
+				   <form action="{:url()}" method="post" class="layui-form layui-form-pane">
+					<div class="text-input register-text-input">
+						<i class="layui-icon layui-icon-cellphone blue-color"></i>
+						<input type="tel" name="cellphone" id="cellphone" lay-verify="phone" placeholder="请输入手机号" required>
+					</div>
+					<div class="text-input register-text-input">
+						<i class="layui-icon layui-icon-vercode blue-color"></i>
+						<input type="text" name="vercode" id="vercode" lay-verify="required" placeholder="请输入验证码" required>
+						<!-- <button id="get-code" class="blue-color">获取验证码</button> -->
+						<input type="button" class="blue-color" onClick="sendMessage1()" id="getsmscode" value="获取验证码" />
+					</div>
+					<input type="submit" value="登录" lay-submit="" lay-filter="formphone" class="layui-btn layui-btn-normal register-submit">
+				  </form>
+				 </div>
+		     </div>
+			</fieldset>
+	</div>
 </div>
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/particles.min.js"></script>
@@ -73,7 +120,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             account = $('input[name="username"]').val(),
             pwd = $('input[name="password"]').val(),
             token = $('input[name="__token__"]').val(),
-            captcha = $('input[name="captcha"]').val();
+             captcha = $('input[name="captcha"]').val(); 
 
         layer.msg('数据提交中...',{time:500000});
         that.prop('disabled', true);
@@ -81,11 +128,11 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
         $.ajax({
             type: "POST",
             url: _form.attr('action'),
-            data: {'username': account, 'password': md5.exec(pwd), '__token__' : token, captcha: captcha},
+            data: {'username': account, 'password': md5.exec(pwd), '__token__' : token /* , captcha: captcha */},
             success: function(res) {
-                if (res.data.captcha) {
+               /* if (res.data.captcha) {
                     $('#captchaImg').attr('src', res.data.captcha).parents('.layui-form-item').show();
-                }
+                } */
 
                 if (res.data.token) {
                     $('input[name="__token__"]').val(res.data.token);
@@ -104,11 +151,57 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
         return false;
     });
 
-    $(document).on('click', '#captchaImg', function(){
+   /* $(document).on('click', '#captchaImg', function(){
         $(this).attr('src', captchaUrl+'#rand='+Math.random());
-    });
+    }); */
+	//input框获取焦点变化
+	$(".text-input input").focus(function() {
+		$(this).parent().addClass("input-focus");
+	});
+	$(".text-input input").blur(function() {
+		$(this).parent().removeClass("input-focus");
+	});
+	//手机登录
+	var phoneReg = /(^1[3|4|5|6|7|8]\d{9}$)|(^09\d{8}$)/;//手机号正则 
+	var count = 60; //间隔函数，1秒执行
+	var InterValObj1; //timer变量，控制时间
+	var curCount1;//当前剩余秒数
+	window.sendMessage1 = function(){
+		curCount1 = count;		 		 
+		var phone = $.trim($('#cellphone').val());
+		if (!phoneReg.test(phone)) {
+			layer.msg('请输入有效的手机号码');
+			return false;
+		}
+		//设置button效果，开始计时
+		$("#getsmscode").attr("disabled", "true");
+		$("#getsmscode").addClass("on");
+		$("#getsmscode").val("获取验证码 " + "( "+ curCount1+"s" +" )");
+		InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
+		//向后台发送处理数据
+			 
+	}
+	window.SetRemainTime1 = function(){
+		if (curCount1 == 0) {                
+			window.clearInterval(InterValObj1);//停止计时器
+			$("#getsmscode").removeAttr("disabled");//启用按钮
+			$("#getsmscode").removeClass("on");
+			$("#getsmscode").val("重新获取");
+		}
+		else {
+			curCount1--;
+			$("#getsmscode").val("获取验证码 " +"( "+ curCount1+"s" +" )");
+		}
+	} 
+	//登陆切换
+	var $div_li =$(".j-logon-title li");
+	    $div_li.click(function(){
+	        $(this).addClass("on").siblings().removeClass("on");
+	        var index =  $div_li.index(this);
+	        $(".j-logon-con > .j-logon-box").eq(index).show().siblings().hide(); 
+	    })
 });
-particlesJS("particles-js",{"particles":{"number":{"value":100,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"opacity":{"value":0.2,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":140,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true});
+/* particlesJS("particles-js",{"particles":{"number":{"value":100,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"opacity":{"value":0.2,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":140,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}); */
 </script>
 </body>
 </html>

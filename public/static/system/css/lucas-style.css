@@ -1,0 +1,22 @@
+/*---------------------公用样式 S--------------------*/
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;/* 去谷歌默认背景色 */
+}
+.j-visibility{visibility:hidden;}
+.clear{clear:both;}
+.clearfix{zoom:1;}
+.clearfix:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+.fl{ float: left;}
+.fr{float: right;}
+/*---------------------公用样式 E--------------------*/
+/* 设置密码 S */
+.j-setting-box{ width: 50%;position: absolute;left: 50%; top:50%; transform: translate(-50%,-50%);}
+.j-setting-pass{ margin: 0 auto; border-radius: 14px; background: #fff;    overflow: hidden;}
+.j-setting-pass h1{ height: 80px; font: 20px/80px 'MicrosoftYaHei'; color: #fff; background: #4794FF; text-align: center;}
+.j-setting-pass .j-from-input{ width: 50%; margin: 0 auto; padding: 70px 0;}
+.j-setting-pass .j-pass-but{ background: #4794FF; border-radius: 2px; width: 100%; font: 14px/50px 'MicrosoftYaHei'; color: #fff; height: 50px; margin-top: 15px;}
+.j-setting-pass .layui-form-item{ margin-bottom: 22px;}
+.j-setting-pass .layui-input,.j-setting-pass  .layui-select,.j-setting-pass .layui-textarea{height: 40px;}
+.j-setting-box .j-foot{ text-align: center; color:#d3d3d3 ; padding-top: 30px;}
+.j-setting-box .j-foot a{ color: #4794FF;}
+/* 设置密码 E */
