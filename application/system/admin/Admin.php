@@ -102,7 +102,6 @@ class Admin extends Common
                     }
 
                     
-
                     // 获取所有参数
                     $params = ParamModel::getCparams();
                     $this->assign('params',$params);

@@ -30,16 +30,13 @@ class Index extends Admin
      */
     public function index()
     {
-
-        if (cookie('hisi_iframe')) {
+        //cookie('hisi_iframe') 等于1 表示当前为iframe模式；等于0 表示当前为单页模式。
+        if (cookie('hisi_iframe') && session('curr_project_id')) {
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
-
             return $this->fetch();
-        }
-        
-        
+        }     
     }
 
     /**
