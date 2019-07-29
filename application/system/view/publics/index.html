@@ -30,41 +30,6 @@
     </style> -->
 </head>
 <body>
-
-<div id="particles-js" class="hide">
-    <div class="login-box">
-        <form action="{:url()}" method="post" class="layui-form layui-form-pane">
-            <fieldset class="layui-elem-field layui-field-title">
-                <legend style="color:#fff;">管理后台登录</legend>
-            </fieldset>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" class="layui-input" lay-verify="required" placeholder="登录账号" autofocus="autofocus" />
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i></label>
-                <div class="layui-input-block">
-                    <input type="password" name="password" class="layui-input" lay-verify="required" placeholder="登录密码" />
-                </div>
-            </div>
-            <div class="layui-form-item" {if ($loginError < 3)}style="display:none;"{/if}>
-                <label class="layui-form-label"><i class="layui-icon layui-icon-vercode"></i></label>
-                <div class="layui-input-block">
-                    <input type="text" name="captcha" class="layui-input" placeholder="验证码" /><a href="javascript:;" class="captcha"><img {if ($loginError >= 3)}src="{:captcha_src()}"{/if} height="38" width="120" id="captchaImg" alt="验证码" /></a>
-                </div>
-            </div>
-            
-            {:token()}
-            <input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal">
-        </form>
-        <div class="copyright">
-            ? 2018-2020 <a href="{:config('hisiphp.url')}" target="_blank">{:config('hisiphp.copyright')}</a> All Rights Reserved.
-        </div>
-    </div>
-</div>
-
 <div class="container j-old-logon">
 	<div class="form-area">
 		
@@ -76,18 +41,20 @@
 						<li>手机登录</li>
 					</ul>
 				</div>
+				<div class="j-errors j-visibility clearfix">asdas</div>
                 <!-- 账号登录 -->
 				<div class="j-logon-con">
 					<div class="j-logon-box">
 					  <form action="{:url()}" method="post" class="layui-form layui-form-pane">
 						<div class="text-input">
 							<i class="layui-icon layui-icon-cellphone blue-color"></i>
-							<input type="text" name="username" class="layui-input" lay-verify="required" placeholder="请输入手机号" autofocus="autofocus" />
+							<input type="text" name="username" class="layui-input"  placeholder="请输入手机号" autofocus="autofocus" />
 						</div>
 						<div class="text-input">
 							<i class="layui-icon layui-icon-password blue-color"></i>
-							<input type="password" name="password" class="layui-input" lay-verify="required" placeholder="请输入密码" />
+							<input type="password" name="password" class="layui-input" placeholder="请输入密码" />
 						</div>
+						{:token()}
 						<input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal  register-submit">
 					</form>
 				  </div>
@@ -97,11 +64,11 @@
 				   <form action="{:url()}" method="post" class="layui-form layui-form-pane">
 					<div class="text-input register-text-input">
 						<i class="layui-icon layui-icon-cellphone blue-color"></i>
-						<input type="tel" name="cellphone" id="cellphone" lay-verify="phone" placeholder="请输入手机号" required>
+						<input type="tel" name="cellphone" id="cellphone"  placeholder="请输入手机号" required>
 					</div>
 					<div class="text-input register-text-input">
 						<i class="layui-icon layui-icon-vercode blue-color"></i>
-						<input type="text" name="vercode" id="vercode" lay-verify="required" placeholder="请输入验证码" required>
+						<input type="text" name="vercode" id="vercode"  placeholder="请输入验证码" required>
 						<!-- <button id="get-code" class="blue-color">获取验证码</button> -->
 						<input type="button" class="blue-color" onClick="sendMessage1()" id="getsmscode" value="获取验证码" />
 					</div>
@@ -126,7 +93,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             token = $('input[name="__token__"]').val(),
             captcha = $('input[name="captcha"]').val(); 
 
-        layer.msg('数据提交中...',{time:500000});
+        //layer.msg('数据提交中...',{time:500000});
         that.prop('disabled', true);
         
         $.ajax({
@@ -141,14 +108,17 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
                 if (res.data.token) {
                     $('input[name="__token__"]').val(res.data.token);
                 }
-
-                layer.msg(res.msg, {}, function() {
-                    if (res.code == 1) {
+				if (res.code == 1) {
+					    $(".j-errors").addClass("j-visibility");
                         location.href = res.url;
                     } else {
+						$(".j-errors").removeClass("j-visibility");
+						$(".j-errors").text(res.msg);
                         that.prop('disabled', false);
                     }
-                });
+//                 layer.msg(res.msg, {}, function() {
+//                     
+//                 });
 
             }
         });
@@ -171,7 +141,9 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
 		curCount1 = count;		 		 
 		var phone = $.trim($('#cellphone').val());
 		if (!phoneReg.test(phone)) {
-			layer.msg('请输入有效的手机号码');
+			// layer.msg('请输入有效的手机号码');
+			$(".j-errors").removeClass("j-visibility");
+			$(".j-errors").text("请输入有效的手机号码");
 			return false;
 		}
 
@@ -186,6 +158,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             data: {'type': 3,'username': phone},
             success: function(res) {
                 if (res.code == 1) {
+					$(".j-errors").addClass("j-visibility");
                     console.log(res.msg);
                     //设置button效果，开始计时
                     $("#getsmscode").attr("disabled", "true");
@@ -193,7 +166,8 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
                     $("#getsmscode").val("获取验证码 " + "( "+ curCount1+"s" +" )");
                     InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
                 } else {
-                    layer.msg(res.msg);
+					$(".j-errors").removeClass("j-visibility");
+					$(".j-errors").text(res.msg);
                 }
             }
         });		 
@@ -214,6 +188,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
 	//登陆切换
 	var $div_li =$(".j-logon-title li");
 	    $div_li.click(function(){
+			$(".j-errors").addClass("j-visibility");
 	        $(this).addClass("on").siblings().removeClass("on");
 	        var index =  $div_li.index(this);
 	        $(".j-logon-con > .j-logon-box").eq(index).show().siblings().hide(); 
@@ -226,10 +201,11 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             phone = $.trim($('#cellphone').val());
       
         if (!phoneReg.test(phone)) {
-            layer.msg('请输入有效的手机号码');
+			$(".j-errors").removeClass("j-visibility");
+			$(".j-errors").text("请输入有效的手机号码");
             return false;
         }
-        layer.msg('数据提交中...',{time:500000});
+        //layer.msg('数据提交中...',{time:500000});
         that.prop('disabled', true);
         
         $.ajax({
@@ -238,14 +214,14 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             data: {'type': 2,'username': phone, code:code},
             success: function(res) {
                
-                layer.msg(res.msg, {}, function() {
                     if (res.code == 1) {
+						$(".j-errors").addClass("j-visibility");
                         location.href = res.url;
                     } else {
+						$(".j-errors").removeClass("j-visibility");
+						$(".j-errors").text(res.msg);
                         that.prop('disabled', false);
                     }
-                });
-
             }
         });
         return false;

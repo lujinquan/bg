@@ -4,6 +4,7 @@
 	border: none;
 	outline: none;
 }
+.j-visibility{visibility:hidden;}
 body {
 	width: 100%;
 	height: 100vh;	
@@ -37,7 +38,7 @@ input:-webkit-autofill {
 	color: #4794FF;
 }
 .container {
-	width: 55%;
+	width:1046px;
 	height: 552px;
 	background-color: rgba(255, 255, 255, 1);
 	background-image: url(../image/logo.png);
@@ -49,12 +50,12 @@ input:-webkit-autofill {
 	transform: translate(-50%, -50%);
 }
 .form-area {
-	width: 35%;
+	width: 300px;
 	height: inherit;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-left: 60%;
+	margin-left: 660px;
 }
 fieldset legend {
 	font-size: 34px;
@@ -118,6 +119,7 @@ button#get-code:hover {
 	cursor: pointer;
 }
 .j-logon-box{font-family:MicrosoftYaHei;}
-.j-logon-title{ margin-bottom: 30px;}
+.j-logon-title{ margin-bottom:5px;}
 .j-logon-title li{float: left; padding: 10px 20px; border-bottom: #fff 2px solid; color: #9B9B9B; font-size: 16px; cursor: pointer;}
 .j-logon-title li.on{border-bottom: #4794FF 2px solid; color: #4794FF;}
+.j-errors{ margin-bottom: 15px; color: #FF0000;}
