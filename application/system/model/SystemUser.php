@@ -201,6 +201,78 @@ class SystemUser extends Model
     }
 
     /**
+     * 短信登录
+     * @param string $username 用户名
+     * @author Lucas <598936602@qq.com>
+     * @return bool|mixed
+     */
+    public function loginPhone($username = '')
+    {
+        $username = trim($username);
+        $map = [];
+        $map['status'] = 1;
+        $map['username'] = $username;
+
+        $validate = new \app\system\validate\SystemUser;
+        
+        // if ($validate->scene('login')->check(input('post.')) !== true) {
+        //     $this->error = $validate->getError();
+        //     return false;
+        // }
+        
+        $user = self::where($map)->find();
+        if (!$user) {
+            $this->error = '用户不存在或被禁用！';
+            return false;
+        }
+
+        // 密码校验
+        // if (!password_verify($password, $user->password)) {
+        //     $this->error = '登陆密码错误！';
+        //     return false;
+        // }
+
+        // 检查是否分配角色
+        if ($user->role_id == 0) {
+            $this->error = '禁止访问(原因：未分配角色)！';
+            return false;
+        }
+
+        // 角色信息
+        $role = RoleModel::where('id', $user->role_id)->find()->toArray();
+        if (!$role || $role['status'] == 0) {
+            $this->error = '禁止访问(原因：角色分组可能被禁用)！';
+            return false;
+        }
+
+        // 自动清除过期的系统日志
+        LogModel::where('ctime', '<', strtotime('-'.(int)config('sys.system_log_retention').' days'))->delete();
+
+        // 更新登录信息
+        $user->last_login_time = time();
+        $user->last_login_ip   = get_client_ip();
+        if ($user->save()) {
+            // 执行登陆
+            $login = [];
+            $login['uid'] = $user->id;
+            $login['role_id'] = $user->role_id;
+            $login['role_name'] = $role['name'];
+            $login['nick'] = $user->nick;
+            cookie('hisi_iframe', (int)$user->iframe);
+            // 主题设置
+            self::setTheme(isset($user->theme) ? $user->theme : 0);
+            self::getThemes(true);
+            // 缓存角色权限
+            session('role_auth_'.$user->role_id, $user->auth ? $user->auth : $role['auth']);
+            // 缓存登录信息
+            session('admin_user', $login);
+            session('admin_user_sign', $this->dataSign($login));
+            return $user->id;
+        }
+        return false;
+    }
+
+    /**
      * 获取主题列表
      * @author Lucas <598936602@qq.com>
      * @return bool

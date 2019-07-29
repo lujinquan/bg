@@ -105,7 +105,7 @@
 						<!-- <button id="get-code" class="blue-color">获取验证码</button> -->
 						<input type="button" class="blue-color" onClick="sendMessage1()" id="getsmscode" value="获取验证码" />
 					</div>
-					<input type="submit" value="登录" lay-submit="" lay-filter="formphone" class="layui-btn layui-btn-normal register-submit">
+					<input type="submit" value="登录" lay-submit="" lay-filter="formPhone" class="layui-btn layui-btn-normal register-submit">
 				  </form>
 				 </div>
                  
@@ -124,7 +124,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
             account = $('input[name="username"]').val(),
             pwd = $('input[name="password"]').val(),
             token = $('input[name="__token__"]').val(),
-             captcha = $('input[name="captcha"]').val(); 
+            captcha = $('input[name="captcha"]').val(); 
 
         layer.msg('数据提交中...',{time:500000});
         that.prop('disabled', true);
@@ -132,7 +132,7 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
         $.ajax({
             type: "POST",
             url: _form.attr('action'),
-            data: {'username': account, 'password': md5.exec(pwd), '__token__' : token /* , captcha: captcha */},
+            data: {'type': 1,'username': account, 'password': md5.exec(pwd), '__token__' : token /* , captcha: captcha */},
             success: function(res) {
                /* if (res.data.captcha) {
                     $('#captchaImg').attr('src', res.data.captcha).parents('.layui-form-item').show();
@@ -155,9 +155,6 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
         return false;
     });
 
-   /* $(document).on('click', '#captchaImg', function(){
-        $(this).attr('src', captchaUrl+'#rand='+Math.random());
-    }); */
 	//input框获取焦点变化
 	$(".text-input input").focus(function() {
 		$(this).parent().addClass("input-focus");
@@ -177,13 +174,29 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
 			layer.msg('请输入有效的手机号码');
 			return false;
 		}
-		//设置button效果，开始计时
-		$("#getsmscode").attr("disabled", "true");
-		$("#getsmscode").addClass("on");
-		$("#getsmscode").val("获取验证码 " + "( "+ curCount1+"s" +" )");
-		InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
-		//向后台发送处理数据
-			 
+
+        var that = $(this), _form = that.parents('form'),
+            account = $('input[name="username"]').val(),
+            pwd = $('input[name="password"]').val();
+            
+        //手机号格式正确，则后台验证是否存在当前有效手机号，如果有效则发送短信给用用户
+        $.ajax({
+            type: "POST",
+            url: '{:url()}',
+            data: {'type': 3,'username': phone},
+            success: function(res) {
+                if (res.code == 1) {
+                    console.log(res.msg);
+                    //设置button效果，开始计时
+                    $("#getsmscode").attr("disabled", "true");
+                    $("#getsmscode").addClass("on");
+                    $("#getsmscode").val("获取验证码 " + "( "+ curCount1+"s" +" )");
+                    InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
+                } else {
+                    layer.msg(res.msg);
+                }
+            }
+        });		 
 	}
 	window.SetRemainTime1 = function(){
 		if (curCount1 == 0) {                
@@ -196,7 +209,8 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
 			curCount1--;
 			$("#getsmscode").val("获取验证码 " +"( "+ curCount1+"s" +" )");
 		}
-	} 
+	}
+
 	//登陆切换
 	var $div_li =$(".j-logon-title li");
 	    $div_li.click(function(){
@@ -205,46 +219,37 @@ layui.use(['form', 'layer', 'jquery', 'md5'], function() {
 	        $(".j-logon-con > .j-logon-box").eq(index).show().siblings().hide(); 
 	    })
 
+    // 短信登录
+    form.on('submit(formPhone)', function(data) {
+        var that = $(this), _form = that.parents('form'),
+            code = $('#vercode').val(),
+            phone = $.trim($('#cellphone').val());
+      
+        if (!phoneReg.test(phone)) {
+            layer.msg('请输入有效的手机号码');
+            return false;
+        }
+        layer.msg('数据提交中...',{time:500000});
+        that.prop('disabled', true);
+        
+        $.ajax({
+            type: "POST",
+            url: _form.attr('action'),
+            data: {'type': 2,'username': phone, code:code},
+            success: function(res) {
+               
+                layer.msg(res.msg, {}, function() {
+                    if (res.code == 1) {
+                        location.href = res.url;
+                    } else {
+                        that.prop('disabled', false);
+                    }
+                });
 
-    // function sendCode(){
-    //     var objtip = $(".error-box");
-    //     var telNum = $('#phoneNum').val();
-    //     var code = $('#code').val();
-    //     if($.trim(telNum) == ''){
-            
-    //         objtip.show();
-    //         objtip.html('手机号不能为空');
-    //     } else if(!isPhoneNum(telNum)){
-            
-    //         objtip.show();
-    //         objtip.html('请输入有效的手机号码！');
-    //     } else if($.trim(code) == ''){
-            
-    //         objtip.show();
-    //         objtip.html('验证码不能为空');
-    //     } else {
-           
-    //         $.post('/user/Publics/telsignin', 'telNum='+telNum+'&code='+code, function(result){
-    //             if (result.code ==1) {
-    //                 setCookie('ph_code_sceond_down', 0, 1);
-    //                 objtip.html('');
-    //                 objtip.css('color', 'blue');
-    //                 objtip.show();
-    //                 objtip.html("登陆成功 正在跳转...");
-    //                 window.location.href = result.url;
-    //             } else {
-    //                 objtip.show();
-    //                 objtip.html(result.msg);
-    //             }
-    //         });
-    //     }
-    // }
-
-    // function setCookie(c_name,value,expiredays){
-    //     var exdate=new Date();
-    //     exdate.setDate(exdate.getDate()+expiredays);
-    //     document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
-    // }
+            }
+        });
+        return false;
+    });
 });
 /* particlesJS("particles-js",{"particles":{"number":{"value":100,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"opacity":{"value":0.2,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":140,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true}); */
 </script>

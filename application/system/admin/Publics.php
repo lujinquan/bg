@@ -14,6 +14,7 @@ namespace app\system\admin;
 use app\common\controller\Common;
 use app\system\model\SystemUser as UserModel;
 use think\captcha\Captcha;
+use SendMessage\ServerCodeAPI;
 
 /**
  * 后台公共控制器
@@ -32,10 +33,100 @@ class Publics extends Common
         $loginError = (int)session('admin_login_error');
         
         if ($this->request->isPost()) {
-            $captchaObj = new Captcha();
+            $type = $this->request->post('type/s');
             $username   = $this->request->post('username/s');
             $password   = $this->request->post('password/s');
-            $captcha    = $this->request->post('captcha/s');
+            switch ($type) {
+                case 1: //用户名密码登录
+                    if (!$model->login($username, $password)) {
+                        $loginError = ($loginError+1);
+                        session('admin_login_error', $loginError);
+                        $data['token'] = $this->request->token();
+                        //$data['captcha'] = $loginError >= 3 ? captcha_src() : '';
+                        return $this->error($model->getError(), url('index'), $data);
+                    }
+                    session('admin_login_error', 0);          
+                    return $this->success('登陆成功，页面跳转中...', url('index/index'));
+                    break;
+
+                case 2: //手机短信登录
+                    $data       = [];
+                    $code   = $this->request->post('code/d');
+
+                    $auth = new ServerCodeAPI();
+                    
+                        $res = $auth->CheckSmsYzm($username, $code);
+                        $res = json_decode($res);
+                        if($res->code == '200'){
+                            if (!$model->loginPhone($username)) {
+                                $loginError = ($loginError+1);
+                                session('admin_login_error', $loginError);
+                                return $this->error($model->getError(), url('index'), $data);
+                            }
+                            session('admin_login_error', 0);
+                            return $this->success('登陆成功，页面跳转中...', url('index/index'));
+                        } else if($res->code == '413'){
+                            return $this->error('验证失败');
+                        } else {
+                            return $this->error('请重新获取');
+                        }
+
+                    break;
+
+                case 3: //验证
+                    $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
+                    if(!$row){
+                        return $this->error('用户名不存在或被禁用');
+                    }
+                    //验证通过即发送短信
+                    $auth = new ServerCodeAPI();
+                    if(!isset($data['code'])){
+                        $res = $auth->SendSmsCode($username);
+                        $res = json_decode($res);
+                        if($res->code == '416'){
+                            $this->error('验证次数过多，请更换登录方式');
+                        }
+                    }
+                    return $this->success('用户名验证成功');
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+            
+        }
+
+        if ($model->isLogin()) {
+            $this->redirect(url('index/index', '', true, true));
+        }
+
+        $this->view->engine->layout(false);
+        
+        $this->assign('loginError', $loginError);
+
+        return $this->fetch();
+    }
+
+    /**
+     * 登陆页面
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function index_old()
+    {
+        $model = new UserModel;
+        $loginError = (int)session('admin_login_error');
+        
+        if ($this->request->isPost()) {
+            $type = $this->request->post('type/s');
+            $username   = $this->request->post('username/s');
+            $password   = $this->request->post('password/s');
+
+            //$captchaObj = new Captcha();
+            // $username   = $this->request->post('username/s');
+            // $password   = $this->request->post('password/s');
+            //$captcha    = $this->request->post('captcha/s');
             $data       = [];
 
             /* if ($loginError >= 3) {
@@ -55,7 +146,7 @@ class Publics extends Common
                 session('admin_login_error', $loginError);
 
                 $data['token'] = $this->request->token();
-                $data['captcha'] = $loginError >= 3 ? captcha_src() : '';
+                //$data['captcha'] = $loginError >= 3 ? captcha_src() : '';
 
                 return $this->error($model->getError(), url('index'), $data);
 
