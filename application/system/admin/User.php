@@ -113,6 +113,44 @@ class User extends Admin
     }
 
     /**
+     * 新增授权
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function addUserManage()
+    {
+        if ($this->request->isPost()) {
+
+            $data = $this->request->post();
+            $data['password'] = md5($data['password']);
+            $data['password_confirm'] = md5($data['password_confirm']);
+
+            // 验证
+            $result = $this->validate($data, 'SystemUser');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            
+            unset($data['id'], $data['password_confirm']);
+
+            $data['last_login_ip'] = '';
+            $data['auth'] = '';
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+            if (!UserModel::create($data)) {
+                return $this->error('添加失败');
+            }
+
+            return $this->success('添加成功');
+        }
+        
+        $this->assign('menu_list', '');
+        $this->assign('roleOptions', RoleModel::getOption());
+
+        return $this->fetch('usermanage');
+    }
+
+    /**
      * 布局切换
      * @author Lucas <598936602@qq.com>
      * @return mixed
