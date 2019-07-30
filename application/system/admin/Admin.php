@@ -51,6 +51,11 @@ class Admin extends Common
             return $this->error('请登陆之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
 
+        //$login = $model->isLogin();
+        // if (session('curr_project_id')) {
+        //     return $this->redirect(ROOT_DIR.'system/view/index.html');
+        // }
+
         $this->assign('fillwords','站位');
 
         //if(!session('curr_project_id')){
@@ -116,6 +121,8 @@ class Admin extends Common
                     $this->assign('hisiMenus', MenuModel::getMainMenu());
                     // 分组切换类型 0无需分组切换，1单个分组，2分组切换[无链接]，3分组切换[有链接]，具体请看后台layout.html
                     $this->assign('hisiTabType', 0);
+
+                    //halt($curMenu);
                     // tab切换数据
                     // $hisiTabData = [
                     //     ['title' => '后台首页', 'url' => 'system/index/index'],

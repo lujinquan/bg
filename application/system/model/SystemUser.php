@@ -147,13 +147,13 @@ class SystemUser extends Model
             $this->error = $validate->getError();
             return false;
         }
-        
+
         $user = self::where($map)->find();
         if (!$user) {
             $this->error = '用户不存在或被禁用！';
             return false;
         }
-
+        
         // 密码校验
         if (!password_verify($password, $user->password)) {
             $this->error = '登陆密码错误！';

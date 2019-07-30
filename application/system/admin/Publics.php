@@ -45,6 +45,7 @@ class Publics extends Common
                         //$data['captcha'] = $loginError >= 3 ? captcha_src() : '';
                         return $this->error($model->getError(), url('index'), $data);
                     }
+                    //halt(1);
                     session('admin_login_error', 0);          
                     return $this->success('登陆成功，页面跳转中...', url('index/index'));
                     break;

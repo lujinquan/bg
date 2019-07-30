@@ -35,8 +35,14 @@ class Index extends Admin
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
-            return $this->fetch();
+            
+            return $this->fetch('lead');
         }     
+    }
+
+    public function lead()
+    {
+        return $this->fetch();
     }
 
     /**

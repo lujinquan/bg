@@ -73,6 +73,46 @@ class User extends Admin
     }
 
     /**
+     * 一般管理员管理列表页
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function indexManage($q = '')
+    {
+        if ($this->request->isAjax()) {
+            $where      = $data = [];
+            $page       = $this->request->param('page/d', 1);
+            $limit      = $this->request->param('limit/d', 15);
+            $keyword    = $this->request->param('keyword/s');
+            $where[]    = ['id', 'neq', 1];
+            if ($keyword) {
+                $where[] = ['username', 'like', "%{$keyword}%"];
+            }
+
+            $data['data'] = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            $data['count'] = UserModel::where($where)->count('id');
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+        }
+        $this->assign('leadUrlExtra','user/indexManage');
+        $this->assign('hisiTabData', $this->tabData);
+        $this->assign('hisiTabType', 3);
+        return $this->fetch();
+    }
+
+
+    /**
+     * 一般管理员管理列表页
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function impower($q = '')
+    {
+        return $this->fetch();
+    }
+
+    /**
      * 布局切换
      * @author Lucas <598936602@qq.com>
      * @return mixed

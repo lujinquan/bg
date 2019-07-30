@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,10 +17,12 @@
 
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header" style="z-index:999!important;">
-        <div class="fl header-logo"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></div>
+        <div class="fl header-logo"><a href="{:url('system/index/index')}"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></a></div>
         
         <ul class="layui-nav fr nobg head-info">
-           
+           <li class="layui-nav-item">
+                <a href="{:url('system/user/indexManage')}" id="j-index-manage">一般管理员账号管理</a>
+            </li>
             <li class="layui-nav-item">
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
             </li>
@@ -49,12 +50,17 @@
     <div class="layui-j-body" id="switchBody">
         <div style="padding:0 10px;" class="mcolor"></div>
         <div class="page-body">
-            {include file="index/lead" /}
+            {switch hisiCurMenu.url}
+                {case system/user/indexmanage}{include file="user/index_manage"}{/case}
+                {case system/user/impower}{include file="user/impower"}{/case} 
+                {default /}
+            {/switch}
         </div>
     </div>
     <div class="layui-j-footer j-footer">
-        
+      
     </div>
 </div>
 </body>
 </html>
+
