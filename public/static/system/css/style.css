@@ -42,8 +42,10 @@ body{background-color:#f5f5f5;margin:0;padding:0;}
 .head-info .layui-nav-item a {padding:0 10px}
 .main-nav {padding:0}
 .main-nav .layui-nav-item a {font-size:16px;padding:0;margin:0 15px}
-.footer {line-height:44px;padding:0 10px;color:#666}
-.footer a {color:#5c90d2}
+.footer {line-height:44px;padding:0 10px;color:#989EB0; text-align: center;}
+.layui-layout-admin .layui-footer.j-special{left: 0; text-align: center;z-index: 999;}
+.layui-layout-admin .layui-footer label{padding-left: 20px;}
+.footer a {color:#0084FF}
 #switchNav {position:fixed;left:0;top:60px;z-index:99999}
 #switchNav .layui-nav-child dd {position:relative}
 #switchNav .layui-nav-child dd .j-del-menu {position:absolute;right:10px;top:3px;font-size:18px;color:#999;cursor:pointer}
@@ -219,3 +221,31 @@ body{background-color:#f5f5f5;margin:0;padding:0;}
 .hisi-search .layui-form-item .layui-input-inline {padding:0;margin:0; width:65%;flex:1 1;}
 .hisi-search .hisi-search-btn {text-align:left;}
 .hisi-search .hisi-search-btn .layui-form-label:after {content: normal;}
+/* 表格新样式 S */
+.j-indent-box{ padding: 0 60px;}
+.layui-table-page{ border: none;}
+.layui-table-cell{height:50px;line-height:40px;}
+.layui-table-view .layui-table th{ font:bold 14px/50px 'MicrosoftYaHei-Bold'; color: #737F90;}
+.j-operation-box a:last-child {border-right: none;}
+.layui-table-header{border: none;}
+.layui-table-view{border: none;}
+.j-operation-box .layui-btn{ background: none; font-size: 14px;}
+.j-operation-box .layui-btn+.layui-btn{ margin: 0;}
+.j-operation-box .layui-btn-xs{ padding: 0 10px;height: 14px;line-height: 14px;}
+.j-operation-box .layui-btn-normal{ color: #20A0FF;}
+.j-operation-box .layui-btn-danger{ color: #FF0000;}
+.j-operation-box a{ border-right: #D8D8D8 1px solid;}
+.page-toolbar.j-page-toolbar{ margin: 20px 0 10px 0;}
+.j-page-toolbar .layui-btn.j-btn-reset{background: none; color: #4A4A4A; padding: 0 10px 0 0;}
+.j-page-toolbar .layui-form-pane .layui-input{border: #C6D2DD 1px solid;}
+.j-page-toolbar  .layui-form-pane .layui-input-inline{ margin-right: 20px;}
+.layui-btn-group.j-add-group { padding-top: 20px;}
+.layui-btn-group.j-add-group  .layui-btn{background: #20A0FF;border: 0; height: 38px; color: #fff; font:bold 14px/38px '';border-radius: 4px;    padding: 0 18px;}
+.layui-btn{border-radius: 4px;}
+/* 新增授权 */
+.layui-tab-brief.j-no-color>.layui-tab-title .layui-this{ color: #181818; font-size: 16px;font-family:MicrosoftYaHei;}
+.layui-tab-brief.j-no-color>.layui-tab-title .layui-this:after{border-bottom: 2px solid #20A0FF;}
+.layui-tab-brief.j-no-color .layui-tab-title li{padding: 0 20px;}
+.layui-input-block.j-input-width{ width: 40%;}
+.layui-form.j-top-margin{ padding-top: 20px;}
+/* 表格新样式 E */

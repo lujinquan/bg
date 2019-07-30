@@ -1,53 +1,82 @@
-<table id="dataTable"></table>
+<div class="j-indent-box">
+	<div class="layui-btn-group j-add-group clearfix">
+		<a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>新增授权</a>
+	</div>
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="ban_number" placeholder="输入账号（手机号）" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="ban_address" placeholder="输入姓名" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline" style="width:150px;">
+					  <select name="ban_inst_id">
+						  <option value="">授权项目</option>
+						  <option value="1">1</option>
+						</select>
+				  </div>
+				  <div class="layui-input-inline" style="width:150px;">
+					  <select name="ban_owner_id">
+						  <option value="">请选择状态</option>
+						  <option value="1">1</option>
+						</select>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable"></table>
 
-{include file="block/layui" /}
+	{include file="block/layui" /}
 
-<script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
-</script>
+	<script type="text/html" id="statusTpl">
+	   正常
+	</script>
 
-<script type="text/html" title="操作按钮模板" id="buttonTpl">
-    <a href="{:url('editUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-    <a href="{:url('delUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
-    <a href="{:url('removeUserAuth')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">移除授权</a>
-</script>
-
-<script type="text/html" id="toolbar">
-    <div class="layui-btn-group fl">
-        <a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员">&nbsp;新增授权</a>
-        <a data-href="{:url('status?val=1')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
-        <a data-href="{:url('status?val=0')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
-        <a data-href="{:url('delUser')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
-    </div>
-</script>
-
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('editUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('delUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+			<a href="{:url('removeUserAuth')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">移除授权</a>
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
 <script type="text/javascript">
-    layui.use(['table'], function() {
-        var table = layui.table;
+    layui.use(['table','jquery', 'layer'], function() {
+        var $ = layui.$
+		    ,layer = layui.layer
+		    ,table = layui.table;
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-            ,skin: 'row'
-            ,even: true
-            ,limit: 20
+			,height: 'full-280'
+            ,skin: 'line'
+            ,even: false
+            ,limit: 12
             ,text: {
                 none : '暂无相关数据'
             }
-            ,toolbar: '#toolbar'
+       
             ,defaultToolbar: ['filter']
             ,cols: [[ //表头
                 {type:'checkbox'}
-                ,{field: 'username',with:140, title: '用户名'}
-                ,{field: 'nick',with:140, title: '昵称'}
-                ,{field: 'role_id', with:140,title: '角色', templet:function(d){
+                ,{field: 'username',with:140, title: '账号'}
+                ,{field: 'nick',with:140, title: '姓名'}
+                ,{field: 'role_id', with:140,title: '职务', templet:function(d){
                     return d.role.name;
                 }}
-                
-                ,{field: 'last_login_time', width: 150, title: '最后登陆'}
-                ,{field: 'last_login_ip', with:140,title: '登陆IP'}
-                ,{field: 'remark', with:140,title: '简介'}
-                ,{field: 'status', title: '状态', width: 100, templet: '#statusTpl'}
+                ,{field: 'project', width: 150, title: '授权项目'}
+                ,{field: 'last_login_time', width: 150, title: '授权时间'}
+                ,{field: 'remark', with:140,title: '备注'}
+                ,{field: 'state', title: '状态', width: 100, templet: '#statusTpl'}
                 ,{title: '操作', minWith:180, templet: '#buttonTpl'}
             ]]
         });
