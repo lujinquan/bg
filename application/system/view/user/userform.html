@@ -1,5 +1,7 @@
 	<style>
 		.page-tab-content{margin: 40px;}
+		/* .layui-layer-msg{transform: translate(-50%,-50%)!important;left: 50%!important;top: 50%!important;} */
+		.layui-layout-body{ overflow: auto;}
 	</style>
 	<div class="layui-tab layui-tab-brief j-no-color">
 	  <ul class="layui-tab-title">
@@ -11,7 +13,7 @@
 			<div class="layui-inline">
 			  <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
 			  <div class="layui-input-inline">
-				<input type="tel" name="phone" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+				<input type="tel" name="phone" lay-verify="required|phone" lay-verType="tips" placeholder="请输入手机号" autocomplete="off" class="layui-input">
 			  </div>
 			</div>
 		</div>  
@@ -19,7 +21,7 @@
 		 	<div class="layui-inline">
 		 	  <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
 		 	  <div class="layui-input-inline">
-		 		<input type="tel" name="name" lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+		 		<input type="tel" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
 		 	  </div>
 		 	</div>
 		 </div>  
@@ -27,7 +29,7 @@
 		   	<div class="layui-inline">
 		   	  <label class="layui-form-label">职务：</label>
 		   	  <div class="layui-input-inline">
-		   		<input type="tel" name="name" lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+		   		<input type="tel" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
 		   	  </div>
 		   	</div>
 		</div>   
@@ -35,12 +37,12 @@
 			<div class="layui-inline">
 			  <label class="layui-form-label">备注：</label>
 			  <div class="layui-input-inline">
-				<textarea name="remarks" placeholder="备注描述" class="layui-textarea"></textarea>
+				<textarea name="remarks" placeholder="备注描述" lay-verType="tips" class="layui-textarea"></textarea>
 			  </div>
 			</div>
 	    </div>   
 		<div class="layui-form-item" pane="">
-			<label class="layui-form-label"><i class="red">*</i>授权项目</label>
+			<label class="layui-form-label j-tips"><i class="red">*</i>授权项目</label>
 			<div class="layui-input-block j-input-width">
 			  <input type="checkbox" name="project" lay-skin="primary" title="项目1" checked="">
 			  <input type="checkbox" name="project" lay-skin="primary" title="项目2">
@@ -66,7 +68,7 @@
 			//监听提交
 			form.on('submit(submit)', function(data){
 				 if ($("input[name='project']:checked").length == 0) {
-					layer.msg("请先选择授权项目",{icon:5});
+					layer.tips('请选择授权项目', '.j-tips');
 					return false;
                 }
 			    /* //获取checkbox[name='foodId']的值，获取所有选中的复选框，并将其值放入数组中
