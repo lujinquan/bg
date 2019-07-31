@@ -1,0 +1,65 @@
+<style>
+    .page-tab-content{margin: 40px;}
+</style>
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">新增授权</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="username" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="nick" lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div> 
+     <div class="layui-form-item">
+        <label class="layui-form-label">角色分组</label>
+        <div class="layui-input-inline">
+            <select name="role_id" class="field-role_id" type="select">
+                {$roleOptions|raw}
+            </select>
+        </div>
+    </div> 
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>职务：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+    </div>   
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">备注：</label>
+          <div class="layui-input-inline">
+            <textarea name="remark" placeholder="备注描述" class="layui-textarea"></textarea>
+          </div>
+        </div>
+    </div>   
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label"><i class="red">*</i>授权项目</label>
+        <div class="layui-input-block j-input-width">
+          {volist name="proArr" id="v"}
+          <input type="checkbox" name="pro_ids[]" class="j-check" value="{$key}" lay-skin="primary" title="{$v}">
+          {/volist}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="block/layui" /}

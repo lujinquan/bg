@@ -14,6 +14,7 @@ namespace app\system\admin;
 use app\system\model\SystemUser as UserModel;
 use app\system\model\SystemRole as RoleModel;
 use app\system\model\SystemMenu as MenuModel;
+use app\Common\model\Project;
 
 /**
  * 后台用户、角色控制器
@@ -79,22 +80,54 @@ class User extends Admin
      */
     public function indexManage($q = '')
     {
+        $projectModel = new Project;
+        $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isAjax()) {
             $where      = $data = [];
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
-            $keyword    = $this->request->param('keyword/s');
+            $username    = $this->request->param('username/s');
+            $nick    = $this->request->param('nick/s');
+            $username    = $this->request->param('username/s');
+            $pro_ids    = $this->request->param('pro_ids/d');
+            $status    = $this->request->param('status/d');
             $where[]    = ['id', 'neq', 1];
-            if ($keyword) {
-                $where[] = ['username', 'like', "%{$keyword}%"];
+            if ($username) {
+                $where[] = ['username', 'like', "%{$username}%"];
             }
-
-            $data['data'] = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            if ($nick) {
+                $where[] = ['nick', 'like', "%{$nick}%"];
+            }
+            if ($pro_ids) {
+                $where[] = ['pro_ids', 'like', "%{$pro_ids}%"];
+            }
+            if ($status) {
+                $where[] = ['status', 'eq', $status];
+            }
+            
+            $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            foreach ($temp as $key => $value) {
+                $value['pro_names'] = '';
+                //dump($value['pro_ids']);
+                if($value['pro_ids'][0]){
+                    foreach ($value['pro_ids'] as $k => $v) {
+                        if($value['pro_names']){
+                            $value['pro_names'] .= ','.$proArr[$v];
+                        }else{
+                            $value['pro_names'] .= $proArr[$v];
+                        }
+                        
+                    }
+                }  
+            }//exit;
+            $data['data'] = $temp;
             $data['count'] = UserModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
+            //halt($temp);
             return json($data);
         }
+        $this->assign('proArr',$proArr);
         $this->assign('leadUrlExtra','user/indexManage');
         $this->assign('hisiTabData', $this->tabData);
         $this->assign('hisiTabType', 3);
@@ -113,29 +146,46 @@ class User extends Admin
     }
 
     /**
+     * 移除授权
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function removeUserProject()
+    {
+        $id   = $this->request->param('id/d');
+        $model = new UserModel();
+        $res = $model->where([['id','eq',$id]])->update(['pro_ids'=>'']);
+        //halt($res);
+        if ($res) {
+            return $this->success('移除成功');
+        }
+        return $this->error($model->getError());
+    }
+
+    /**
      * 新增授权
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */
     public function addUserManage()
     {
+        $projectModel = new Project;
+        $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
-            $data['password'] = md5($data['password']);
-            $data['password_confirm'] = md5($data['password_confirm']);
-
             // 验证
-            $result = $this->validate($data, 'SystemUser');
+            $result = $this->validate($data, 'SystemUserManage.scenceAdd');
             if($result !== true) {
                 return $this->error($result);
             }
-            
-            unset($data['id'], $data['password_confirm']);
+            if(!isset($data['pro_ids'])){
+                return $this->error('请选择授权项目');
+            }
+            unset($data['id']);
 
             $data['last_login_ip'] = '';
             $data['auth'] = '';
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
             if (!UserModel::create($data)) {
                 return $this->error('添加失败');
@@ -143,11 +193,68 @@ class User extends Admin
 
             return $this->success('添加成功');
         }
-        
+        $this->assign('proArr',$proArr);
         $this->assign('menu_list', '');
         $this->assign('roleOptions', RoleModel::getOption());
 
         return $this->fetch('usermanage');
+    }
+
+    /**
+     * 新增授权
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function editUserManage()
+    {
+        $projectModel = new Project;
+        $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
+        if ($this->request->isPost()) {
+
+            $data = $this->request->post();
+            // 验证
+            $result = $this->validate($data, 'SystemUserManage.scenceEdit');
+            if($result !== true) {
+                return $this->error($result);
+            }
+
+            if (!UserModel::create($data)) {
+                return $this->error('编辑失败');
+            }
+
+            return $this->success('编辑成功');
+        }
+        $id   = $this->request->param('id/d');
+        $model = new UserModel();
+        $row = $model->find($id);
+        $this->assign('data_info',$row);
+        $this->assign('proArr',$proArr);
+        $this->assign('menu_list', '');
+        $this->assign('roleOptions', RoleModel::getOption());
+
+        return $this->fetch('editusermanage');
+    }
+
+    /**
+     * 删除用户
+     * @param int $id
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function delUserManage()
+    {
+        $id   = $this->request->param('id/d');
+        $model = new UserModel();
+        $pro_ids = $model->where([['id','eq',$id]])->value('pro_ids');
+        if (!$pro_ids) {
+            if ($model->del($id)) {
+                return $this->success('删除成功');
+            }
+            return $this->error($model->getError());
+        } else {
+            return $this->error('请先移除授权');
+        }
+        
     }
 
     /**

@@ -52,6 +52,24 @@ class SystemUser extends Model
         return date('Y-m-d H:i', $value);
     }
 
+    // 格式化授权时间
+    public function getCtimeAttr($value)
+    {
+        return date('Y-m-d H:i', $value);
+    }
+
+    // 格式化授权时间
+    public function getProIdsAttr($value)
+    {
+        return explode(',', $value);
+    }
+
+    // 格式化授权时间
+    public function setProIdsAttr($value)
+    {
+        return implode(',', $value);
+    }
+
     // 权限
     public function role()
     {

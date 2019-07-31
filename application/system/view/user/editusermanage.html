@@ -1,0 +1,103 @@
+<style>
+    .page-tab-content{margin: 40px;}
+</style>
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">账号编辑</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
+          <div class="layui-input-inline">
+            <input type="tel" readonly lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input field-username">
+          </div>
+        </div>
+    </div>  
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="nick" value="{$data_info['nick']}" readonly lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input field-nick">
+          </div>
+        </div>
+     </div> 
+     <div class="layui-form-item">
+        <label class="layui-form-label">角色分组</label>
+        <div class="layui-input-inline">
+            <select name="role_id" class="field-role_id" type="select">
+                {$roleOptions|raw}
+            </select>
+        </div>
+    </div> 
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>职务：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input field-post">
+          </div>
+        </div>
+    </div>   
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">备注：</label>
+          <div class="layui-input-inline">
+            <textarea name="remark" placeholder="备注描述" class="layui-textarea field-remark"></textarea>
+          </div>
+        </div>
+    </div>   
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label"><i class="red">*</i>授权项目</label>
+        <div class="layui-input-block j-input-width">
+        	
+          {volist name="proArr" id="v"}
+          <input type="checkbox" name="pro_ids[]" class="j-check" value="{$key}" lay-skin="primary" title="{$v}" {if condition="in_array($key,$data_info['pro_ids'])"}checked{/if}>
+          {/volist}
+   
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$data_info['id']}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="block/layui" /}
+<script>
+        var formData = {:json_encode($data_info)};
+        layui.use(['form', 'func'], function() {
+            var $ = layui.jquery, form = layui.form;
+            layui.func.assign(formData);
+            /* 有BUG 待完善*/
+            // form.on('checkbox(roleAuth)', function(data) {
+            //     var child = $(data.elem).parent('dt').siblings('dd').find('input');
+            //     /* 自动选中父节点 */
+            //     var check_parent = function (id) {
+            //         var self = $('.role-list-form input[value="'+id+'"]');
+            //         var pid = self.attr('data-pid') || '';
+            //         self.prop('checked', true);
+            //         if (pid == '') {
+            //             return false;
+            //         }
+            //         check_parent(pid);
+            //     };
+            //     /* 自动选中子节点 */
+            //     child.each(function(index, item) {
+            //         item.checked = data.elem.checked;
+            //     });
+            //     check_parent($(data.elem).attr('data-pid'));
+            //     form.render('checkbox');
+            // });
+        
+            // /* 权限赋值 */
+            // if (formData) {
+            //     for(var i in formData['auth']) {
+            //         $('.role-list-form input[value="'+formData['auth'][i]+'"]').prop('checked', true);
+            //     }
+            //     form.render('checkbox');
+            // }
+        });
+        </script>

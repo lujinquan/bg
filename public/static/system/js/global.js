@@ -291,7 +291,10 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         } else {
             _form = that.parents('form');
         }
-
+        // if ($(".j-check:checked").length == 0) {
+        //     layer.msg("请先选择授权项目");
+        //     return false;
+        // }
         if (that.attr('hisi-data')) {
             options = new Function('return '+ that.attr('hisi-data'))();
         } else if (that.attr('lay-data')) {

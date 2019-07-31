@@ -1,26 +1,29 @@
 <div class="j-indent-box">
 	<div class="layui-btn-group j-add-group clearfix">
-		<a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>新增授权</a>
+		<a href="{:url('addUserManage')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>新增授权</a>
 	</div>
 	<div class="page-toolbar j-page-toolbar clearfix">
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="ban_number" placeholder="输入账号（手机号）" class="layui-input">
+					  <input type="text" name="username" placeholder="输入账号（手机号）" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="ban_address" placeholder="输入姓名" class="layui-input">
+					  <input type="text" name="nick" placeholder="输入姓名" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline" style="width:150px;">
-					  <select name="ban_inst_id">
+					  <select name="pro_ids">
 						  <option value="">授权项目</option>
-						  <option value="1">1</option>
+						  {volist name="proArr" id="v"}
+						  <option value="{$key}">{$v}</option>
+						  {/volist}
 						</select>
 				  </div>
 				  <div class="layui-input-inline" style="width:150px;">
-					  <select name="ban_owner_id">
+					  <select name="status">
 						  <option value="">请选择状态</option>
-						  <option value="1">1</option>
+						  <option value="0">关闭</option>
+						  <option value="1">正常</option>
 						</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -36,31 +39,33 @@
 	{include file="block/layui" /}
 
 	<script type="text/html" id="statusTpl">
-	   正常
+	   <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
 	</script>
 
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
 			<a href="{:url('editUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			{{#  if(!d.pro_names){ }}
 			<a href="{:url('delUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
-			<a href="{:url('removeUserAuth')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">移除授权</a>
+			{{#  } else { }}
+			<a href="{:url('removeUserProject')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-ajax">移除授权</a>
+			{{#  } }}
 		</div>
 	</script>
 	<script type="text/html" id="toolbar"></script>
 </div>
 <script type="text/javascript">
-    layui.use(['table','jquery', 'layer'], function() {
+    layui.use(['table','jquery'], function() {
         var $ = layui.$
-		    ,layer = layui.layer
 		    ,table = layui.table;
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			,height: 'full-280'
+			//,height: 'full-280'
             ,skin: 'line'
-            ,even: false
-            ,limit: 12
+            //,even: false
+            ,limit: 10
             ,text: {
                 none : '暂无相关数据'
             }
@@ -68,16 +73,17 @@
             ,defaultToolbar: ['filter']
             ,cols: [[ //表头
                 {type:'checkbox'}
-                ,{field: 'username',with:140, title: '账号'}
-                ,{field: 'nick',with:140, title: '姓名'}
-                ,{field: 'role_id', with:140,title: '职务', templet:function(d){
+                ,{field: 'username', align:'center',with:80, title: '账号'}
+                ,{field: 'nick', align:'center',with:100, title: '姓名'}
+                ,{field: 'role_id', align:'center', with:100,title: '角色', templet:function(d){
                     return d.role.name;
                 }}
-                ,{field: 'project', width: 150, title: '授权项目'}
-                ,{field: 'last_login_time', width: 150, title: '授权时间'}
-                ,{field: 'remark', with:140,title: '备注'}
-                ,{field: 'state', title: '状态', width: 100, templet: '#statusTpl'}
-                ,{title: '操作', minWith:180, templet: '#buttonTpl'}
+                ,{field: 'post', align:'center', width: 100, title: '职务'}
+                ,{field: 'pro_names', align:'center', minWidth: 150, title: '授权项目'}
+                ,{field: 'ctime',  align:'center',width: 150, title: '授权时间'}
+                ,{field: 'remark', align:'center', with:140,title: '备注'}
+                ,{field: 'status', align:'center', title: '状态', width: 100, templet: '#statusTpl'}
+                ,{title: '操作', with:280, templet: '#buttonTpl'}
             ]]
         });
     });
