@@ -66,16 +66,16 @@
 			//监听提交
 			form.on('submit(submit)', function(data){
 				 if ($("input[name='project']:checked").length == 0) {
-					layer.msg("请先选择授权项目");
+					layer.msg("请先选择授权项目",{icon:5});
 					return false;
                 }
-			    //获取checkbox[name='foodId']的值，获取所有选中的复选框，并将其值放入数组中
+			    /* //获取checkbox[name='foodId']的值，获取所有选中的复选框，并将其值放入数组中
 				var arr = new Array();
 				$("input:checkbox[name='foodId']:checked").each(function(i){
 					arr[i] = $(this).val();
 				});
 				//  替换 data.field.foodId的数据为拼接后的字符串
-				data.field.foodId = arr.join(",");//将数组合并成字符串
+				data.field.foodId = arr.join(",");//将数组合并成字符串 */
 			}); 
          });   
         </script>
