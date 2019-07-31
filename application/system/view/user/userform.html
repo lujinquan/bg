@@ -68,7 +68,9 @@
 			//监听提交
 			form.on('submit(submit)', function(data){
 				 if ($("input[name='project']:checked").length == 0) {
-					layer.tips('请选择授权项目', '.j-tips');
+					layer.tips('请选择授权项目', '.j-input-width', {
+                         tips: 1
+                     });
 					return false;
                 }
 			    /* //获取checkbox[name='foodId']的值，获取所有选中的复选框，并将其值放入数组中
