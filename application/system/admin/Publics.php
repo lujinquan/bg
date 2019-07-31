@@ -59,7 +59,7 @@ class Publics extends Common
                         $res = $auth->CheckSmsYzm($username, $code);
                         $res = json_decode($res);
                         // 验证短信码是否正确
-                        if($res->code = '200'){ 
+                        if($res->code == '200'){ 
                             if (!$model->loginPhone($username)) {
                                 $loginError = ($loginError+1);
                                 session('admin_login_error', $loginError);
