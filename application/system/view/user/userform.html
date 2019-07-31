@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <form class="layui-form" action="{:url()}" method="post" id="editForm">
         <div class="layui-tab-item layui-show">
             <div class="layui-form-item">
@@ -154,4 +155,90 @@
                 form.render('checkbox');
             }
         });
+=======
+	<style>
+		.page-tab-content{margin: 40px;}
+		/* .layui-layer-msg{transform: translate(-50%,-50%)!important;left: 50%!important;top: 50%!important;} */
+		.layui-layout-body{ overflow: auto;}
+	</style>
+	<div class="layui-tab layui-tab-brief j-no-color">
+	  <ul class="layui-tab-title">
+		<li class="layui-this">新增授权</li>
+	  </ul>
+	</div>
+	<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+		<div class="layui-form-item">
+			<div class="layui-inline">
+			  <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
+			  <div class="layui-input-inline">
+				<input type="tel" name="phone" lay-verify="required|phone" lay-verType="tips" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+			  </div>
+			</div>
+		</div>  
+		<div class="layui-form-item">
+		 	<div class="layui-inline">
+		 	  <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
+		 	  <div class="layui-input-inline">
+		 		<input type="tel" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+		 	  </div>
+		 	</div>
+		 </div>  
+		 <div class="layui-form-item">
+		   	<div class="layui-inline">
+		   	  <label class="layui-form-label">职务：</label>
+		   	  <div class="layui-input-inline">
+		   		<input type="tel" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+		   	  </div>
+		   	</div>
+		</div>   
+	    <div class="layui-form-item">
+			<div class="layui-inline">
+			  <label class="layui-form-label">备注：</label>
+			  <div class="layui-input-inline">
+				<textarea name="remarks" placeholder="备注描述" lay-verType="tips" class="layui-textarea"></textarea>
+			  </div>
+			</div>
+	    </div>   
+		<div class="layui-form-item" pane="">
+			<label class="layui-form-label j-tips"><i class="red">*</i>授权项目</label>
+			<div class="layui-input-block j-input-width">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目1" checked="">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目2">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目3">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目4">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目5">
+			  <input type="checkbox" name="project" lay-skin="primary" title="项目6">
+			</div>
+	    </div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+			  <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+			  <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submit">提交</button>
+			</div>
+		 </div>
+	</form>
+        {include file="block/layui" /}
+        <script>
+        layui.use(['jquery', 'layer','form',], function() {
+            var $ = layui.$
+                ,layer = layui.layer
+                ,form = layui.form;
+			//监听提交
+			form.on('submit(submit)', function(data){
+				 if ($("input[name='project']:checked").length == 0) {
+					layer.tips('请选择授权项目', '.j-input-width', {
+                         tips: 1
+                     });
+					return false;
+                }
+			    /* //获取checkbox[name='foodId']的值，获取所有选中的复选框，并将其值放入数组中
+				var arr = new Array();
+				$("input:checkbox[name='foodId']:checked").each(function(i){
+					arr[i] = $(this).val();
+				});
+				//  替换 data.field.foodId的数据为拼接后的字符串
+				data.field.foodId = arr.join(",");//将数组合并成字符串 */
+			}); 
+         });   
+>>>>>>> 10f771957a6bc3290b82084fae3741ef4af100b5
         </script>
