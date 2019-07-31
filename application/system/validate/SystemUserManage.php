@@ -21,55 +21,60 @@ class SystemUserManage extends Validate
 {
     //定义验证规则
     protected $rule = [
+    	'username|账户名称' => 'require|unique:system_user',
         'nick|昵称'       => 'require|unique:system_user',
         'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
-        //'email|邮箱'      => 'requireWith:email|email|unique:system_user',
-        //'password|密码'   => 'require|length:32|confirm',
+        'post|职务'       => 'require',
+        //'pro_ids|授权项目' => 'require',
+        'password|密码'   => 'require|confirm',
         //'mobile|手机号'   => 'requireWith:mobile|regex:^1\d{10}',
-        'username|账户名称' => 'requireWith:mobile|unique:system_user',
+        
         //'__token__'      => 'require|token',
     ];
 
     //定义验证提示
     protected $message = [
-        'username.require' => '请输入用户名',
-        'role_id.require'  => '请选择角色分组',
-        'role_id.notIn'    => '禁止设置为超级管理员',
+        // 'username.require' => '请输入账户名称',
+        // 'role_id.require'  => '请选择角色分组',
+        // 'role_id.notIn'    => '禁止设置为超级管理员',
         // 'email.require'    => '邮箱不能为空',
         // 'email.email'      => '邮箱格式不正确',
         // 'email.unique'     => '该邮箱已存在',
-        // 'password.require' => '密码不能为空',
-        // 'password.length'  => '密码设置无效',
+        //'password.require' => '密码为空',
+        //'password.length'  => '密码设置无效',
         //'mobile.regex'     => '手机号不正确',
     ];
 
-    // 添加
+    // //定义验证场景
+    // protected $scene = [
+    //     //新增
+    //     'sceneAdd'  =>  ['username','nick','role_id'],
+    //     //编辑
+    //     'sceneEdit'  =>  ['nick','role_id'],
+    //     //设置密码
+    //     'sceneSetPassword'  =>  ['password'],
+         
+    // ];
+
+    //添加
     public function sceneAdd()
     {
-        return $this->only(['username', 'nick', 'role_id']);
+        return $this->only(['username', 'nick', 'role_id','post']);
+        //return $this->only(['username', 'nick', 'role_id','post'])->remove('post',['require']);
     }
 
     // 编辑
     public function sceneEdit()
     {
-        return $this->only(['nick', 'role_id']);
+        return $this->only(['role_id','post']);
     }
 
     // 自定义更新个人信息
-    public function sceneInfo()
+    public function sceneSetPassword()
     {
-        return $this->only(['username', 'email', 'mobile', 'password', '__token__'])
-                    ->remove('password', ['require'])
-                    ->append('password', ['requireWith']);
+        return $this->only(['password']);
     }
 
-    // 自定义登录场景
-    public function sceneLogin()
-    {
-        return $this->only(['username', 'password', '__token__'])
-                    ->remove('username', ['unique'])
-                    ->remove('password', ['confirm'])
-                    ->append('username', ['require']);
-    }
+    
 }
 

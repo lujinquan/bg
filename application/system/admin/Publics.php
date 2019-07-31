@@ -23,7 +23,7 @@ use SendMessage\ServerCodeAPI;
 class Publics extends Common
 {
     /**
-     * 登陆页面
+     * 登录页面
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */
@@ -47,7 +47,7 @@ class Publics extends Common
                     }
                     //halt(1);
                     session('admin_login_error', 0);          
-                    return $this->success('登陆成功，页面跳转中...', url('index/index'));
+                    return $this->success('登录成功，页面跳转中...', url('index/index'));
                     break;
 
                 case 2: //手机短信登录
@@ -58,14 +58,19 @@ class Publics extends Common
                     
                         $res = $auth->CheckSmsYzm($username, $code);
                         $res = json_decode($res);
-                        if($res->code == '200'){
+                        // 验证短信码是否正确
+                        if($res->code == '200'){ 
                             if (!$model->loginPhone($username)) {
                                 $loginError = ($loginError+1);
                                 session('admin_login_error', $loginError);
                                 return $this->error($model->getError(), url('index'), $data);
                             }
                             session('admin_login_error', 0);
-                            return $this->success('登陆成功，页面跳转中...', url('index/index'));
+                            $password = $model->where([['username','eq',$username]])->value('password');
+                            if(!$password){
+                                return $this->success('登录成功，页面跳转中...', url('index/setPassword'));
+                            }
+                            return $this->success('登录成功，页面跳转中...', url('index/index'));
                         } else if($res->code == '413'){
                             return $this->error('验证失败');
                         } else {
@@ -110,7 +115,7 @@ class Publics extends Common
     }
 
     /**
-     * 登陆页面
+     * 登录页面
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */
@@ -155,7 +160,7 @@ class Publics extends Common
 
             session('admin_login_error', 0);
             
-            return $this->success('登陆成功，页面跳转中...', url('index/index'));
+            return $this->success('登录成功，页面跳转中...', url('index/index'));
 
         }
 
@@ -171,7 +176,7 @@ class Publics extends Common
     }
 
     /**
-     * 退出登陆
+     * 退出登录
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */

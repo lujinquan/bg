@@ -17,11 +17,12 @@
 	.j-add-project .layui-form{ padding: 20px;}
 </style>
 <div class="j-guide-box">
+	{if condition="ADMIN_ROLE == 1"}
 	<div class="layui-row layui-col-space15">
 		<div class="layui-col-md3">
 			<div class="j-guide-list j-guide-total">
 				<div class="j-project">
-					项目总况（4）
+					项目总况（{:count($projectArr)}）
 				</div>
 				<div class="j-guide-statistics">
 					 <ul>
@@ -33,8 +34,10 @@
 			</div>
 		</div>
 	</div>
+	{/if}
 	<div class="layui-row layui-col-space15 j-guide-project">
 		{volist name="projectArr" id="vo"}
+		{if condition="ADMIN_ROLE == 1"}
 		<div class="layui-col-md3 j-login-project" project-id="{$vo['id']}">
 		  <div class="j-guide-list">
 			 <div class="j-guide-name">
@@ -50,13 +53,39 @@
 			 </div>
 		  </div>
 		</div>
+		{else /}
+
+			{if condition="$login['pro_ids'][0] && in_array($vo['id'],$login['pro_ids'])"}
+			<div class="layui-col-md3 j-login-project" project-id="{$vo['id']}">
+			  <div class="j-guide-list">
+				 <div class="j-guide-name">
+					 <div class="j-title">{$vo['project_name']}</div>
+					 <div class="j-address">{$vo['project_address']}</div>
+				 </div>
+				 <div class="j-guide-statistics">
+					 <ul>
+						 <li>入驻企业数量：{$fillwords}</li>
+						 <li>入驻人员数量：{$fillwords}</li>
+						 <li>空闲工位数量：{$fillwords}</li>
+					 </ul>
+				 </div>
+			  </div>
+			</div>
+			{/if}
+		{/if}
 		{/volist}
+
+		{if condition="ADMIN_ROLE != 1 && !$login['pro_ids'][0]"}
+			暂无项目分配
+		{/if}
+		{if condition="ADMIN_ROLE == 1"}
 		<div class="layui-col-md3" id="j-add-guide">
 				<div class="j-guide-list j-add">
 				<i class="layui-icon layui-icon-add-1"></i>
 				<p>添加新项目</p>
 				</div>
 		</div>
+		{/if}
   </div>
 </div>
 <div  class="j-add-project j-hide">

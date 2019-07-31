@@ -80,6 +80,9 @@ class User extends Admin
      */
     public function indexManage($q = '')
     {
+        if(ADMIN_ROLE != 1){
+            return $this->error('权限不足');
+        }
         $projectModel = new Project;
         $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isAjax()) {
@@ -92,6 +95,7 @@ class User extends Admin
             $pro_ids    = $this->request->param('pro_ids/d');
             $status    = $this->request->param('status/d');
             $where[]    = ['id', 'neq', 1];
+            $where[] = ['status', 'eq', 1];
             if ($username) {
                 $where[] = ['username', 'like', "%{$username}%"];
             }
@@ -102,7 +106,12 @@ class User extends Admin
                 $where[] = ['pro_ids', 'like', "%{$pro_ids}%"];
             }
             if ($status) {
-                $where[] = ['status', 'eq', $status];
+                if($status == 1){
+                    $where[] = ['last_login_ip', 'neq', ''];
+                }else{
+                    $where[] = ['last_login_ip', 'eq', ''];
+                }
+                
             }
             
             $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
@@ -134,17 +143,6 @@ class User extends Admin
         return $this->fetch();
     }
 
-
-    /**
-     * 一般管理员管理列表页
-     * @author Lucas <598936602@qq.com>
-     * @return mixed
-     */
-    public function impower($q = '')
-    {
-        return $this->fetch();
-    }
-
     /**
      * 移除授权
      * @author Lucas <598936602@qq.com>
@@ -152,6 +150,9 @@ class User extends Admin
      */
     public function removeUserProject()
     {
+        if(ADMIN_ROLE != 1){
+            return $this->error('权限不足');
+        }
         $id   = $this->request->param('id/d');
         $model = new UserModel();
         $res = $model->where([['id','eq',$id]])->update(['pro_ids'=>'']);
@@ -169,13 +170,17 @@ class User extends Admin
      */
     public function addUserManage()
     {
+        if(ADMIN_ROLE != 1){
+            return $this->error('权限不足');
+        }
         $projectModel = new Project;
         $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
+
             // 验证
-            $result = $this->validate($data, 'SystemUserManage.scenceAdd');
+            $result = $this->validate($data, 'SystemUserManage.add');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -207,18 +212,21 @@ class User extends Admin
      */
     public function editUserManage()
     {
+        if(ADMIN_ROLE != 1){
+            return $this->error('权限不足');
+        }
         $projectModel = new Project;
         $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
             // 验证
-            $result = $this->validate($data, 'SystemUserManage.scenceEdit');
+            $result = $this->validate($data, 'SystemUserManage.edit');
             if($result !== true) {
                 return $this->error($result);
             }
 
-            if (!UserModel::create($data)) {
+            if (!UserModel::update($data)) {
                 return $this->error('编辑失败');
             }
 
@@ -243,6 +251,9 @@ class User extends Admin
      */
     public function delUserManage()
     {
+        if(ADMIN_ROLE != 1){
+            return $this->error('权限不足');
+        }
         $id   = $this->request->param('id/d');
         $model = new UserModel();
         $pro_ids = $model->where([['id','eq',$id]])->value('pro_ids');
@@ -347,7 +358,7 @@ class User extends Admin
             }
             
             $row = UserModel::where('id', $id)->field('role_id,auth')->find();
-            if ($data['id'] == 1 || ADMIN_ID == $id) {// 禁止更改超管角色，当前登陆用户不可更改自己的角色和自定义权限
+            if ($data['id'] == 1 || ADMIN_ID == $id) {// 禁止更改超管角色，当前登录用户不可更改自己的角色和自定义权限
                 unset($data['role_id'], $data['auth']);
                 if (!$row['auth']) {
                     $data['auth'] = '';
@@ -532,7 +543,7 @@ class User extends Admin
 
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 当前登陆用户不可更改自己的分组角色
+            // 当前登录用户不可更改自己的分组角色
             if (ADMIN_ROLE == $data['id']) {
                 return $this->error('禁止修改当前角色(原因：您不是超级管理员)');
             }

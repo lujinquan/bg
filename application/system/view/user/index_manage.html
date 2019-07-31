@@ -22,8 +22,8 @@
 				  <div class="layui-input-inline" style="width:150px;">
 					  <select name="status">
 						  <option value="">请选择状态</option>
-						  <option value="0">关闭</option>
 						  <option value="1">正常</option>
+						  <option value="2">未激活</option>
 						</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -38,9 +38,7 @@
 
 	{include file="block/layui" /}
 
-	<script type="text/html" id="statusTpl">
-	   <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
-	</script>
+	
 
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
@@ -82,7 +80,14 @@
                 ,{field: 'pro_names', align:'center', minWidth: 150, title: '授权项目'}
                 ,{field: 'ctime',  align:'center',width: 150, title: '授权时间'}
                 ,{field: 'remark', align:'center', with:140,title: '备注'}
-                ,{field: 'status', align:'center', title: '状态', width: 100, templet: '#statusTpl'}
+                ,{field: 'last_login_ip', align:'center', title: '状态', width: 100, templet:function(d){
+                	if(d.last_login_ip){
+                		return '正常';
+                	}else{
+                		return '未激活';
+                	}
+                    //return d.role.name;
+                }}
                 ,{title: '操作', with:280, templet: '#buttonTpl'}
             ]]
         });

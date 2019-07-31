@@ -15,6 +15,7 @@ use Env;
 use hisi\Dir;
 use app\common\model\Cparam;
 use app\common\model\Project;
+use app\system\model\SystemUser;
 
 /**
  * 后台默认首页控制器
@@ -43,6 +44,42 @@ class Index extends Admin
     public function lead()
     {
         return $this->fetch();
+    }
+
+    public function setPassword()
+    {
+        //检查是否可以进入到当前页面
+        $systemUserModel = new SystemUser;
+        $password = $systemUserModel->where([['id','eq',ADMIN_ID]])->value('password');
+        if($password){
+            return $this->error('页面不存在！');
+        }
+
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+
+            $data['password'] = md5($data['password']);
+            $data['password_confirm'] = md5($data['password_confirm']);
+  
+            // 验证
+            $result = $this->validate($data, 'SystemUserManage.setPassword');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            
+            unset($data['id'], $data['password_confirm']);
+
+            // 入库
+            
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            $row = $systemUserModel->where([['id','eq',ADMIN_ID]])->update($data);
+            //halt($res);
+            if (!$row) {
+                return $this->error('设置失败');
+            }
+            return $this->success('设置成功','index/index',['id'=>$row['id']]);
+        }
+        return $this->fetch('set_password');
     }
 
     /**

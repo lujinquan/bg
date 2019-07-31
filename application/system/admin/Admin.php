@@ -48,7 +48,7 @@ class Admin extends Common
         // 判断登陆
         $login = $model->isLogin();
         if (!$login['uid']) {
-            return $this->error('请登陆之后在操作', ROOT_DIR.config('sys.admin_path'));
+            return $this->error('请登录之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
 
         //$login = $model->isLogin();
@@ -56,15 +56,11 @@ class Admin extends Common
         //     return $this->redirect(ROOT_DIR.'system/view/index.html');
         // }
 
-        $this->assign('fillwords','站位');
+        $this->assign('fillwords','占位');
 
         //if(!session('curr_project_id')){
             //halt(session('curr_project_id'));
-            $projectModel = new Project;
-            $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
-            
-            //halt($projectArr);
-            $this->assign('projectArr',$projectArr);
+
             //$this->view->engine->layout(true);
             //return $this->fetch('index/lead');
 
@@ -91,6 +87,12 @@ class Admin extends Common
                     $curMenu = ['title' => '', 'url' => '', 'id' => 0];
 
                 }
+
+                $projectModel = new Project;
+                $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
+               //halt($login);
+
+                $this->assign('projectArr',$projectArr);
 
                 $this->_systemLog($curMenu['title']);
 

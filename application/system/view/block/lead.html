@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="__ADMIN_CSS__/theme.css?v={:config('hisiphp.version')}">
     <link rel="stylesheet" href="__ADMIN_CSS__/style.css?v={:config('hisiphp.version')}" media="all">
     <link rel="stylesheet" href="__STATIC__/fonts/typicons/min.css?v={:config('hisiphp.version')}">
-    <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">
+    <link rel="stylesheet" href="__STATIC__/fonts/font-awesome/min.css?v={:config('hisiphp.version')}">  
+    <link rel="stylesheet" href="__ADMIN_CSS__/lucas-style.css?v={:config('hisiphp.version')}">
     {$hisiHead|raw}
 </head>
 <body class="layui-layout-body hisi-theme-{:cookie('hisi_admin_theme')}">
@@ -20,9 +21,12 @@
         <div class="fl header-logo"><a href="{:url('system/index/index')}"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></a></div>
         
         <ul class="layui-nav fr nobg head-info">
+            {// 超级管理员才可以管理一般管理员}
+            {if condition="ADMIN_ROLE == 1"}
            <li class="layui-nav-item">
                 <a href="{:url('system/user/indexManage')}" id="j-index-manage">一般管理员账号管理</a>
             </li>
+            {/if}
             <li class="layui-nav-item">
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
             </li>
@@ -31,7 +35,7 @@
                 <dl class="layui-nav-child">
                     
                     <dd>
-                        <a href="{:url('system/publics/logout')}">退出登陆</a>
+                        <a href="{:url('system/publics/logout')}">退出登录</a>
                     </dd>
                 </dl>
             </li>
