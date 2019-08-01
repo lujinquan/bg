@@ -24,6 +24,9 @@ input:-webkit-autofill {
 .j-setting-pass .j-errors i{ font-size: 10px;}
 .j-setting-pass .j-errors label{ padding-left: 8px;}
 /* 设置密码 E */
+/* input显示文字样式 S */
+.layui-input.j-no-border{ border: 0; padding-left: 0;}
+/* input显示文字样式 E */
 /* 弹框新样式 S*/
 .layui-layer-dialog .layui-layer-padding{font-family:MicrosoftYaHei;color: #4A4A4A;}
 .layui-layer-dialog .layui-layer-btn{position: relative; height: 40px;}
