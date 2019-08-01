@@ -4,6 +4,7 @@
 /public/upload/*
 /config/hs_auth.php
 /config/hs_cloud.php
+/config/database.php
 composer.lock
 install.lock
 .idea
