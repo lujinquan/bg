@@ -238,7 +238,7 @@ body{background-color:#f5f5f5;margin:0;padding:0;}
 .page-toolbar.j-page-toolbar{ margin: 20px 0 10px 0;}
 .j-page-toolbar .layui-btn.j-btn-reset{background: none; color: #4A4A4A; padding: 0 10px 0 0;}
 .j-page-toolbar .layui-form-pane .layui-input{border: #C6D2DD 1px solid;}
-.j-page-toolbar  .layui-form-pane .layui-input-inline{ margin-right: 20px;}
+.j-page-toolbar  .layui-form-pane .layui-input-inline{ margin:0 20px 20px 0;}
 .layui-btn-group.j-add-group { padding-top: 20px;}
 .layui-btn-group.j-add-group  .layui-btn{background: #20A0FF;border: 0; height: 38px; color: #fff; font:bold 14px/38px '';border-radius: 4px;    padding: 0 18px;}
 .layui-btn{border-radius: 4px;}

@@ -34,7 +34,7 @@
 			</div>
 		  </form>
 	  </div>
-	<table id="dataTable"></table>
+	<table id="dataTable" lay-filter='dataTable'></table>
 
 	{include file="block/layui" /}
 
@@ -67,10 +67,8 @@
             ,text: {
                 none : '暂无相关数据'
             }
-       
-            ,defaultToolbar: ['filter']
             ,cols: [[ //表头
-                {type:'checkbox'}
+                {type:'checkbox', fixed: 'left'}
                 ,{field: 'username', align:'center',with:80, title: '账号'}
                 ,{field: 'nick', align:'center',with:100, title: '姓名'}
                 ,{field: 'role_id', align:'center', with:100,title: '角色', templet:function(d){
@@ -88,7 +86,7 @@
                 	}
                     //return d.role.name;
                 }}
-                ,{title: '操作', with:280, templet: '#buttonTpl'}
+                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
             ]]
         });
     });
