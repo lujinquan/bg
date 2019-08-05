@@ -83,8 +83,8 @@
 					<span class="card-title">访客记录</span>
 					<div class="layui-layout-right card-header-rside">
 						<span class="layui-breadcrumb card-breadcrumb" lay-separator="|">
-							<a href="" style="color: #0000FF;">临时访客</a>
-							<a href="">预约访客</a>
+							<a href="javascript:;" class="on" style="color: #0000FF;">临时访客</a>
+							<a href="javascript:;">预约访客</a>
 						</span>
 						<a href="#" class="text-blue">更多>></a>
 					</div>
@@ -119,6 +119,10 @@
 	      ,$= layui.jquery;
 		  conferenceroom();
 		  workstation();
+		  //访客记录tab切换
+		  $(".card-breadcrumb a").click(function(){
+			  $(this).addClass("on").siblings().removeClass("on");
+		  })
 		  //访客记录
 		  table.render({
 		    elem: '#visitor'
