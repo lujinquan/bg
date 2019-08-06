@@ -9,6 +9,32 @@ input:-webkit-autofill {
 .fl{ float: left;}
 .fr{float: right;}
 /*---------------------公用样式 E--------------------*/
+/* 首页样式 S */
+ .project-info, .card {border-radius: 4px;}
+ .project-info {height: 100px;}
+ .project-info1 {background: url(../image/info1.png);}
+ .project-info2 {background: url(../image/info2.png) repeat-x;}
+ .project-info3 {background: url(../image/info4.png) repeat-x;}
+ .project-info4 {background: url(../image/info3.png) repeat-x;}
+ .project-icon {width: 25%;height: inherit;}
+ .project-icon1 {background: url(../image/ruzhuqiye.png) no-repeat center;}
+ .project-icon2 {background: url(../image/renyuanguanli.png) no-repeat center;}
+ .project-icon3 {background: url(../image/kongjiangongwei.png) no-repeat center;}
+ .project-icon4 {background: url(../image/huiyishi.png) no-repeat center;}
+ .project-text {height: inherit;margin-right: 10%;color: #FFFFFF;font-size: 16px;font-weight: bold;display: flex;flex-direction: column;justify-content: center;align-items: flex-end;}
+ .project-text .value {font-size: 34px;font-weight: normal;line-height: 1.5em;}
+ .card-header {border-bottom: #D8D8D8 solid 1px;}
+ .card-title {color: #999999;font-size: 18px;font-weight: bold;border-left: #20A0FF solid 6px;padding-left: .5em;}
+ .card-header-rside {margin-right: 1em;}
+ .card-breadcrumb {margin-right: 30px;}
+ .text-blue {color: #20A0FF;font-size: 14px;}
+ .card-btn {background: none;border: #20A0FF solid 1px;border-radius: 5px;padding: 3px 8px;margin-right: 10px;}
+ .card-btn:hover {cursor: pointer;color: white;background-color: #20A0FF;}
+ .card-table th {color: #333333;background-color: #EDF0F9;font-size: 16px;font-weight: bold;}
+ .chart {width: 45%;height: 200px;padding: 0 5%;}
+ .chart-info {height: 200px;color: #4A4A4A;line-height: 2em;margin-right: 20%;display: flex;flex-direction: column;justify-content: center;}
+ .layui-breadcrumb a.on,.layui-breadcrumb a:hover{ color: #20A0FF!important;}
+/* 首页样式 E */
 /* 设置密码 S */
 .j-setting-box{ width: 700px;position: absolute;left: 50%; top:50%; transform: translate(-50%,-50%);}
 .j-setting-pass{ margin: 0 auto; border-radius: 14px; background: #fff;    overflow: hidden;}
@@ -33,3 +59,6 @@ input:-webkit-autofill {
 .layui-layer-dialog .layui-layer-btn .layui-layer-btn0{ position: absolute; right:25px; top:0;}
 .layui-layer-dialog .layui-layer-btn .layui-layer-btn1{ position: absolute; right:105px; top:0;}
 /* 弹框新样式 E*/
+/* 首页table样式 S */
+.j-table-card .layui-table-view .layui-table th{font: bold 14px/40px 'MicrosoftYaHei-Bold';color: #333;}
+/* 首页table样式 E */
