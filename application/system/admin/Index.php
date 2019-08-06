@@ -52,12 +52,12 @@ class Index extends Admin
         $systemUserModel = new SystemUser;
         $password = $systemUserModel->where([['id','eq',ADMIN_ID]])->value('password');
         if($password){
-            return $this->error('页面不存在！');
+            return $this->error('权限不足！');
         }
 
         if ($this->request->isAjax()) {
             $data = $this->request->post();
-
+//halt($data);
             $data['password'] = md5($data['password']);
             $data['password_confirm'] = md5($data['password_confirm']);
   
@@ -162,22 +162,24 @@ class Index extends Admin
     public function clear()
     {
         $path   = Env::get('runtime_path');
-        $cache  = $this->request->param('cache/d', 0);
-        $log    = $this->request->param('log/d', 0);
-        $temp   = $this->request->param('temp/d', 0);
+        // $cache  = $this->request->param('cache/d', 0);
+        // $log    = $this->request->param('log/d', 0);
+        // $temp   = $this->request->param('temp/d', 0);
 
-        if ($cache == 1) {
-            Dir::delDir($path.'cache');
-        }
+        // if ($cache == 1) {
+        //     Dir::delDir($path.'cache');
+        // }
 
-        if ($temp == 1) {
-            Dir::delDir($path.'temp');
-        }
+        // if ($temp == 1) {
+        //     Dir::delDir($path.'temp');
+        // }
 
-        if ($log == 1) {
-            Dir::delDir($path.'log');
-        }
-
-        return $this->success('任务执行成功');
+        // if ($log == 1) {
+        //     Dir::delDir($path.'log');
+        // }
+        Dir::delDir($path.'cache');
+        Dir::delDir($path.'temp');
+        Dir::delDir($path.'log');
+        return $this->success('清除成功');
     }
 }

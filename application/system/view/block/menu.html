@@ -13,7 +13,7 @@
         </ul>
         <ul class="layui-nav fr nobg head-info">
             <li class="layui-nav-item">
-                <a href="javascript:void(0);" class="aicon ai-qingchu" id="hisi-clear-cache" title="清缓存"></a>
+                <a href="javascript:void(0);" data-href="{:url('system/index/clear')}" class="aicon ai-qingchu j-ajax" title="清缓存"></a>
             </li>
             <li class="layui-nav-item">
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
@@ -24,9 +24,9 @@
                     <dd>
                         <a data-id="00" class="admin-nav-item top-nav-item" href="{:url('system/user/info')}">个人设置</a>
                     </dd>
-                    <dd>
+                    <!-- <dd>
                         <a href="{:url('system/user/iframe')}" class="hisi-ajax" refresh="true">{:input('cookie.hisi_iframe') ? '单页布局' : '框架布局' }</a>
-                    </dd>
+                    </dd> -->
                     <dd>
                         <a href="{:url('system/publics/logout')}">退出登录</a>
                     </dd>
@@ -45,16 +45,16 @@
             {if (isset($v['childs']))}
                 {volist name="v['childs']" id="vv" key="kk"}
                 <li class="layui-nav-item {if condition="$kk eq 1"}layui-nav-itemed{/if}">
-                    <a href="javascript:;"><i class="{$vv['icon']}"></i>{$vv['title']}<span class="layui-nav-more"></span></a>
+                    <a href="javascript:;"><i class="{$vv['icon']}"></i>&nbsp;&nbsp;{$vv['title']}<span class="layui-nav-more"></span></a>
                     <dl class="layui-nav-child">
                         {if condition="$vv['title'] eq '快捷菜单'"}
                             <dd>
-                                <a class="admin-nav-item" data-id="0" href="{:input('cookie.hisi_iframe') ? url('system/index/welcome') : url('system/index/index')}"><i class="aicon ai-shouye"></i> 后台首页</a>
+                                <a class="admin-nav-item" data-id="0" href="{:input('cookie.hisi_iframe') ? url('system/index/welcome') : url('system/index/index')}"><i class="aicon ai-shouye"></i>&nbsp;&nbsp;后台首页</a>
                             </dd>
                             {if (isset($vv['childs']))}
                             {volist name="vv['childs']" id="vvv"}
                             <dd>
-                                <a class="admin-nav-item" data-id="{$vvv['id']}" href="{if condition="strpos('http', $vvv['url']) heq false"}{:url($vvv['url'], $vvv['param'])}{else /}{$vvv['url']}{/if}">{if condition="file_exists('.'.$vvv['icon'])"}<img src="{$vvv['icon']}" width="16" height="16" />{else /}<i class="{$vvv['icon']}"></i>{/if} {$vvv['title']}</a><i data-href="{:url('system/menu/del?id='.$vvv['id'])}" class="layui-icon j-del-menu">&#xe640;</i>
+                                <a class="admin-nav-item" data-id="{$vvv['id']}" href="{if condition="strpos('http', $vvv['url']) heq false"}{:url($vvv['url'], $vvv['param'])}{else /}{$vvv['url']}{/if}">{if condition="file_exists('.'.$vvv['icon']) && $vvv['icon']"}<i class="{$vvv['icon']}"></i>{/if}&nbsp;&nbsp;&nbsp;&nbsp;{$vvv['title']}</a><i data-href="{:url('system/menu/del?id='.$vvv['id'])}" class="layui-icon j-del-menu">&#xe640;</i>
                             </dd>
                             {/volist}
                             {/if}
@@ -62,7 +62,7 @@
                             {if (isset($vv['childs']))}
                             {volist name="vv['childs']" id="vvv"}
                             <dd>
-                                <a class="admin-nav-item" data-id="{$vvv['id']}" href="{if condition="strpos('http', $vvv['url']) heq false"}{:url($vvv['url'], $vvv['param'])}{else /}{$vvv['url']}{/if}">{if condition="file_exists('.'.$vvv['icon'])"}<img src="{$vvv['icon']}" width="16" height="16" />{else /}<i class="{$vvv['icon']}"></i>{/if} {$vvv['title']}</a>
+                                <a class="admin-nav-item" data-id="{$vvv['id']}" href="{if condition="strpos('http', $vvv['url']) heq false"}{:url($vvv['url'], $vvv['param'])}{else /}{$vvv['url']}{/if}">{if condition="file_exists('.'.$vvv['icon']) && $vvv['icon']"}<img src="{$vvv['icon']}" width="16" height="16" />{/if}&nbsp;&nbsp;&nbsp;&nbsp;{$vvv['title']}</a>
                             </dd>
                             {/volist}
                             {/if}
@@ -83,7 +83,7 @@
         </ul>
     </script>
     <script type="text/html" id="hisi-clear-cache-tpl">
-        <form class="layui-form" style="padding:10px 0 0 30px;" action="{:url('system/index/clear')}" method="post">
+        <!-- <form class="layui-form" style="padding:10px 0 0 30px;" action="{:url('system/index/clear')}" method="post">
             <div class="layui-form-item">
                 <input type="checkbox" name="cache" value="1" title="数据缓存" />
             </div>
@@ -96,5 +96,5 @@
             <div class="layui-form-item">
                 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">执行删除</button>
             </div>
-        </form>
+        </form> -->
     </script>

@@ -240,6 +240,7 @@ class SystemMenu extends Model
 
         $auths = Tree::toTree($auths);
         Cache::set($cacheName, $auths);
+        //Cache::rm($cacheName);
         
         return $auths;
     }

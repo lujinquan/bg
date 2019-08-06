@@ -51,6 +51,11 @@ class Admin extends Common
             return $this->error('请登录之后在操作', ROOT_DIR.config('sys.admin_path'));
         }
 
+        if(session('curr_project_id')){
+            if (!defined('PROJECT_ID')) {
+                define('PROJECT_ID', session('curr_project_id'));
+            }
+        }
         //$login = $model->isLogin();
         // if (session('curr_project_id')) {
         //     return $this->redirect(ROOT_DIR.'system/view/index.html');

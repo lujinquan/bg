@@ -27,22 +27,22 @@ class User extends Admin
     /**
      * 初始化方法
      */
-    protected function initialize()
-    {
-        parent::initialize();
+    // protected function initialize()
+    // {
+    //     parent::initialize();
 
-        $tabData['menu'] = [
-            [
-                'title' => '管理员角色',
-                'url' => 'system/user/role',
-            ],
-            [
-                'title' => '系统管理员',
-                'url' => 'system/user/index',
-            ],
-        ];
-        $this->tabData = $tabData;
-    }
+    //     $tabData['menu'] = [
+    //         [
+    //             'title' => '管理员角色',
+    //             'url' => 'system/user/role',
+    //         ],
+    //         [
+    //             'title' => '系统管理员',
+    //             'url' => 'system/user/index',
+    //         ],
+    //     ];
+    //     $this->tabData = $tabData;
+    // }
 
     /**
      * 用户管理
@@ -51,25 +51,45 @@ class User extends Admin
      */
     public function index($q = '')
     {
+        // $projectModel = new Project;
+        // $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isAjax()) {
             $where      = $data = [];
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
-            $keyword    = $this->request->param('keyword/s');
+            $username    = $this->request->param('username/s');
+            $nick       = $this->request->param('nick/s');
+            $status    = $this->request->param('status/d');
             $where[]    = ['id', 'neq', 1];
-            if ($keyword) {
-                $where[] = ['username', 'like', "%{$keyword}%"];
+            $where[] = ['status', 'eq', 1];
+            $where[]    = ['pro_ids', 'eq', PROJECT_ID];
+            if ($username) {
+                $where[] = ['username', 'like', "%{$username}%"];
             }
+            if ($nick) {
+                $where[] = ['nick', 'like', "%{$nick}%"];
+            }
+            
+            if ($status) {
+                if($status == 1){
+                    $where[] = ['last_login_ip', 'neq', ''];
+                }else{
+                    $where[] = ['last_login_ip', 'eq', ''];
+                }
+                
+            }
+            
+            $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
 
-            $data['data'] = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            $data['data'] = $temp;
             $data['count'] = UserModel::where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
+            //halt($temp);
             return json($data);
         }
-
-        $this->assign('hisiTabData', $this->tabData);
-        $this->assign('hisiTabType', 3);
+        //$this->assign('proArr',$proArr);
+        $this->assign('leadUrlExtra','user/indexManage');
         return $this->fetch();
     }
 
@@ -138,8 +158,6 @@ class User extends Admin
         }
         $this->assign('proArr',$proArr);
         $this->assign('leadUrlExtra','user/indexManage');
-        $this->assign('hisiTabData', $this->tabData);
-        $this->assign('hisiTabType', 3);
         return $this->fetch();
     }
 
@@ -312,20 +330,17 @@ class User extends Admin
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
-            $data['password'] = md5($data['password']);
-            $data['password_confirm'] = md5($data['password_confirm']);
 
             // 验证
-            $result = $this->validate($data, 'SystemUser');
+            $result = $this->validate($data, 'SystemUser.add');
             if($result !== true) {
                 return $this->error($result);
             }
             
-            unset($data['id'], $data['password_confirm']);
-
+            unset($data['id']);
+            $data['pro_ids'] = PROJECT_ID;
             $data['last_login_ip'] = '';
             $data['auth'] = '';
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
             if (!UserModel::create($data)) {
                 return $this->error('添加失败');
@@ -333,10 +348,8 @@ class User extends Admin
 
             return $this->success('添加成功');
         }
-        
-        $this->assign('menu_list', '');
-        $this->assign('roleOptions', RoleModel::getOption());
-
+        $roleArr = RoleModel::where([['status','eq',1],['id','>',2]])->column('id,name');
+        $this->assign('roleArr', $roleArr);
         return $this->fetch('userform');
     }
 
@@ -351,67 +364,31 @@ class User extends Admin
         if ($id == 1 && ADMIN_ID != $id) {
             return $this->error('禁止修改超级管理员');
         }
+
+        
         if ($this->request->isPost()) {
+
             $data = $this->request->post();
-            if (!isset($data['auth'])) {
-                $data['auth'] = '';
-            }
-            
-            $row = UserModel::where('id', $id)->field('role_id,auth')->find();
-            if ($data['id'] == 1 || ADMIN_ID == $id) {// 禁止更改超管角色，当前登录用户不可更改自己的角色和自定义权限
-                unset($data['role_id'], $data['auth']);
-                if (!$row['auth']) {
-                    $data['auth'] = '';
-                }
-            } else if ($row['role_id'] != $data['role_id']) {// 如果分组不同，自定义权限无效
-                $data['auth'] = '';
-            }
-
-            if (isset($data['role_id']) && RoleModel::where('id', $data['role_id'])->value('auth') == json_encode($data['auth'])) {// 如果自定义权限与角色权限一致，则设置自定义权限为空
-                $data['auth'] = '';
-            }
-
-            if ($data['password']) {
-                $data['password'] = md5($data['password']);
-                $data['password_confirm'] = md5($data['password_confirm']);
-            }
-            
             // 验证
-            $result = $this->validate($data, 'SystemUser.update');
+            $result = $this->validate($data, 'SystemUser.edit');
             if($result !== true) {
                 return $this->error($result);
             }
 
-            if ($data['password']) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            } else {
-                unset($data['password']);
-            }
-
             if (!UserModel::update($data)) {
-                return $this->error('修改失败');
+                return $this->error('编辑失败');
             }
-            return $this->success('修改成功');
-        }
 
-        $row = UserModel::where('id', $id)->field('id,username,role_id,nick,email,mobile,auth,status')->find()->toArray();
-        if (!$row['auth']) {
-            $role = RoleModel::where('id', $row['role_id'])->find();
-            $row['auth'] = $role->auth;
+            return $this->success('编辑成功');
         }
-        
-        $tabData = [];
-        $tabData['menu'] = [
-            ['title' => '修改管理员'],
-            ['title' => '设置权限'],
-        ];
-
-        $this->assign('menu_list', MenuModel::getAllChild());
-        $this->assign('hisiTabData', $tabData);
-        $this->assign('hisiTabType', 2);
-        $this->assign('roleOptions', RoleModel::getOption($row['role_id']));
-        $this->assign('formData', $row);
-        return $this->fetch('userform');
+        $roleArr = RoleModel::where([['status','eq',1],['id','>',2]])->column('id,name');
+        $this->assign('roleArr', $roleArr);
+        $id   = $this->request->param('id/d');
+        $model = new UserModel();
+        $row = $model->find($id);
+        //halt($row);
+        $this->assign('data_info',$row);
+        return $this->fetch('edituserform');
     }
 
     /**
@@ -493,9 +470,6 @@ class User extends Admin
             $data['msg'] = '';
             return json($data);
         }
-
-        $this->assign('hisiTabData', $this->tabData);
-        $this->assign('hisiTabType', 3);
         return $this->fetch();
     }
 

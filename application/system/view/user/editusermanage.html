@@ -11,7 +11,8 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
           <div class="layui-input-inline">
-            <input type="tel" readonly lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input field-username j-no-border">
+            {$data_info['username']}
+            <!-- <input type="tel" readonly lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input field-username j-no-border"> -->
           </div>
         </div>
     </div>  
@@ -19,18 +20,11 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="nick" value="{$data_info['nick']}" readonly lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input field-nick j-no-border">
+            {$data_info['nick']}
+            <!-- <input type="tel" name="nick" value="{$data_info['nick']}" readonly lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input field-nick j-no-border"> -->
           </div>
         </div>
      </div> 
-     <div class="layui-form-item">
-        <label class="layui-form-label">角色分组</label>
-        <div class="layui-input-inline">
-            <select name="role_id" class="field-role_id" type="select">
-                {$roleOptions|raw}
-            </select>
-        </div>
-    </div> 
      <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>职务：</label>
@@ -38,7 +32,7 @@
             <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input field-post">
           </div>
         </div>
-    </div>   
+    </div>
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">备注：</label>
@@ -67,37 +61,9 @@
 </form>
 {include file="block/layui" /}
 <script>
-        var formData = {:json_encode($data_info)};
-        layui.use(['form', 'func'], function() {
-            var $ = layui.jquery, form = layui.form;
-            layui.func.assign(formData);
-            /* 有BUG 待完善*/
-            // form.on('checkbox(roleAuth)', function(data) {
-            //     var child = $(data.elem).parent('dt').siblings('dd').find('input');
-            //     /* 自动选中父节点 */
-            //     var check_parent = function (id) {
-            //         var self = $('.role-list-form input[value="'+id+'"]');
-            //         var pid = self.attr('data-pid') || '';
-            //         self.prop('checked', true);
-            //         if (pid == '') {
-            //             return false;
-            //         }
-            //         check_parent(pid);
-            //     };
-            //     /* 自动选中子节点 */
-            //     child.each(function(index, item) {
-            //         item.checked = data.elem.checked;
-            //     });
-            //     check_parent($(data.elem).attr('data-pid'));
-            //     form.render('checkbox');
-            // });
-        
-            // /* 权限赋值 */
-            // if (formData) {
-            //     for(var i in formData['auth']) {
-            //         $('.role-list-form input[value="'+formData['auth'][i]+'"]').prop('checked', true);
-            //     }
-            //     form.render('checkbox');
-            // }
-        });
-        </script>
+var formData = {:json_encode($data_info)};
+layui.use(['form', 'func'], function() {
+    var $ = layui.jquery, form = layui.form;
+    layui.func.assign(formData);
+});
+</script>

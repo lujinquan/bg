@@ -23,7 +23,7 @@ class SystemUserManage extends Validate
     protected $rule = [
     	'username|账户名称' => 'require|unique:system_user',
         'nick|昵称'       => 'require|unique:system_user',
-        'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
+        //'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
         'post|职务'       => 'require',
         //'pro_ids|授权项目' => 'require',
         'password|密码'   => 'require|confirm',
@@ -59,14 +59,14 @@ class SystemUserManage extends Validate
     //添加
     public function sceneAdd()
     {
-        return $this->only(['username', 'nick', 'role_id','post']);
+        return $this->only(['username', 'nick','post']);
         //return $this->only(['username', 'nick', 'role_id','post'])->remove('post',['require']);
     }
 
     // 编辑
     public function sceneEdit()
     {
-        return $this->only(['role_id','post']);
+        return $this->only(['post']);
     }
 
     // 自定义更新个人信息

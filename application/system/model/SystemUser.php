@@ -28,6 +28,13 @@ class SystemUser extends Model
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
 
+    protected $type = [
+        'ctime' => 'timestamp:Y-m-d H:i',
+        'mtime' => 'timestamp:Y-m-d H:i',
+        'guard' =>  'json',
+        //'jsondata' =>  'json',
+    ];
+
     public function setAuthAttr($value)
     {
         if (empty($value)) return '';
@@ -52,7 +59,7 @@ class SystemUser extends Model
         return date('Y-m-d H:i', $value);
     }
 
-    // 格式化授权时间
+    // 格式化授权项目
     public function getCtimeAttr($value)
     {
         return date('Y-m-d H:i', $value);
@@ -64,10 +71,10 @@ class SystemUser extends Model
         return explode(',', $value);
     }
 
-    // 格式化授权时间
+    // 格式化授权项目
     public function setProIdsAttr($value)
     {
-        return implode(',', $value);
+        return (strpos($value,',') === false) ? $value : implode(',', $value);
     }
 
     // 权限
@@ -158,7 +165,7 @@ class SystemUser extends Model
         $map = [];
         $map['status'] = 1;
         $map['username'] = $username;
-
+       
         $validate = new \app\system\validate\SystemUser;
         
         if ($validate->scene('login')->check(input('post.')) !== true) {

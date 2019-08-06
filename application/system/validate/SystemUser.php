@@ -44,6 +44,18 @@ class SystemUser extends Validate
     ];
 
     // 自定义更新场景
+    public function sceneAdd()
+    {
+        return $this->only(['username', 'nick', 'role_id']);
+    }
+
+    // 自定义更新场景
+    public function sceneEdit()
+    {
+        return $this->only(['role_id']);
+    }
+
+    // 自定义更新场景
     public function sceneUpdate()
     {
         return $this->only(['username', 'email', 'mobile', 'password', 'role_id', '__token__'])
