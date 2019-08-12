@@ -1,0 +1,45 @@
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">编辑楼层</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
+          <div class="layui-input-inline">
+            <select name="ban_id" class="field-cid" type="select">
+			    <option value="">请选择</option>
+			    {volist name="banArr" id="v"}
+			    <option value="{$v['ban_id']}"{if condition="$v['ban_id'] == $data_info['ban_id']"}selected{/if}>{$v['ban_name']}</option>
+			    {/volist}
+			</select>
+          </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>楼层：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_number" value="{$data_info['floor_number']}" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>面积：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_area" value="{$data_info['floor_area']}" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     {:token()}
+     <input type="hidden" name="floor_id" value="{$data_info['floor_id']}">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}

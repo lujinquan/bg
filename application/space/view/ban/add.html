@@ -1,0 +1,31 @@
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">新增楼宇</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>楼宇名称：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="ban_name" lay-verify="required" lay-verType="tips" placeholder="" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>楼宇地址：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="ban_address" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     {:token()}
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}

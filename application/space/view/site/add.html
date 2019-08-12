@@ -1,0 +1,89 @@
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">新增工位区</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+    <div class="layui-form-item">
+    	<div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位区名称：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_number" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
+          <div class="layui-input-inline">
+            <select name="ban_id" class="field-cid" type="select">
+      			    <option value="">请选择</option>
+      			    {volist name="banArr" id="v"}
+      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
+      			    {/volist}
+      			</select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_number" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位区类型：</label>
+          <div class="layui-input-inline">
+            <select name="ban_id" class="field-cid" type="select">
+      			    <option value="">请选择</option>
+      			    {volist name="params['site_type']" id="v"}
+      			    <option value="{$key}">{$v}</option>
+      			    {/volist}
+      			</select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位数：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="site_num" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位区面积：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_area" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位区介绍：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_area" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_area" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>工位区图片：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="floor_area" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+     </div>
+     {:token()}
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}

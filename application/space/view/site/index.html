@@ -1,0 +1,75 @@
+<div class="j-indent-box">
+	<div class="layui-btn-group j-add-group clearfix">
+		<a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon"><i class="layui-icon layui-icon-add-1"></i>新增工位区</a>
+	</div>
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				<div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="site_name" placeholder="工位区名称" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="ban_id" class="field-cid" type="select">
+	      			    <option value="">请选择</option>
+	      			    {volist name="banArr" id="v"}
+	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
+	      			    {/volist}
+	      			</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="ban_address" placeholder="楼宇地址" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="floor_number" placeholder="楼层" class="layui-input">
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+
+	
+
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('edit')}?id={{ d.site_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('del')}?id={{ d.site_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+	
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery'], function() {
+        var $ = layui.$
+		    ,table = layui.table;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+			//,height: 'full-280'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+                {field: 'site_name', align:'center',with:80, title: '楼宇名称'}
+                ,{field: 'site_type', align:'center',with:100, title: '类型', templet:function(d){
+                    return params.site_type[d.site_type];
+                }}
+                ,{field: 'ban_name', align:'center',with:100, title: '所属楼宇'}
+                ,{field: 'floor_number', align:'center',with:100, title: '楼层'}
+                ,{field: 'site_num', align:'center',with:100, title: '工位数'}
+                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
+            ]]
+        });
+    });
+</script>
