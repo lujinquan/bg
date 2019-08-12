@@ -133,6 +133,7 @@ class System extends Admin
             $arr['url'] = '?group='.$key;
             $tabData['menu'][] = $arr;
         }
+        //halt(config('sys.config_group'));
         $map = [];
         $map['group'] = $group;
         $map['status'] = 1;

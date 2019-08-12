@@ -17,6 +17,7 @@ use app\common\model\SystemAnnex as AnnexModel;
 use app\common\model\Cparam as CparamModel;
 use app\system\model\SystemNotice;
 use app\system\model\SystemHelp;
+use app\system\model\SystemUser as UserModel;
 use think\Db;
 
 /**
@@ -165,6 +166,22 @@ class Api extends Common
     public function upload($from = 'input', $group = 'sys', $water = '', $thumb = '', $thumb_type = '', $input = 'file')
     {
         return json(AnnexModel::upload($from, $group, $water, $thumb, $thumb_type, $input));
+    }
+
+    public function checkUserName()
+    {
+        $username = input('param.username');
+        if(!$username){
+            return $this->erro('参数错误');
+        }
+
+        //查找是否当前手机号已被使用
+        $findRow = UserModel::where([['username','eq',$username]])->find();
+        if($findRow){
+            return $this->success('当前账号已存在');
+        }else{
+            return $this->erro('当前账号不存在');
+        }
     }
 
 }

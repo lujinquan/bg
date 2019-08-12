@@ -68,8 +68,7 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {type:'checkbox', fixed: 'left'}
-                ,{field: 'username', align:'center',with:80, title: '账号'}
+                {field: 'username', align:'center',with:80, title: '账号'}
                 ,{field: 'nick', align:'center',with:100, title: '姓名'}
                 ,{field: 'role_id', align:'center', with:100,title: '角色', templet:function(d){
                     return d.role.name;
@@ -80,7 +79,7 @@
                 ,{field: 'remark', align:'center', with:140,title: '备注'}
                 ,{field: 'last_login_ip', align:'center', title: '状态', width: 100, templet:function(d){
                 	if(d.last_login_ip){
-                		return '正常';
+                		return '已激活';
                 	}else{
                 		return '未激活';
                 	}

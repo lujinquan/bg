@@ -207,6 +207,7 @@ class User extends Admin
             }
             unset($data['id']);
 
+            
             $data['last_login_ip'] = '';
             $data['auth'] = '';
 

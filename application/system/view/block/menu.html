@@ -1,6 +1,7 @@
 <div class="layui-header" style="z-index:999!important;">
         <div class="fl header-logo"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></div>
-        <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-shouqicaidan" id="foldSwitch"></a></div>
+        <!-- <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-shouqicaidan" id="foldSwitch"></a></div> -->
+        <div class="fl header-fold"><a href="javascript:;" title="切换项目" class="aicon ai-shouqicaidan" id="projectSwitch"></a></div>
         <ul class="layui-nav fl nobg main-nav">
             {volist name="hisiMenus" id="vo"}
                 {if condition="($hisiCurParents['pid'] eq $vo['id'] and $ca neq 'plugins/run') or ($ca eq 'plugins/run' and $vo['id'] eq 3)"}
@@ -13,13 +14,16 @@
         </ul>
         <ul class="layui-nav fr nobg head-info">
             <li class="layui-nav-item">
+                <a href="javascript:void(0);"  title="当前项目：{:session('curr_project_row.project_name')}">{:session('curr_project_row.project_name')}</a>
+            </li>
+            <li class="layui-nav-item">
                 <a href="javascript:void(0);" data-href="{:url('system/index/clear')}" class="aicon ai-qingchu j-ajax" title="清缓存"></a>
             </li>
             <li class="layui-nav-item">
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:void(0);">{$login['nick']}({:session('curr_project_row.project_name')})&nbsp;&nbsp;</a>
+                <a href="javascript:void(0);">{$login['nick']}&nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
                     <dd>
                         <a data-id="00" class="admin-nav-item top-nav-item" href="{:url('system/user/info')}">个人设置</a>

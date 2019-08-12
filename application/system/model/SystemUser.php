@@ -209,7 +209,9 @@ class SystemUser extends Model
             $login = [];
             $login['uid'] = $user->id;
             $login['role_id'] = $user->role_id;
+            $login['pro_ids'] = $user->pro_ids;
             $login['role_name'] = $role['name'];
+            $login['post'] = $user->post;
             $login['nick'] = $user->nick;
             cookie('hisi_iframe', (int)$user->iframe);
             // 主题设置

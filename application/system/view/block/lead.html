@@ -22,19 +22,21 @@
         <div class="fl header-logo"><a href="{:url('system/index/index')}"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></a></div>
         
         <ul class="layui-nav fr nobg head-info">
-            {// 超级管理员才可以管理一般管理员}
-            {if condition="ADMIN_ROLE == 1"}
-           <li class="layui-nav-item">
+           <!-- <li class="layui-nav-item">
                 <a href="{:url('system/user/indexManage')}" id="j-index-manage">一般管理员账号管理</a>
-            </li>
-            {/if}
+            </li> -->
             <li class="layui-nav-item">
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
             </li>
             <li class="layui-nav-item">
                 <a href="javascript:void(0);">{$login['nick']}&nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
-                    
+                    {// 超级管理员才可以管理一般管理员}
+                    {if condition="ADMIN_ROLE == 1"}
+                    <dd>
+                        <a href="{:url('system/user/indexManage')}" id="j-index-manage">授权管理</a>
+                    </dd>
+                    {/if}
                     <dd>
                         <a href="{:url('system/publics/logout')}">退出登录</a>
                     </dd>
