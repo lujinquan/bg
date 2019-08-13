@@ -1,2 +1,164 @@
-{:runhook('system_admin_index')}
+<style>
+	.page-tab-content{background: none;}
+</style>
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space20">
+		<div class="layui-col-md3">
+			<div class="project-info project-info1">
+				<div class="project-icon project-icon1"></div>
+				<div class="layui-layout-right project-text">
+					<span class="value">18</span>
+					<span>入驻企业</span>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="project-info project-info2">
+				<div class="project-icon project-icon2"></div>
+				<div class="layui-layout-right project-text">
+					<span class="value">422</span>
+					<span>入驻人员</span>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="project-info project-info3">
+				<div class="project-icon project-icon3"></div>
+				<div class="layui-layout-right project-text">
+					<span class="value">122</span>
+					<span>空间工位</span>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md3">
+			<div class="project-info project-info4">
+				<div class="project-icon project-icon4"></div>
+				<div class="layui-layout-right project-text">
+					<span class="value">5</span>
+					<span>当前可预约会议室</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row layui-col-space20">
+		<div class="layui-col-md6">
+			<div class="layui-card card">
+				<div class="layui-card-header card-header">
+					<span class="card-title">工位使用情况</span>
+					<div class="layui-layout-right card-header-rside">
+						<a href="#" class="text-blue">更多>></a>
+					</div>
+				</div>
+				<div class="layui-card-body">
+					<div class="chart" id="chart1"></div>
+					<div class="layui-layout-right chart-info">
+						<p>当前使用：103/263 个</p>
+						<p>当前入驻：0</p>
+						<p>当日到期：0</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md6">
+			<div class="layui-card card">
+				<div class="layui-card-header card-header">
+					<span class="card-title">会议室使用情况</span>
+					<div class="layui-layout-right card-header-rside">
+						<a href="#" class="text-blue">更多>></a>
+					</div>
+				</div>
+				<div class="layui-card-body">
+					<div class="chart" id="chart2"></div>
+					<div class="layui-layout-right chart-info">
+						<p>当前使用：0/5 个</p>
+						<p>当前入驻：0</p>
+						<p>当日到期：0</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md6">
+			<div class="layui-card card">
+				<div class="layui-card-header card-header">
+					<span class="card-title">访客记录</span>
+					<div class="layui-layout-right card-header-rside">
+						<span class="layui-breadcrumb card-breadcrumb" lay-separator="|">
+							<a href="javascript:;" class="on" style="color: #0000FF;">临时访客</a>
+							<a href="javascript:;">预约访客</a>
+						</span>
+						<a href="#" class="text-blue">更多>></a>
+					</div>
+				</div>
+				<div class="layui-card-body j-table-card">
+					<table class="layui-table card-table" lay-skin="nob" id="visitor"></table>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md6">
+			<div class="layui-card card">
+				<div class="layui-card-header card-header">
+					<span class="card-title">人员出入记录</span>
+					<div class="layui-layout-right card-header-rside">
+						<button class="text-blue card-btn">发送通知</button>
+						<a href="#" class="text-blue">更多>></a>
+					</div>
+				</div>
+				<div class="layui-card-body j-table-card">
+					<table class="layui-table card-table" lay-skin="nob" id="personnel"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {include file="block/layui" /}
+<script type="text/javascript" src="__PUBLIC_JS__/echarts.min.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript" src="__ADMIN_JS__/viewjs/system_index_index.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript">
+	layui.use(['table','jquery'], function(){
+	  var table = layui.table
+	      ,$= layui.jquery;
+		  conferenceroom();
+		  workstation();
+		  //访客记录tab切换
+		  $(".card-breadcrumb a").click(function(){
+			  $(this).addClass("on").siblings().removeClass("on");
+		  })
+		  //访客记录
+		  table.render({
+		    elem: '#visitor'
+		    //,height: 330
+		    ,url: '{:url("house/Tenant/index")}' //数据接口
+		    ,page: true //开启分页
+		  	,skin:'nob'
+		  	,limit: 10
+		  	,text: {
+		  		none: '暂无相关数据'
+		  	}
+		    ,cols: [[ //表头
+		      {field: 'name', title: '姓名'}
+		      ,{field: 'number', title: '联系电话'},
+			  ,{field: 'objective', title: '访问目的'}
+		      ,{field: 'receptionist', title: '接待人'} 
+		      ,{field: 'time', title: '到访时间'}
+		    ]]
+		  });
+	      //人员出入记录
+	      table.render({
+	        elem: '#personnel'
+	        //,height: 330
+	        ,url: '{:url("house/Tenant/index")}' //数据接口
+	        ,page: true //开启分页
+	      	,skin:'nob'
+	      	,limit: 10
+	      	,text: {
+	      		none: '暂无相关数据'
+	      	}
+	        ,cols: [[ //表头
+	          {field: 'name', title: '姓名'}
+	          ,{field: 'number', title: '联系电话'}
+	          ,{field: 'address', title: '出入位置'} 
+	          ,{field: 'time', title: '到访时间'}
+	        ]]
+	      });
+	});
+</script>
