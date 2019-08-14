@@ -1,6 +1,3 @@
-<style>
-    .page-tab-content{margin: 40px;}
-</style>
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
     <li class="layui-this">添加账号</li>
@@ -58,6 +55,76 @@
           {/volist}
         </div>
     </div>
+	 <div class="layui-form-item">
+	      <label class="layui-form-label"></label>
+	      <div class="layui-input-block">
+	         <div id="firstpane" class="menu_list">
+	            <div class="menu_head current"><input type="checkbox"  title="楼栋一"  lay-skin="primary" value="all" lay-filter="chooseAll" class="chooseAllMessage"></div>
+	            <div class="menu_body" >
+	              <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层一"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+						  <ul>
+							  <li>
+								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+							  <li>
+							  	 <input type="checkbox" name="list" title="门禁二"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+						  </ul>
+					  </dd>
+				  </dl>
+				  <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层二"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+						  <ul>
+							  <li>
+								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+						  </ul>
+					  </dd>
+				  </dl>
+				  <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层三"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+					  </dd>
+				  </dl>
+				</div>
+	            <div class="menu_head"><input type="checkbox"  title="楼栋二"  lay-skin="primary" value="all" lay-filter="chooseAll" class="chooseAllMessage"></div>
+	            <div class="menu_body hide" >
+	              <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层一"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+						  <ul>
+							  <li>
+								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+							  <li>
+								 <input type="checkbox" name="list" title="门禁二"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+						  </ul>
+					  </dd>
+	              </dl>
+	              <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层二"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+						  <ul>
+							  <li>
+								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
+							  </li>
+						  </ul>
+					  </dd>
+	              </dl>
+	              <dl class="clearfix">
+					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层三"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
+					  <dd class="clearfix">
+					  </dd>
+	              </dl>
+	            </div>
+	         </div>
+	      </div>
+	</div>   
+	
     <div class="layui-form-item">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -66,3 +133,22 @@
      </div>
 </form>
 {include file="block/layui" /}
+<script>
+layui.use(['layer','jquery'], function(){
+  var layer = layui.layer
+      $= layui.jquery;
+  
+  //监听折叠
+  $("#firstpane .menu_body:eq(0)").show();
+  $("#firstpane .menu_head").click(function(){
+  	 if ($(this).hasClass("current")) {
+          $(this).removeClass("current").siblings("div.menu_body").slideUp("slow");
+      }
+      else {
+        $(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+  	    $(this).siblings().removeClass("current");
+      }
+  });
+  
+});
+</script>

@@ -62,3 +62,32 @@ input:-webkit-autofill {
 /* 首页table样式 S */
 .j-table-card .layui-table-view .layui-table th{font: bold 14px/40px 'MicrosoftYaHei-Bold';color: #333;}
 /* 首页table样式 E */
+/*-------------------- 空间场地配置 ---------------------S */
+/* 新增 S */
+.j-positions-size  .layui-input-inline{position: relative;}
+.j-positions-size  .layui-input.j-explain-input {padding-right: 30px;}
+b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;cursor: pointer;}
+.j-uplode-icon{position: relative;border: #D7D7D7 1px dashed;border-radius:4px; width: 100px; height: 100px; line-height: 100px; text-align: center;background:rgba(243,246,253,1);    margin: 0 10px 10px 0;}
+.j-uplode-icon i{ font-size:68px; color: #D7D7D7;}
+.j-uplode-icon button {position: absolute;left: 0;top: 0; height:100px;width: 100px;overflow: hidden;opacity: 0;}
+.j-uplode-icon button:hover{opacity: 0;}
+.layui-input-block.j-uplode-block{display: block;}
+/*------------------ 多图上传S ----------------*/
+.upload_img_list{ display: inline-block;}
+.upload_img_list dd {position: relative;margin: 0 10px 10px 0;float: left; border: #D7D7D7 1px dashed;border-radius:4px;height:100px;width: 100px; text-align: center;}
+.upload_img_list .operate {position: absolute;top: -7px;right: -10px;z-index: 1}
+.upload_img_list .operate i {cursor: pointer;padding: 2px;line-height: 15px;text-align: center;color: #F14C3D;margin-left: 1px;float: left;filter: alpha(opacity=80);-moz-opacity: .8;-khtml-opacity: .8;
+opacity: .8color: #333;}
+.upload_img_list dd .img {height: 100px; width: 100px; padding: 10px; box-sizing: border-box;}
+.j-details-box .j-enclosure-label.j-uplode-icon button{position: absolute; left: 0; top:0; height: 38px;  width: 122px; overflow: hidden; opacity: 0;}
+/*------------------ 多图上传E ----------------*/
+/* 新增 E */
+/*-------------------- 空间场地配置 ---------------------E */
+.menu_head{padding-left:10px;color:#333;cursor:pointer;position:relative;background:#EDF0F9 url(../images/pro_left.png) center right no-repeat; font:14px/40px 'MicrosoftYaHei'; margin-bottom: 10px;}
+.menu_list .current{background:#EDF0F9 url(../images/pro_down.png) center right no-repeat;}
+.menu_body{height:auto;overflow:hidden;backguound:#fff;}
+.menu_body dl{ padding-bottom: 10px;}
+.menu_body dt{ margin-left: 30px; margin-bottom: 10px;}
+.menu_body dd{ margin-left: 60px;}
+.menu_body dd li{ float: left; margin-right: 20px; margin-bottom: 10px;}
+.layui-form-item .menu_list .layui-form-checkbox[lay-skin=primary]{ margin-top: 0;}
