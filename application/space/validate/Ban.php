@@ -23,6 +23,7 @@ class Ban extends Validate
     protected $rule = [
         'ban_name|楼宇名称'       => 'require|unique:space_ban',
         'ban_address|楼宇地址'    => 'require',
+        'ban_area|楼宇面积'    => 'require|float',
         '__token__'      	  => 'require|token',
     ];
 
@@ -34,7 +35,7 @@ class Ban extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['ban_name', 'ban_address','__token__']);
+        return $this->only(['ban_name', 'ban_address','ban_area','__token__']);
     }
 
     

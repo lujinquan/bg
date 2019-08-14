@@ -29,7 +29,7 @@
                 <a href="{:url('system/user/setTheme')}" id="hisi-theme-setting" class="aicon ai-theme"></a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:void(0);">{$login['nick']}&nbsp;&nbsp;</a>
+                <a href="javascript:void(0);">{$login['nick']}({$login['group_name']})&nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
                     {// 超级管理员才可以管理一般管理员}
                     {if condition="ADMIN_ROLE == 1"}

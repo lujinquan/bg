@@ -13,9 +13,9 @@
 
 namespace app\space\admin;
 use app\system\admin\Admin;
-use app\space\model\Ban as BanModel;
+use app\space\model\Rest as RestModel;
 
-class Ban extends Admin
+class Rest extends Admin
 {
 
     public function index()

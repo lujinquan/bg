@@ -13,9 +13,9 @@
 
 namespace app\space\admin;
 use app\system\admin\Admin;
-use app\space\model\Ban as BanModel;
+use app\space\model\Park as ParkModel;
 
-class Ban extends Admin
+class Park extends Admin
 {
 
     public function index()

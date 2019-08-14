@@ -26,12 +26,12 @@ class Meeting extends Admin
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
             $MeetingModel = new MeetingModel;
-            $where = $banModel->checkWhere($getData);
+            $where = $MeetingModel->checkWhere($getData);
             $fields = 'ban_id,ban_name,ban_address';
             $data = [];
-            $data['data'] = $banModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $MeetingModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
-            $data['count'] = $banModel->where($where)->count('ban_id');
+            $data['count'] = $MeetingModel->where($where)->count('ban_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);

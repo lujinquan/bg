@@ -73,9 +73,10 @@ class Admin extends Common
         //}else{
 
             if (!defined('ADMIN_ID')) {
-                define('ADMIN_ID', $login['uid']);
-                define('ADMIN_ROLE', $login['role_id']);
-            
+                define('ADMIN_ID', $login['uid']); //用户id
+                define('ADMIN_ROLE', $login['role_id']); //角色id
+                define('GROUP_ID', $login['group_id']); //所属组id
+
                 $curMenu = MenuModel::getInfo();
                 if ($curMenu) {
 
@@ -95,7 +96,7 @@ class Admin extends Common
                 }
 
                 $projectModel = new Project;
-                $projectArr = $projectModel->where([['status','eq',1]])->field('id,project_name,project_address')->select();
+                $projectArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->field('id,project_name,project_address')->select();
                //halt($login);
 
                 $this->assign('projectArr',$projectArr);

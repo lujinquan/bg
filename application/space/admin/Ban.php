@@ -26,7 +26,7 @@ class Ban extends Admin
             $getData = $this->request->get();
             $banModel = new BanModel;
             $where = $banModel->checkWhere($getData);
-            $fields = 'ban_id,ban_name,ban_address';
+            $fields = 'ban_id,ban_name,ban_area,ban_address';
             $data = [];
             $data['data'] = $banModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);

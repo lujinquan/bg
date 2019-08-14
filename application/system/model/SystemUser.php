@@ -83,6 +83,12 @@ class SystemUser extends Model
         return $this->hasOne('SystemRole', 'id', 'role_id');
     }
 
+    // 权限
+    public function group()
+    {
+        return $this->belongsTo('SystemGroup', 'group_id', 'group_id')->bind('group_name');
+    }
+
     /**
      * 删除用户
      * @param string $id 用户ID
@@ -173,7 +179,8 @@ class SystemUser extends Model
             return false;
         }
 
-        $user = self::where($map)->find();
+        $user = self::with('group')->where($map)->find();
+        //halt($user);
         if (!$user) {
             $this->error = '用户不存在或被禁用！';
             return false;
@@ -210,6 +217,8 @@ class SystemUser extends Model
             $login['uid'] = $user->id;
             $login['role_id'] = $user->role_id;
             $login['pro_ids'] = $user->pro_ids;
+            $login['group_id'] = $user->group_id;
+            $login['group_name'] = $user->group_name;
             $login['role_name'] = $role['name'];
             $login['post'] = $user->post;
             $login['nick'] = $user->nick;
@@ -284,6 +293,7 @@ class SystemUser extends Model
             $login['uid'] = $user->id;
             $login['role_id'] = $user->role_id;
             $login['role_name'] = $role['name'];
+            $login['group_id'] = $user->group_id;
             $login['nick'] = $user->nick;
             $login['pro_ids'] = $user->pro_ids;
             $login['post'] = $user->post;

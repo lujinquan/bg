@@ -15,6 +15,7 @@ namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
+use app\common\model\SystemAnnex;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
 
@@ -51,6 +52,14 @@ class Floor extends Admin
                 return $this->error($result);
             }
             $FloorModel = new FloorModel();
+            $findRow = $FloorModel->where([['ban_id','eq',$data['ban_id']],['floor_number','eq',$data['floor_number']],['status','eq',1]])->find();
+            if ($findRow) {
+                return $this->error('当前楼宇'.$data['floor_number'].'层，已存在系统中！');
+            }
+            if(isset($data['file'])){ //附件
+                $data['imgs'] = implode(',',$data['file']);
+                (new \app\common\model\SystemAnnex)->updateAnnexEtime($data['file']);
+            }
             unset($data['floor_id']);
             // 入库
             if (!$FloorModel->allowField(true)->create($data)) {
@@ -72,6 +81,10 @@ class Floor extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if(isset($data['file'])){ //附件
+                $data['imgs'] = implode(',',$data['file']);
+                (new \app\common\model\SystemAnnex)->updateAnnexEtime($data['file']);
+            }
             $FloorModel = new FloorModel();
             // 入库
             if (!$FloorModel->allowField(true)->update($data)) {
@@ -81,6 +94,8 @@ class Floor extends Admin
         }
         $id = input('param.id/d');
         $row = FloorModel::with('ban')->find($id);
+        $row['imgs'] = SystemAnnex::changeFormat($row['imgs']);
+        //halt($row);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
         $this->assign('data_info',$row);

@@ -24,7 +24,7 @@
         <label class="layui-form-label">角色分组：</label>
         <div class="layui-input-inline">
             <select name="role_id" class="field-role_id" type="select">
-                <!-- <option value="">请选择</option> -->
+                <option value="">请选择</option>
                 {volist name="roleArr" id="v"}
                 <option value="{$key}">{$v}</option>
                 {/volist}
@@ -49,82 +49,26 @@
     </div>   
     <div class="layui-form-item" pane="">
         <label class="layui-form-label"><i class="red"></i>门禁：</label>
-        <div class="layui-input-block j-input-width">
-          {volist name="params['guard']" id="v"}
-          <input type="checkbox" name="guard[]" class="j-check" value="{$key}" lay-skin="primary" title="{$v}">
-          {/volist}
+        <div class="layui-input-inline">
+          <select name="" class="field-role_id" lay-filter="filter" type="select">
+                <option value="">请选择</option>
+                {volist name="guardArr" id="v"}
+                {if condition="$v['pid'] == 0"}
+                <option value="{$v['id']}">{$v['title']}</option>
+                {/if}
+                {/volist}
+            </select>
         </div>
     </div>
-	 <div class="layui-form-item">
-	      <label class="layui-form-label"></label>
-	      <div class="layui-input-block">
-	         <div id="firstpane" class="menu_list">
-	            <div class="menu_head current"><input type="checkbox"  title="楼栋一"  lay-skin="primary" value="all" lay-filter="chooseAll" class="chooseAllMessage"></div>
-	            <div class="menu_body" >
-	              <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层一"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-						  <ul>
-							  <li>
-								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-							  <li>
-							  	 <input type="checkbox" name="list" title="门禁二"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-						  </ul>
-					  </dd>
-				  </dl>
-				  <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层二"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-						  <ul>
-							  <li>
-								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-						  </ul>
-					  </dd>
-				  </dl>
-				  <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层三"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-					  </dd>
-				  </dl>
-				</div>
-	            <div class="menu_head"><input type="checkbox"  title="楼栋二"  lay-skin="primary" value="all" lay-filter="chooseAll" class="chooseAllMessage"></div>
-	            <div class="menu_body hide" >
-	              <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层一"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-						  <ul>
-							  <li>
-								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-							  <li>
-								 <input type="checkbox" name="list" title="门禁二"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-						  </ul>
-					  </dd>
-	              </dl>
-	              <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层二"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-						  <ul>
-							  <li>
-								 <input type="checkbox" name="list" title="门禁一"  lay-skin="primary" value="list" lay-filter="list" class="listMessage"> 
-							  </li>
-						  </ul>
-					  </dd>
-	              </dl>
-	              <dl class="clearfix">
-					  <dt class="clearfix"><input type="checkbox" name="all" title="楼层三"  lay-skin="primary" value="all" lay-filter="secondAll" class="secondAllMessage"></dt>
-					  <dd class="clearfix">
-					  </dd>
-	              </dl>
-	            </div>
-	         </div>
-	      </div>
-	</div>   
-	
+    <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+             <div id="firstpane" class="menu_list">
+     
+                
+             </div>
+          </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -134,21 +78,75 @@
 </form>
 {include file="block/layui" /}
 <script>
-layui.use(['layer','jquery'], function(){
+
+
+layui.use(['form','layer','jquery'], function(){
   var layer = layui.layer
       $= layui.jquery;
+   var   form = layui.form;
   
+
+
+  form.on('select(filter)', function(data){
+    var guards = {:json_encode($guardArr)};
+    //console.log(guards);
+    for (var i = 0 ; i < guards.length - 1 ; i++) {
+      if(guards[i].id == data.value){
+        var bans = guards[i].childs;
+        var str = '';
+
+        if(bans.length > 0){
+          for (var j = 0 ; j < bans.length - 1 ; j++) {
+            if(j==0){
+              var current = 'current';
+            }else{
+              var current = '';
+            }
+            str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"></div><div class="menu_body" >';
+            var floors = bans[j].childs;
+
+            if(floors.length > 0){
+              for (var k = 0 ; k < floors.length - 1 ; k++) {
+                str += '<dl class="clearfix">\
+                          <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage"></dt><dd class="clearfix">\
+                              <ul>';
+                var guards = floors[k].childs;
+                if(guards.length > 0){
+                  for (var h = 0 ; h < guards.length - 1 ; h++) {
+                    str += '<li>\
+                               <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage"> \
+                            </li>';
+                  }
+                }
+                str += '</ul>\
+                          </dd></dl>';
+              }  
+            }
+            str += '</div>';
+
+          }   
+          str += '</div>';     
+          //console.log(str);
+          $('#firstpane').html(str);
+          form.render();
+        }
+        
+      }
+    }
+  }); 
+
+
   //监听折叠
   $("#firstpane .menu_body:eq(0)").show();
-  $("#firstpane .menu_head").click(function(){
-  	 if ($(this).hasClass("current")) {
+  $("#firstpane").on('click','.menu_head',function(){
+     if ($(this).hasClass("current")) {
           $(this).removeClass("current").siblings("div.menu_body").slideUp("slow");
       }
       else {
         $(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
-  	    $(this).siblings().removeClass("current");
+        $(this).siblings().removeClass("current");
       }
   });
-  
+
 });
 </script>

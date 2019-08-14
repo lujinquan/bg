@@ -14,6 +14,7 @@ namespace app\system\admin;
 use app\system\model\SystemUser as UserModel;
 use app\system\model\SystemRole as RoleModel;
 use app\system\model\SystemMenu as MenuModel;
+use app\system\model\SystemGuard as GuardModel;
 use app\Common\model\Project;
 
 /**
@@ -217,6 +218,7 @@ class User extends Admin
 
             return $this->success('添加成功');
         }
+
         $this->assign('proArr',$proArr);
         $this->assign('menu_list', '');
         $this->assign('roleOptions', RoleModel::getOption());
@@ -338,17 +340,30 @@ class User extends Admin
                 return $this->error($result);
             }
             
-            unset($data['id']);
+            
             $data['pro_ids'] = PROJECT_ID;
             $data['last_login_ip'] = '';
             $data['auth'] = '';
 
+            $data['guard'] = [
+                'ban' => $data['ban'],
+                'floor' => $data['floor'],
+                'guard' => $data['guard'],
+            ];
+            
+            unset($data['id'],$data['ban'],$data['floor']);
+            //halt($data);
             if (!UserModel::create($data)) {
                 return $this->error('添加失败');
             }
 
             return $this->success('添加成功');
         }
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
+        //halt($guardArr);
+        $this->assign('guardArr', $guardArr);
         $roleArr = RoleModel::where([['status','eq',1],['id','>',2]])->column('id,name');
         $this->assign('roleArr', $roleArr);
         return $this->fetch('userform');
