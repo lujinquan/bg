@@ -46,6 +46,10 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
     if(window.sessionStorage.getItem("lockscreen") == "true"){
         lockscreen();
     }
+    $('.j-refresh').click(function () { 
+        console.log(1);
+        window.location.reload();
+    });
     
     /* 导航高亮标记 */
     $('.admin-nav-item').click(function() {

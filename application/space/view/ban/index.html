@@ -51,7 +51,10 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {field: 'ban_name', align:'center',with:80, title: '楼宇名称'}
+            	{field: '', align:'center',with:80, title: '序号', templet:function(d){
+                    return d.LAY_INDEX ;
+                }}
+                ,{field: 'ban_name', align:'center',with:80, title: '楼宇名称'}
                 ,{field: 'ban_address', align:'center',with:100, title: '地址'}
                 ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
             ]]

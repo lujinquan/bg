@@ -1,4 +1,5 @@
 {if condition="input('param.hisi_iframe') || cookie('hisi_iframe')"}
+<!-- 单页模式 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +19,7 @@
 </head>
 <body class="hisi-theme-{:cookie('hisi_admin_theme')} pb50">
 {else /}
+<!-- iframe模式 -->
 <!DOCTYPE html>
 <html>
 <head>

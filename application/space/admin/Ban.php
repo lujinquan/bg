@@ -98,46 +98,5 @@ class Ban extends Admin
             $this->error('删除失败');
         }
     }
-
-    public function struct()
-    {
-        $id = input('param.id/d');
-        $row = BanModel::get($id);
-        if ($this->request->isAjax()) {
-            $id = input('param.id/d');
-            $unitID = input('param.unit_id/d',1);
-            $row = BanModel::get($id);
-            $houseArr = HouseModel::with(['tenant'])->where([['ban_id','eq',$id],['house_unit_id','eq',$unitID]])->field('house_floor_id,house_id,tenant_id')->order('house_floor_id asc')->select();
-            $tempHouseArr = [];
-            //dump($row['ban_floors']);halt($houseArr);
-            
-            for($j=1;$j<=$row['ban_floors'];$j++){
-                foreach($houseArr as $h){
-                    if($h['house_floor_id'] == $j){
-                        $tempHouseArr[$j][] = [
-                            'house_id' => $h['house_id'],
-                            'tenant_name' => $h['tenant_name'],
-                        ];
-                    } 
-                }
-                if(!isset($tempHouseArr[$j])){
-                    $tempHouseArr[$j] = [];
-                }
-            }
-            $data = [];
-            $data['data'] = $tempHouseArr;
-            $data['code'] = 0;
-            $data['msg'] = '获取成功';
-            // halt($data);
-            return json($data);
-        }
-        //halt($row);
-        $this->assign('data_info',$row);
-        return $this->fetch();
-    }
-
-    public function ceshi()
-    {
-        return $this->fetch();
-    }
+    
 }

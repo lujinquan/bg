@@ -12,6 +12,8 @@
 
 
 namespace app\space\admin;
+
+use think\Db;
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
 use app\space\model\Meeting as MeetingModel;
@@ -27,15 +29,17 @@ class Meeting extends Admin
             $getData = $this->request->get();
             $MeetingModel = new MeetingModel;
             $where = $MeetingModel->checkWhere($getData);
-            $fields = 'ban_id,ban_name,ban_address';
+            $fields = 'a.meet_name,a.floor_number,a.meet_volume,a.meet_unit_price,b.ban_id,b.ban_name';
             $data = [];
-            $data['data'] = $MeetingModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = Db::name('space_meeting')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
             //halt($where);
-            $data['count'] = $MeetingModel->where($where)->count('ban_id');
+            $data['count'] = Db::name('space_meeting')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('a.meet_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
         }
+        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
         return $this->fetch();
     }
 
@@ -44,18 +48,20 @@ class Meeting extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'Ban.add');
+            $result = $this->validate($data, 'Meeting.add');
             if($result !== true) {
                 return $this->error($result);
             }
-            $BanModel = new BanModel();
-            unset($data['ban_id']);
+            $MeetingModel = new MeetingModel;
+            unset($data['meet_id']);
             // 入库
-            if (!$BanModel->allowField(true)->create($data)) {
+            if (!$MeetingModel->allowField(true)->create($data)) {
                 return $this->error('添加失败');
             }
             return $this->success('添加成功');
         }
+        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
         return $this->fetch();
     }
 
@@ -92,7 +98,7 @@ class Meeting extends Admin
     public function del()
     {
         $ids = $this->request->param('id/a');        
-        $res = BanModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
+        $res = MeetingModel::where([['meet_id','in',$ids]])->update(['status'=>0]);
         if($res){
             $this->success('删除成功');
         }else{
@@ -100,45 +106,5 @@ class Meeting extends Admin
         }
     }
 
-    public function struct()
-    {
-        $id = input('param.id/d');
-        $row = BanModel::get($id);
-        if ($this->request->isAjax()) {
-            $id = input('param.id/d');
-            $unitID = input('param.unit_id/d',1);
-            $row = BanModel::get($id);
-            $houseArr = HouseModel::with(['tenant'])->where([['ban_id','eq',$id],['house_unit_id','eq',$unitID]])->field('house_floor_id,house_id,tenant_id')->order('house_floor_id asc')->select();
-            $tempHouseArr = [];
-            //dump($row['ban_floors']);halt($houseArr);
-            
-            for($j=1;$j<=$row['ban_floors'];$j++){
-                foreach($houseArr as $h){
-                    if($h['house_floor_id'] == $j){
-                        $tempHouseArr[$j][] = [
-                            'house_id' => $h['house_id'],
-                            'tenant_name' => $h['tenant_name'],
-                        ];
-                    } 
-                }
-                if(!isset($tempHouseArr[$j])){
-                    $tempHouseArr[$j] = [];
-                }
-            }
-            $data = [];
-            $data['data'] = $tempHouseArr;
-            $data['code'] = 0;
-            $data['msg'] = '获取成功';
-            // halt($data);
-            return json($data);
-        }
-        //halt($row);
-        $this->assign('data_info',$row);
-        return $this->fetch();
-    }
-
-    public function ceshi()
-    {
-        return $this->fetch();
-    }
+    
 }
