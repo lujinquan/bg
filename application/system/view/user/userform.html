@@ -86,13 +86,13 @@ layui.use(['form','layer','jquery'], function(){
   form.on('select(filter)', function(data){
     var guards = {:json_encode($guardArr)};
     //console.log(guards);
-    for (var i = 0 ; i < guards.length - 1 ; i++) {
+    for (var i = 0 ; i < guards.length; i++) {
       if(guards[i].id == data.value){
         var bans = guards[i].childs;
         var str = '';
 
         if(bans.length > 0){
-          for (var j = 0 ; j < bans.length - 1 ; j++) {
+          for (var j = 0 ; j < bans.length; j++) {
             if(j==0){
               var current = 'current';
 			  var hide = '';
@@ -104,13 +104,13 @@ layui.use(['form','layer','jquery'], function(){
             var floors = bans[j].childs;
 
             if(floors.length > 0){
-              for (var k = 0 ; k < floors.length - 1 ; k++) {
+              for (var k = 0 ; k < floors.length; k++) {
                 str += '<dl class="clearfix">\
                           <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
                               <ul>';
                 var guards = floors[k].childs;
                 if(guards.length > 0){
-                  for (var h = 0 ; h < guards.length - 1 ; h++) {
+                  for (var h = 0 ; h < guards.length; h++) {
                     str += '<li>\
                                <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
                             </li>';
@@ -132,10 +132,7 @@ layui.use(['form','layer','jquery'], function(){
       }
     }
   }); 
-
-
   //监听折叠
- 
   $("#firstpane").on('click','.menu_head .j-icon',function(){
      if ($(this).parent().hasClass("current")) {
           $(this).parent().removeClass("current").siblings("div.menu_body").slideUp("slow");
@@ -164,34 +161,49 @@ layui.use(['form','layer','jquery'], function(){
 	  form.on('checkbox(secondAll)', function (data) {
 	  		  var that = $(this);
 	  		  var b = data.elem.checked;
-	    $("input[name='guard[]'],input[name='floor[]']").each(function () {
-	  			 if (b == true) {
-	  				that.parent().next().find(".list").prop('checked',true);
+			$("input[name='guard[]'],input[name='floor[]']").each(function () {
+				 if (b == true) {
+					that.parent().next().find(".list").prop('checked',true);
 					that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',true);
-	  				form.render('checkbox');
-	  			} else {
-	  				that.parent().next().find(".list").prop('checked',false);
+					form.render('checkbox');
+				} else {
+					that.parent().next().find(".list").prop('checked',false);
 					//that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',false);
-	  				form.render('checkbox');
-	  			}
-	  			
-	    });
+					form.render('checkbox');
+				}	
+			});
+			if  ($("input[name='floor[]']:checked").length>0){
+					  that.parents(".menu_body ").prev().find(".chooseAllMessage").prop('checked',true);
+					  form.render('checkbox');
+				 }
+			else
+				  {
+					  that.parents(".menu_body ").prev().find(".chooseAllMessage").prop('checked',false);
+					  form.render('checkbox');
+				  }
 	  });
       //判断层级勾选
 	  form.on('checkbox(list)', function (data) {
 		 var that = $(this);
 		 var c = data.elem.checked;
-		  if(c == true)
-		  {
+		 if  ($("input[name='guard[]']:checked").length>0){
 			  that.parents("dd").prev().find(".list").prop('checked',true);
 			  form.render('checkbox');
-		  }
-		  else{
-			  //that.parents("dd").prev().find(".list").prop('checked',false);
+		 }
+	   else
+		  {
+			  that.parents("dd").prev().find(".list").prop('checked',false);
 			  form.render('checkbox');
 		  }
-		  
+	   if  ($("input[name='floor[]']:checked").length>0){
+				  that.parents(".menu_body ").prev().find(".chooseAllMessage").prop('checked',true);
+				  form.render('checkbox');
+			 }
+	  else
+		  {
+			  that.parents(".menu_body ").prev().find(".chooseAllMessage").prop('checked',false);
+			  form.render('checkbox');
+		  }
 	 });  
-
  })
 </script>
