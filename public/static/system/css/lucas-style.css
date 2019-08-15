@@ -95,8 +95,9 @@ opacity: .8color: #333;}
 /* 工位区 E */
 /*-------------------- 空间场地配置 ---------------------E */
 /* 工作人员账号 S */
-.menu_head{padding-left:10px;color:#333;cursor:pointer;position:relative;background:#EDF0F9 url(../images/pro_left.png) center right no-repeat; font:14px/40px 'MicrosoftYaHei'; margin-bottom: 10px;}
-.menu_list .current{background:#EDF0F9 url(../images/pro_down.png) center right no-repeat;}
+.menu_head{padding-left:10px;color:#333;cursor:pointer;position:relative;font:14px/40px 'MicrosoftYaHei'; margin-bottom: 10px;background:#EDF0F9}
+.menu_head .j-icon{background:url(../image/j-down.png) center right no-repeat;  width: 18px; height: 18px; position: absolute; top:11px; right: 10px;}
+.menu_list .menu_head.current .j-icon{background:url(../image/j-up.png) center right no-repeat;}
 .menu_body{height:auto;overflow:hidden;backguound:#fff;}
 .menu_body dl{ padding-bottom: 10px;}
 .menu_body dt{ margin-left: 30px; margin-bottom: 10px;}
