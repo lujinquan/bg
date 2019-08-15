@@ -65,6 +65,8 @@ input:-webkit-autofill {
 /*-------------------- 空间场地配置 ---------------------S */
 /* 新增 S */
 .layui-form-item  .layui-input-inline{position: relative;}
+.layui-form-item .layui-input-inline.j-name{ width:500px;}
+.layui-form-item .layui-input-inline.j-name .layui-input{ width: 190px;}
 .layui-form-item  .layui-input.j-explain-input,.j-from-box  .layui-input.j-explain-input {padding-right: 30px;}
 b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;cursor: pointer;}
 .j-uplode-icon{position: relative;border: #D7D7D7 1px dashed;border-radius:4px; width: 100px; height: 100px; line-height: 100px; text-align: center;background:rgba(243,246,253,1);    margin: 0 10px 10px 0;}
@@ -92,6 +94,8 @@ opacity: .8color: #333;}
 .j-from-box .j-form-label.j-add{ text-align: left; color: #20A0FF; font-size: 16px;}
 .layui-form.j-top-margin.j-padding-right{padding: 20px 200px 0 0;}
 .j-words-border{ line-height: 36px; color: #4A4A4A;}
+.j-tips{ color: #FFB84D; font-size: 12px; margin-top: 10px;}
+.j-tips i{ font-size: 8px;}
 /* 工位区 E */
 /*-------------------- 空间场地配置 ---------------------E */
 /* 工作人员账号 S */

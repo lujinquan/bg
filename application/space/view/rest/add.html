@@ -1,1 +1,200 @@
-add.html
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">新增场地</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+	<div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>场地名称：</label>
+          <div class="layui-input-inline j-name">
+            <input type="text" name="field_name" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+			<div class="j-tips">( <i class="layui-icon layui-icon-tips"></i> 用户办理入驻后即可进入并使用会员类场地，类似自由工位区 )</div>
+          </div>
+        </div>
+     </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>场地类型：</label>
+          <div class="layui-input-inline">
+            <select name="field_class" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+      			    <option value="">请选择</option>
+      			    <option value="1">类型1</option>
+      			</select>
+          </div>
+        </div>
+    </div>
+	<div class="layui-form-item">
+	    <div class="layui-inline">
+	      <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
+	      <div class="layui-input-inline">
+	        <select name="field_building" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+	  			    <option value="">请选择</option>
+	  			    <option value="1">楼宇1</option>
+	  			</select>
+	      </div>
+	    </div>
+	</div>
+	<div class="layui-form-item">
+	      <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
+	      <div class="layui-input-block" id="tag_ids1"></div>
+	</div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>可预约时段：</label>
+          <div class="layui-input-inline" style="width: 190px;">
+			<input type="text" name="price_min" class="layui-input" lay-verify="required" lay-verType="tips" id="test14" placeholder="H点m分">
+		  </div>
+		  <div class="layui-form-mid">-</div>
+		  <div class="layui-input-inline" style="width: 190px;">
+			<input type="text" name="price_max" class="layui-input" lay-verify="required" lay-verType="tips" id="test15" placeholder="H点m分">
+		  </div>
+        </div>
+     </div>
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
+	       <div class="layui-input-inline">
+	         <select name="field_floor" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
+	   			    <option value="">请选择</option>
+	   			    <option value="1">设备1</option>
+	   			</select>
+	       </div>
+	     </div>
+	 </div>
+	 <div class="layui-form-item">
+		<div class="layui-col-md8">
+	       <label class="layui-form-label"><i class="red">*</i>路径门禁：</label>
+	       <div class="layui-input-block">
+	         <input type="checkbox" name="door" lay-skin="primary" title="门禁1" checked="">
+			 <input type="checkbox" name="door" lay-skin="primary" title="门禁2">
+			 <input type="checkbox" name="door" lay-skin="primary" title="门禁3">
+	       </div>
+		</div>
+	  </div>
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label">容纳人数：</label>
+	       <div class="layui-input-inline">
+	         <input type="text" name="field_number"  placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+	       </div>
+	     </div>
+	  </div>
+	 <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>面积：</label>
+          <div class="layui-input-inline">
+            <input type="tel" name="field_has"  placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+			<b class="j-explain-name">m²</b>
+          </div>
+        </div>
+     </div>
+	 <div class="layui-form-item">
+		<div class="layui-col-md8">
+			<label class="layui-form-label">工位区介绍：</label>
+			<div class="layui-input-block">
+				<input type="text" name="workbay_remarks" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</div>
+	 <div class="layui-form-item j-positions-size">
+	     <div class="layui-inline">
+	       <label class="layui-form-label">场地图片：</label>
+	       <div class="layui-input-block j-uplode-block">
+	         	<div class="j-uplode-icon fl">
+	         		<i class="layui-icon  layui-icon-add-1"></i>
+	         		<button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
+	         	</div>
+	         	<div id="upload_img_list1" class="upload_img_list j-viewer-img">
+	 				
+	 			</div>
+	       </div>
+	     </div>
+	 </div> 
+     {:token()}
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}
+<script>
+	var tagData = [{"id":12,"name":"长者","status":0},{"id":13,"name":"工厂"},{"id":14,"name":"小学生"},{"id":15,"name":"大学生"},{"id":16,"name":"研究生"},{"id":17,"name":"教师"},{"id":18,"name":"记者"}];    
+	/*上传参数设定*/
+	var upurl = "{:url('system/Api/upload')}?input=floorSign&group=ban&water=no"; //上传楼层平面图
+	var duotu = true; //是否为多图上传true false
+	 layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
+		var laydate = layui.laydate,
+			$ = layui.$,
+			upload = layui.upload,
+			form = layui.form,
+			selectN = layui.selectN,
+			selectM = layui.selectM;
+		//场地图片
+		upload.render({
+			elem: '#upload_img1',
+			url: upurl,
+			size: 1024,
+			multiple: duotu,
+			field: 'floorSign',
+			before: function(obj) {
+				layer.msg('图片上传中...', {
+					icon: 16,
+					shade: 0.01,
+					time: 0
+				})
+			},
+			done: function(res) {
+				layer.close(layer.msg()); //关闭上传提示窗口
+				if (duotu == true) {
+					//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
+				} else {
+					//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file" value="' + res.data.id + '" /></dd>');
+				}
+			}
+		})
+		/*
+		删除上传图片
+		*/
+		$(document).on("click", ".upload_img_list dd i", function() {
+			$(this).parents("dd").remove();
+		})
+		//多选标签-基本配置
+		var tagIns1 = selectM({
+		  //元素容器【必填】
+		  elem: '#tag_ids1'
+		  //候选数据【必填】
+		  ,data: tagData
+		  //,max:10
+		  ,width:400
+		  //添加验证
+		  ,verify:'required'      
+		}); 
+		 //时间选择器
+			laydate.render({
+			elem: '#test14'
+			,type: 'time'
+			,format: 'HH:mm'
+		  });
+		  laydate.render({
+		elem: '#test15'
+		,type: 'time'
+		,format: 'HH:mm'
+		  });
+	});
+	//图片查看
+	/* $(".j-viewer-img").on("click",function(){
+		$(this).viewer({
+			url: 'data-original',
+		 });
+	}) */
+	
+</script>

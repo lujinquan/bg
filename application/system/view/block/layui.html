@@ -5,7 +5,10 @@
     layui.config({
     	base: '__ADMIN_JS__/',
         version: '{:config("hisiphp.version")}'
-    }).use('global');
+    }).extend({
+    selectN: 'select/selectN',
+    selectM: 'select/selectM',
+  }).use('global');
     // 载入全局系统参数
     var paramsJson = document.getElementById("paramsJson").getAttribute('params');
     if(paramsJson){
