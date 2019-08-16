@@ -51,9 +51,9 @@ class Ban extends Admin
             unset($data['ban_id']);
             // 入库
             if (!$BanModel->allowField(true)->create($data)) {
-                return $this->error('添加失败');
+                return $this->error('新增失败');
             }
-            return $this->success('添加成功');
+            return $this->success('新增成功');
         }
         return $this->fetch();
     }
@@ -70,9 +70,9 @@ class Ban extends Admin
             $BanModel = new BanModel();
             // 入库
             if (!$BanModel->allowField(true)->update($data)) {
-                return $this->error('修改失败');
+                return $this->error('编辑失败');
             }
-            return $this->success('修改成功');
+            return $this->success('编辑成功');
         }
         $id = input('param.id/d');
         $row = BanModel::get($id);

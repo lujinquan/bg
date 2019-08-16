@@ -14,20 +14,19 @@ namespace app\space\validate;
 use think\Validate;
 
 /**
- * 会议室验证器
+ * 工位区 - 验证器
  * @package app\system\validate
  */
-class Meeting extends Validate
+class Site extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'meet_name|会议室名称'    	=> 'require',
-        'meet_area|面积'    	=> 'require|float',
-        'ban_id|楼宇'    	=> 'require|number',
-        'floor_number|楼层'     => 'require',
-        'meet_unit_price|单价'    	=> 'require|float',
-        'order_start_time|可预约起始时间'      => 'require',
-        'order_end_time|可预约结束时间'        => 'require',
+        'site_name|工位区名称'    	=> 'require',
+        'site_type|工位区类型'    	=> 'require',
+        'site_area|工位区面积'    	=> 'require|float',
+        'ban_id|所属楼宇'    	=> 'require|number',
+        'floor_number|所属楼层'     => 'require',
+        'sites|工位'    	=> 'require', 
         '__token__'      	  	=> 'require|token',
     ];
 
@@ -39,7 +38,7 @@ class Meeting extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['meet_name','meet_area','ban_id','floor_number','order_start_time','order_end_time','meet_unit_price','__token__']);
+        return $this->only(['site_name','site_type','ban_id','floor_number','sites','site_area','__token__']);
     }
 
     

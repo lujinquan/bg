@@ -8,7 +8,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
           <div class="layui-input-inline">
-            <select name="ban_id" class="field-cid" type="select">
+            <select name="ban_id" class="field-cid" lay-verify="required|number" lay-verType="tips" type="select">
 			    <option value="">请选择</option>
 			    {volist name="banArr" id="v"}
 			    <option value="{$v['ban_id']}"{if condition="$v['ban_id'] == $data_info['ban_id']"}selected{/if}>{$v['ban_name']}</option>
@@ -21,7 +21,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>楼层：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="floor_number" value="{$data_info['floor_number']}" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+            <input type="tel" name="floor_number" value="{$data_info['floor_number']}" lay-verify="required|number" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
           </div>
         </div>
      </div>
@@ -29,7 +29,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>面积：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="floor_area" value="{$data_info['floor_area']}" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="tel" name="floor_area" value="{$data_info['floor_area']}" lay-verify="required|number" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
 			<b class="j-explain-name">m²</b>
           </div>
         </div>
@@ -43,15 +43,15 @@
 	         		<button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
 	         	</div>
 	         	<div id="upload_img_list1" class="upload_img_list j-viewer-img">
-						{volist name="data_info['imgs']" id="vo"}
-						<dd class="item_img">
-							<div class="operate">
-								<i class="layui-icon-close-fill layui-icon"></i>
-							</div>
-							<img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
-							<input type="hidden" name="{$vo['file_name']}">
-						</dd>
-						{/volist}
+					{volist name="data_info['imgs']" id="vo"}
+					<dd class="item_img">
+						<div class="operate">
+							<i class="layui-icon-close-fill layui-icon"></i>
+						</div>
+						<img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
+						<input type="hidden" name="{$vo['file_name']}">
+					</dd>
+					{/volist}
 	 			</div>
 	         		
 	       </div>

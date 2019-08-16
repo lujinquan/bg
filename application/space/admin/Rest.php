@@ -15,7 +15,7 @@ namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
-use app\common\model\SystemAnnex;
+use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Rest as RestModel;
 
@@ -55,16 +55,17 @@ class Rest extends Admin
             }
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
-                (new \app\common\model\SystemAnnex)->updateAnnexEtime($data['file']);
+                $AnnexModel = new AnnexModel;
+                $AnnexModel->updateAnnexEtime($data['file']);
             }
             $RestModel = new RestModel;
             unset($data['rest_id']);
             //halt($data);
             // 入库
             if (!$RestModel->allowField(true)->create($data)) {
-                return $this->error('添加失败');
+                return $this->error('新增失败');
             }
-            return $this->success('添加成功');
+            return $this->success('新增成功');
         }
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
@@ -73,6 +74,7 @@ class Rest extends Admin
 
     public function edit()
     {
+        $AnnexModel = new AnnexModel;
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
@@ -83,12 +85,13 @@ class Rest extends Admin
             $RestModel = new RestModel();
             // 入库
             if (!$RestModel->allowField(true)->update($data)) {
-                return $this->error('修改失败');
+                return $this->error('编辑失败');
             }
-            return $this->success('修改成功');
+            return $this->success('编辑成功');
         }
         $id = input('param.id/d');
         $row = RestModel::get($id);
+        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
         //halt($row);

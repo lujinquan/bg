@@ -1,6 +1,6 @@
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
-    <li class="layui-this">添加工位区</li>
+    <li class="layui-this">新增工位区</li>
   </ul>
 </div>
 <form class="layui-form j-top-margin j-padding-right" action="{:url()}" method="post" id="addForm">
@@ -8,7 +8,7 @@
 		<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>工位区名称：</label>
 			<div class="j-input-inline">
-				<input type="text" name="floor_number"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="site_name"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-col-md4">
@@ -23,20 +23,16 @@
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>所属楼层：</label>
-			<div class="j-input-inline">
-				<select name="workbay_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					<option value="1">楼层1</option>
-				</select>
-			</div>
+			<label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
+        	<div class="layui-input-block" id="floor_number"></div>
 		</div>
 	</div>
+
     <div class="layui-row j-from-box layui-col-space30">
     	<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>工位区类型：</label>
 			<div class="j-input-inline">
-				<select name="workbay_type" class="field-cid" lay-verify="required" lay-filter="location_type"  lay-verType="tips" type="select">
+				<select name="site_type" class="field-cid" lay-verify="required" lay-filter="site_type"  lay-verType="tips" type="select">
 					<option value="">请选择</option>
 					{volist name="params['site_type']" id="v"}
 					<option value="{$key}">{$v}</option>
@@ -45,24 +41,16 @@
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>工位数：</label>
+			<label class="j-form-label"><i class="red">*</i>工位区面积：</label>
 			<div class="j-input-inline">
-				<input type="text" name="workbay_sum"  placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label">工位区面积：</label>
-			<div class="j-input-inline">
-				<input type="text" name="workbay_has"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
+				<input type="text" name="site_area" lay-verify="required|number" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
 				<b class="j-explain-name">m²</b>
 			</div>
 		</div>
-	</div>
-	<div class="layui-row j-from-box layui-col-space30 j-workbayname">
-		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>工位名称：</label>
+		<div class="layui-col-md4 j-site_num">
+			<label class="j-form-label"><i class="red">*</i>工位数：</label>
 			<div class="j-input-inline">
-				<input type="text" name="workbay_name"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="site_num"  placeholder="请输入"  lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -70,7 +58,7 @@
 		<div class="layui-col-md8">
 			<label class="j-form-label">工位区介绍：</label>
 			<div class="j-input-inline">
-				<input type="text" name="workbay_remarks"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="site_remark"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -80,7 +68,7 @@
     		<div class="j-input-inline">
 				<ul>
 					<li>
-						<input type="text" name="house_number" value="" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
+						<input type="text" name="sites[]" value="" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
 						<b class="j-explain-name hide">未租</b>
 						<i class="icon-cancel j-del"></i>
 					</li>
@@ -115,17 +103,20 @@
 </form>
 {include file="system@block/layui" /}
 <script>
+	var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
 	/*上传参数设定*/
-	var upurl = "{:url('system/Api/upload')}?input=plan&group=ban&water=no"; //土地证电子版上传图片地址
+	var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
 	var duotu = true; //是否为多图上传true false
-	layui.use(['jquery', 'laydate', 'upload', 'form'], function() {
+	layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
 		var laydate = layui.laydate,
 			$ = layui.$,
 			upload = layui.upload,
-			form = layui.form;
+			form = layui.form,
+			selectN = layui.selectN,
+      		selectM = layui.selectM;
 		//工位
 		$('.j-add').click(function(){
-		    var html = '<li><input type="text" name="house_number[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input"><b class="j-explain-name hide">未租</b><i class="icon-cancel j-del"></i></li>';
+		    var html = '<li><input type="text" name="sites[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input"><b class="j-explain-name hide">未租</b><i class="icon-cancel j-del"></i></li>';
 		    $('.j-add').parent().before(html);
 		});
 		$('.e-house').on('click','.j-del',function(){
@@ -133,16 +124,18 @@
 		    that.parent().remove();
 		});
 		//监听工位区选择
-		form.on('select(location_type)', function(data){
-            var sel = data.elem[data.elem.selectedIndex].text;
-			if(sel == '独立办公区' || sel == '自由办公区')
-			{
+		form.on('select(site_type)', function(data){
+            //var sel = data.elem[data.elem.selectedIndex].text;
+            var sel = data.value;
+            console.log(data.value);
+			if(sel == 3 || sel == 2){ //如果是自由工位区或者独立工位区
 				$(".j-workbayname,.j-workbays").hide();//隐藏工位名称和工位
 				$(".j-workbayname .layui-input").removeAttr("lay-verify");//去除工位名称必填
-			}
-			else{
+				$(".j-site_num").show();
+			}else{ //如果是联合工位
 				$(".j-workbayname,.j-workbays").show();//显示工位名称和工位
 				$(".j-workbayname .layui-input").attr("lay-verify","required");//添加工位名称必填
+				$(".j-site_num").hide();
 			}
 
 		})
@@ -152,7 +145,7 @@
 			url: upurl,
 			size: 1024,
 			multiple: duotu,
-			field: 'plan',
+			field: 'SiteImg',
 			before: function(obj) {
 				layer.msg('图片上传中...', {
 					icon: 16,
@@ -164,14 +157,14 @@
 				layer.close(layer.msg()); //关闭上传提示窗口
 				if (duotu == true) {
 					//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
-					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.file +
+					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
 						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
-						'" class="img" ><input type="hidden" name="plan[]" value="' + res.data.file + '" /></dd>');
+						'" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
 				} else {
 					//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
-					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.file +
+					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
 						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
-						'" class="img" ><input type="hidden" name="plan" value="' + res.data.file + '" /></dd>');
+						'" class="img" ><input type="hidden" name="file" value="' + res.data.id + '" /></dd>');
 				}
 			}
 		})
@@ -181,5 +174,17 @@
 		$(document).on("click", ".upload_img_list dd i", function() {
 			$(this).parents("dd").remove();
 		})
+
+		//多选标签-基本配置
+	    var tagIns1 = selectM({
+	      //元素容器【必填】
+	      elem: '#floor_number'
+	      //候选数据【必填】
+	      ,data: tagData
+	      //,max:10
+	      ,width:200
+	      //添加验证
+	      ,verify:'required'  
+	    }); 
 	});
 </script>

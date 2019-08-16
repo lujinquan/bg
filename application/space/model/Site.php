@@ -18,6 +18,17 @@ class Site extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
+    public function setSitesAttr($value)
+    {
+        if (!$value[0]) return '';
+        return '|'.implode('|',$value).'|';
+    }
+
+    public function setFloorNumberAttr($value)
+    {
+        if (!$value) return '';
+        return '|'.str_replace(',','|',$value).'|';
+    }
     
     public function checkWhere($data)
     {

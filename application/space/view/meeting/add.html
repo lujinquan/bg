@@ -16,7 +16,7 @@
       <div class="layui-inline">
         <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
         <div class="layui-input-inline">
-          <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+          <select name="ban_id" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
               <option value="">请选择</option>
               {volist name="banArr" id="v"}
               <option value="{$v['ban_id']}">{$v['ban_name']}</option>
@@ -45,7 +45,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>租赁单价：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="meet_unit_price"  placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="tel" name="meet_unit_price" lay-verify="required|number" placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
       <b class="j-explain-name">元/0.5h</b>
           </div>
         </div>
@@ -71,7 +71,7 @@
     </div>
     </div>
     <div class="layui-form-item">
-       <div class="layui-col-md8">
+       <div class="layui-col-md6">
          <label class="layui-form-label"><i class="red">*</i>选择设备：</label>
          <div class="layui-input-block">
          <input type="checkbox" name="item_ids[]" value="1" lay-skin="primary" title="WI-FI">
@@ -99,7 +99,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>面积：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="meet_area"  placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="text" name="meet_area"  lay-verify="required|number" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
       <b class="j-explain-name">m²</b>
           </div>
         </div>
@@ -136,7 +136,7 @@
 </form>
 {include file="system@block/layui" /}
 <script>
-  var tagData = [{"id":1,"name":"1楼","status":0},{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];     
+  var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];     
   /*上传参数设定*/
   var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=ban&water=no"; //上传楼层平面图
   var duotu = true; //是否为多图上传true false

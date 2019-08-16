@@ -8,50 +8,49 @@
 		<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>工位区名称：</label>
 			<div class="j-input-inline">
-				<input type="text" name="floor_number"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="site_name" value="{$data_info['site_name']}" placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>所属楼宇：</label>
 			<div class="j-input-inline">
-				<select name="ban_id" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
+				<select name="ban_id" class="field-cid" lay-filter="ban_id" lay-verify="required" lay-verType="tips" type="select">
 					<option value="">请选择</option>
 					{volist name="banArr" id="v"}
-					<option value="{$v['ban_id']}">{$v['ban_name']}</option>
+					<option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
 					{/volist}
 				</select>
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>所属楼层：</label>
-			<div class="j-input-inline">
-				<select name="workbay_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					<option value="1">楼层1</option>
-				</select>
-			</div>
+			<label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
+        	<div class="layui-input-block" id="floor_number"></div>
 		</div>
 	</div>
     <div class="layui-row j-from-box layui-col-space30">
     	<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>工位区类型：</label>
 			<div class="j-input-inline">
-				<div class="j-words-border">
-					自由编辑区
-				</div>
+				<select name="site_type" class="field-cid" lay-verify="required" lay-filter="site_type"  lay-verType="tips" type="select">
+					<option value="">请选择</option>
+					{volist name="params['site_type']" id="v"}
+					<option value="{$key}" {if condition="$data_info['site_type'] == $key"}selected{/if}>{$v}</option>
+					{/volist}
+				</select>
 			</div>
 		</div>
+		
 		<div class="layui-col-md4">
+			<label class="j-form-label"><i class="red">*</i>工位区面积：</label>
+			<div class="j-input-inline">
+				<input type="text" name="site_area" value="{$data_info['site_area']}" lay-verify="required|number" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
+				<b class="j-explain-name">m²</b>
+			</div>
+		</div>
+		<div class="layui-col-md4 j-site_num {if condition="$data_info['site_type'] == 1"}hide{/if}">
 			<label class="j-form-label"><i class="red">*</i>工位数：</label>
 			<div class="j-input-inline">
-				<input type="text" name="workbay_sum"  placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label">工位区面积：</label>
-			<div class="j-input-inline">
-				<input type="text" name="workbay_has"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
-				<b class="j-explain-name">m²</b>
+				<input type="text" name="site_num" value="{$data_info['site_num']}" placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -59,7 +58,7 @@
 		<div class="layui-col-md8">
 			<label class="j-form-label">工位区介绍：</label>
 			<div class="j-input-inline">
-				<input type="text" name="workbay_remarks"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="workbay_remarks" value="{$data_info['site_remark']}" placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-col-md4">
@@ -91,11 +90,15 @@
     		<label class="j-form-label">工位：</label>
     		<div class="j-input-inline">
 				<ul>
+					{volist name="$data_info['sites']" id="v"}
+					{if condition="$v"}
 					<li>
-						<input type="text" name="house_number" value="" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
+						<input type="text" name="sites[]" value="{$v}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
 						<b class="j-explain-name hide">未租</b>
 						<i class="icon-cancel j-del"></i>
 					</li>
+					{/if}
+					{/volist}
 					<li>
 						<label class="j-form-label j-add"><i class="layui-icon layui-icon-add-1 " style="color:#1E9FFF;"></i>添加工位</label>
 					</li>
@@ -112,12 +115,21 @@
 					<button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
 				</div>
 				<div id="upload_img_list1" class="upload_img_list j-viewer-img">
-					
+						{volist name="data_info['imgs']" id="vo"}
+						<dd class="item_img">
+							<div class="operate">
+								<i class="layui-icon-close-fill layui-icon"></i>
+							</div>
+							<img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
+							<input type="hidden" name="{$vo['file_name']}">
+						</dd>
+						{/volist}
 				</div>
 			</div>
 		</div>
 	</div>
      {:token()}
+     <input type="hidden" name="site_id" value="{$data_info['site_id']}">
     <div class="layui-form-item">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -127,17 +139,20 @@
 </form>
 {include file="system@block/layui" /}
 <script>
+	
 	/*上传参数设定*/
-	var upurl = "{:url('system/Api/upload')}?input=plan&group=ban&water=no"; //土地证电子版上传图片地址
+	var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=space&water=no"; //土地证电子版上传图片地址
 	var duotu = true; //是否为多图上传true false
-	layui.use(['jquery', 'laydate', 'upload', 'form'], function() {
+	layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
 		var laydate = layui.laydate,
 			$ = layui.$,
 			upload = layui.upload,
-			form = layui.form;
+			form = layui.form,
+			selectN = layui.selectN,
+      		selectM = layui.selectM;
 		//工位
 		$('.j-add').click(function(){
-		    var html = '<li><input type="text" name="house_number[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input"><b class="j-explain-name hide">未租</b><i class="icon-cancel j-del"></i></li>';
+		    var html = '<li><input type="text" name="sites[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input"><b class="j-explain-name hide">未租</b><i class="icon-cancel j-del"></i></li>';
 		    $('.j-add').parent().before(html);
 		});
 		$('.e-house').on('click','.j-del',function(){
@@ -145,16 +160,18 @@
 		    that.parent().remove();
 		});
 		//监听工位区选择
-		form.on('select(location_type)', function(data){
-            var sel = data.elem[data.elem.selectedIndex].text;
-			if(sel == '独立办公区' || sel == '自由办公区')
-			{
+		form.on('select(site_type)', function(data){
+            //var sel = data.elem[data.elem.selectedIndex].text;
+            var sel = data.value;
+            console.log(data.value);
+			if(sel == 3 || sel == 2){ //如果是自由工位区或者独立工位区
 				$(".j-workbayname,.j-workbays").hide();//隐藏工位名称和工位
 				$(".j-workbayname .layui-input").removeAttr("lay-verify");//去除工位名称必填
-			}
-			else{
+				$(".j-site_num").show();
+			}else{ //如果是联合工位
 				$(".j-workbayname,.j-workbays").show();//显示工位名称和工位
 				$(".j-workbayname .layui-input").attr("lay-verify","required");//添加工位名称必填
+				$(".j-site_num").hide();
 			}
 
 		})
@@ -164,7 +181,7 @@
 			url: upurl,
 			size: 1024,
 			multiple: duotu,
-			field: 'plan',
+			field: 'SiteImg',
 			before: function(obj) {
 				layer.msg('图片上传中...', {
 					icon: 16,
@@ -176,14 +193,14 @@
 				layer.close(layer.msg()); //关闭上传提示窗口
 				if (duotu == true) {
 					//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
-					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.file +
+					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
 						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
-						'" class="img" ><input type="hidden" name="plan[]" value="' + res.data.file + '" /></dd>');
+						'" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
 				} else {
 					//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
-					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.file +
+					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
 						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
-						'" class="img" ><input type="hidden" name="plan" value="' + res.data.file + '" /></dd>');
+						'" class="img" ><input type="hidden" name="file" value="' + res.data.id + '" /></dd>');
 				}
 			}
 		})
@@ -193,5 +210,45 @@
 		$(document).on("click", ".upload_img_list dd i", function() {
 			$(this).parents("dd").remove();
 		})
+
+		var tagData = [];
+		//监听所属楼宇选择
+		//var popBindCloud = function (){
+			form.on('select(ban_id)', function(data){
+			var ban_id = data.value;
+			$.post('/admin.php/space/api/getBanFloor', {ban_id:ban_id}, function(res) {
+                if (res.code == 1) {
+                	var s = [{"id":1,"name":"1楼"}];
+                	return s;
+                    console.log(res);
+                }
+            });
+            
+		})
+		//}
+		
+		var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
+
+		var formData = '{$data_info['floor_number']}';
+	  	if(formData){
+	  		var strs = formData.split("|"); 
+	  		var seletedFloorNumber = strs.filter(function(s){
+	  			return s && s.trim();
+	  		}); 
+	  		console.log('被选中的楼层id：'+seletedFloorNumber);
+	  	}
+
+		//多选标签-基本配置
+	    var tagIns1 = selectM({
+	      //元素容器【必填】
+	      elem: '#floor_number'
+	      //候选数据【必填】
+	      ,data: tagData
+	      ,selected: seletedFloorNumber
+	      //,max:10
+	      ,width:200
+	      //添加验证
+	      ,verify:'required'      
+	    }); 
 	});
 </script>

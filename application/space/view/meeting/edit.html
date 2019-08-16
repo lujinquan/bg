@@ -54,9 +54,9 @@
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
          <div class="layui-input-block">
-         <input type="checkbox" name="facility_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|')"}checked{/if} title="设备1">
-       <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|')"}checked{/if} title="设备2">
-       <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|')"}checked{/if} title="设备3">
+         <input type="checkbox" name="facility_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
+       <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
+       <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
          </div>
        </div>
    </div>
@@ -65,8 +65,8 @@
          <label class="layui-form-label"><i class="red">*</i>路径门禁：</label>
          <div class="layui-input-block">
            <input type="checkbox" name="door_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|1|') !== false"}checked{/if} title="门禁1">
-       <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|2|')"}checked{/if} title="门禁2">
-       <input type="checkbox" name="door_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|3|')"}checked{/if} title="门禁3">
+       <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|2|') !== false"}checked{/if} title="门禁2">
+       <input type="checkbox" name="door_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|3|') !== false"}checked{/if} title="门禁3">
          </div>
     </div>
     </div>
@@ -74,16 +74,16 @@
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>选择设备：</label>
          <div class="layui-input-block">
-         <input type="checkbox" name="item_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|')"}checked{/if} title="WI-FI">
-         <input type="checkbox" name="item_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|2|')"}checked{/if} title="投影仪">
-         <input type="checkbox" name="item_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|3|')"}checked{/if} title="智能电视">
-         <input type="checkbox" name="item_ids[]" value="4" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|4|')"}checked{/if} title="电脑">
-         <input type="checkbox" name="item_ids[]" value="5" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|5|')"}checked{/if} title="白板">
-         <input type="checkbox" name="item_ids[]" value="6" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|6|')"}checked{/if} title="杯子">
-         <input type="checkbox" name="item_ids[]" value="7" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|7|')"}checked{/if} title="饮水机">
-         <input type="checkbox" name="item_ids[]" value="8" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|8|')"}checked{/if} title="沙发">
-         <input type="checkbox" name="item_ids[]" value="9" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|9|')"}checked{/if} title="卫生间">
-         <input type="checkbox" name="item_ids[]" value="10" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|10|')"}checked{/if} title="远程会议">
+         <input type="checkbox" name="item_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|') !== false"}checked{/if} title="WI-FI">
+         <input type="checkbox" name="item_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|2|') !== false"}checked{/if} title="投影仪">
+         <input type="checkbox" name="item_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|3|') !== false"}checked{/if} title="智能电视">
+         <input type="checkbox" name="item_ids[]" value="4" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|4|') !== false"}checked{/if} title="电脑">
+         <input type="checkbox" name="item_ids[]" value="5" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|5|') !== false"}checked{/if} title="白板">
+         <input type="checkbox" name="item_ids[]" value="6" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|6|') !== false"}checked{/if} title="杯子">
+         <input type="checkbox" name="item_ids[]" value="7" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|7|') !== false"}checked{/if} title="饮水机">
+         <input type="checkbox" name="item_ids[]" value="8" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|8|') !== false"}checked{/if} title="沙发">
+         <input type="checkbox" name="item_ids[]" value="9" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|9|') !== false"}checked{/if} title="卫生间">
+         <input type="checkbox" name="item_ids[]" value="10" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|10|') !== false"}checked{/if} title="远程会议">
          </div>
        </div>
    </div>
@@ -121,12 +121,21 @@
               <button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
             </div>
             <div id="upload_img_list1" class="upload_img_list j-viewer-img">
-          
-        </div>
+              {volist name="data_info['imgs']" id="vo"}
+              <dd class="item_img">
+                <div class="operate">
+                  <i class="layui-icon-close-fill layui-icon"></i>
+                </div>
+                <img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
+                <input type="hidden" name="{$vo['file_name']}">
+              </dd>
+              {/volist}
+            </div>
          </div>
        </div>
    </div> 
      {:token()}
+     <input type="hidden" name="meet_id" value="{$data_info['meet_id']}">
     <div class="layui-form-item">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -136,9 +145,9 @@
 </form>
 {include file="system@block/layui" /}
 <script>
-  var tagData = [{"id":0,"name":"1楼","status":0},{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];     
+  var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];     
   /*上传参数设定*/
-  var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=ban&water=no"; //上传楼层平面图
+  var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=space&water=no"; //上传楼层平面图
   var duotu = true; //是否为多图上传true false
    layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
     var laydate = layui.laydate,
@@ -184,13 +193,13 @@
     })
 
     var formData = '{$data_info['floor_number']}';
-	if(formData){
-		var strs = formData.split("|"); 
-		var seletedFloorNumber = strs.filter(function(s){
-			return s && s.trim();
-		}); 
-		console.log('被选中的楼层id：'+seletedFloorNumber);
-	}
+  	if(formData){
+  		var strs = formData.split("|"); 
+  		var seletedFloorNumber = strs.filter(function(s){
+  			return s && s.trim();
+  		}); 
+  		console.log('被选中的楼层id：'+seletedFloorNumber);
+  	}
 
     //多选标签-基本配置
     var tagIns1 = selectM({
