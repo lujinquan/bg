@@ -8,7 +8,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>场地名称：</label>
           <div class="layui-input-inline j-name">
-            <input type="text" name="field_name" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+            <input type="text" name="rest_name" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
 			<div class="j-tips">( <i class="layui-icon layui-icon-tips"></i> 用户办理入驻后即可进入并使用会员类场地，类似自由工位区 )</div>
           </div>
         </div>
@@ -17,9 +17,11 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>场地类型：</label>
           <div class="layui-input-inline">
-            <select name="field_class" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
-      			    <option value="">请选择</option>
-      			    <option value="1">类型1</option>
+            <select name="rest_type" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+            	<option value="">请选择</option>
+  			    {volist name="params['rest_type']" id="v"}
+  			    <option value="{$key}">{$v}</option>
+  			    {/volist}
       			</select>
           </div>
         </div>
@@ -28,37 +30,38 @@
 	    <div class="layui-inline">
 	      <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
 	      <div class="layui-input-inline">
-	        <select name="field_building" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+	        <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
 	  			    <option value="">请选择</option>
-	  			    <option value="1">楼宇1</option>
+	  			    {volist name="banArr" id="v"}
+	  			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
+	  			    {/volist}
 	  			</select>
 	      </div>
 	    </div>
 	</div>
 	<div class="layui-form-item">
 	      <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
-	      <div class="layui-input-block" id="tag_ids1"></div>
+	      <div class="layui-input-block" id="floor_number"></div>
 	</div>
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>可预约时段：</label>
           <div class="layui-input-inline" style="width: 190px;">
-			<input type="text" name="price_min" class="layui-input" lay-verify="required" lay-verType="tips" id="test14" placeholder="H点m分">
+			<input type="text" name="order_start_time" class="layui-input" lay-verify="required" lay-verType="tips" id="test14" placeholder="H点m分">
 		  </div>
 		  <div class="layui-form-mid">-</div>
 		  <div class="layui-input-inline" style="width: 190px;">
-			<input type="text" name="price_max" class="layui-input" lay-verify="required" lay-verType="tips" id="test15" placeholder="H点m分">
+			<input type="text" name="order_end_time" class="layui-input" lay-verify="required" lay-verType="tips" id="test15" placeholder="H点m分">
 		  </div>
         </div>
      </div>
 	 <div class="layui-form-item">
-	     <div class="layui-inline">
+	     <div class="layui-col-md8">
 	       <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-	       <div class="layui-input-inline">
-	         <select name="field_floor" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
-	   			    <option value="">请选择</option>
-	   			    <option value="1">设备1</option>
-	   			</select>
+	       <div class="layui-input-block">
+   			 <input type="checkbox" name="facility_ids[]" value="1" lay-skin="primary" title="设备1">
+			 <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" title="设备2">
+			 <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" title="设备3">
 	       </div>
 	     </div>
 	 </div>
@@ -66,9 +69,9 @@
 		<div class="layui-col-md8">
 	       <label class="layui-form-label"><i class="red">*</i>路径门禁：</label>
 	       <div class="layui-input-block">
-	         <input type="checkbox" name="door" lay-skin="primary" title="门禁1" checked="">
-			 <input type="checkbox" name="door" lay-skin="primary" title="门禁2">
-			 <input type="checkbox" name="door" lay-skin="primary" title="门禁3">
+	         <input type="checkbox" name="door_ids[]" value="1" lay-skin="primary" title="门禁1">
+			 <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" title="门禁2">
+			 <input type="checkbox" name="door_ids[]" value="3" lay-skin="primary" title="门禁3">
 	       </div>
 		</div>
 	  </div>
@@ -76,7 +79,7 @@
 	     <div class="layui-inline">
 	       <label class="layui-form-label">容纳人数：</label>
 	       <div class="layui-input-inline">
-	         <input type="text" name="field_number"  placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+	         <input type="text" name="rest_volume"  placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
 	       </div>
 	     </div>
 	  </div>
@@ -84,16 +87,16 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>面积：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="field_has"  placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="tel" name="rest_area"  placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
 			<b class="j-explain-name">m²</b>
           </div>
         </div>
      </div>
 	 <div class="layui-form-item">
 		<div class="layui-col-md8">
-			<label class="layui-form-label">工位区介绍：</label>
+			<label class="layui-form-label">场地介绍：</label>
 			<div class="layui-input-block">
-				<input type="text" name="workbay_remarks" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input">
+				<input type="text" name="rest_remark" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -121,9 +124,9 @@
 </form>
 {include file="system@block/layui" /}
 <script>
-	var tagData = [{"id":12,"name":"长者","status":0},{"id":13,"name":"工厂"},{"id":14,"name":"小学生"},{"id":15,"name":"大学生"},{"id":16,"name":"研究生"},{"id":17,"name":"教师"},{"id":18,"name":"记者"}];    
+	var tagData = [{"id":1,"name":"1楼","status":0},{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];    
 	/*上传参数设定*/
-	var upurl = "{:url('system/Api/upload')}?input=floorSign&group=ban&water=no"; //上传楼层平面图
+	var upurl = "{:url('system/Api/upload')}?input=RestImg&group=ban&water=no"; //上传楼层平面图
 	var duotu = true; //是否为多图上传true false
 	 layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
 		var laydate = layui.laydate,
@@ -138,7 +141,7 @@
 			url: upurl,
 			size: 1024,
 			multiple: duotu,
-			field: 'floorSign',
+			field: 'RestImg',
 			before: function(obj) {
 				layer.msg('图片上传中...', {
 					icon: 16,
@@ -170,7 +173,7 @@
 		//多选标签-基本配置
 		var tagIns1 = selectM({
 		  //元素容器【必填】
-		  elem: '#tag_ids1'
+		  elem: '#floor_number'
 		  //候选数据【必填】
 		  ,data: tagData
 		  //,max:10

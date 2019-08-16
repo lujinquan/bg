@@ -54,10 +54,51 @@
         <label class="layui-form-label"><i class="red"></i>门禁：</label>
         <div class="layui-input-block j-input-width">
 
-          {volist name="params['guard']" id="v"}
-          <input type="checkbox" name="guard[]" class="j-check" value="{$key}" {if condition="$data_info['guard'] && in_array($key,$data_info['guard'])"}checked{/if} lay-skin="primary" title="{$v}">
-          {/volist}
+          <select name="guard_group_id" class="field-role_id" lay-filter="filter" type="select">
+                <option value="">请选择</option>
+                {volist name="guardArr" id="v"}
+                {if condition="$v['pid'] == 0"}
+                <option value="{$v['id']}" {if condition="$v['id'] == $data_info['guard_group_id']"}selected{/if}>{$v['title']}</option>
+                {/if}
+                {/volist}
+            </select>
         </div>
+    </div>
+    <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+
+            <div id="firstpane" class="menu_list">
+              {volist name="guardArr"  id="v"}
+              {if condition="$v['id'] == $data_info['guard_group_id']"}
+              {volist name="v['childs']" key="k" id="vv"}
+              <div class="menu_head {if condition='$k == 1'}current{/if}">
+                <input type="checkbox" name="ban[]" value="{$vv['id']}" title="{$vv['title']}" {if condition="in_array($vv['id'],$data_info['guard']['ban'])"}checked{/if} lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage">
+                <b class="j-icon"></b>
+              </div>  
+              <div class="menu_body {if condition='$k != 1'}hide{/if}">
+                <dl class="clearfix">
+                  {volist name="vv['childs']" id="vvv"}
+                  <dt class="clearfix">
+                    <input type="checkbox" name="floor[]" value="{$vvv['id']}" title="{$vvv['title']}" {if condition="in_array($vvv['id'],$data_info['guard']['floor'])"}checked{/if} lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list">
+                  </dt>
+                  <dd class="clearfix">
+                    <ul>
+                      {volist name="vvv['childs']" id="vvvv"}
+                      <li>
+                        <input type="checkbox" name="guard[]" value="{$vvvv['id']}" title="{$vvvv['title']}" {if condition="in_array($vvvv['id'],$data_info['guard']['guard'])"}checked{/if} lay-skin="primary" lay-filter="list" class="listMessage list">
+                      </li>
+                      {/volist}
+                    </ul>
+                  </dd>
+                  {/volist}
+                </dl>
+              </div>
+              {/volist}
+              {/if}
+              {/volist}
+            </div>
+          </div>
     </div>
     <input type="hidden" name="id" value="{$data_info['id']}">
     <div class="layui-form-item">
@@ -68,3 +109,124 @@
      </div>
 </form>
 {include file="block/layui" /}
+<script>    
+layui.use(['form','layer','jquery'], function(){
+  var layer = layui.layer
+      $= layui.jquery;
+   var   form = layui.form;
+
+
+
+  
+  form.on('select(filter)', function(data){
+    var guards = {:json_encode($guardArr)};
+    //console.log(guards);
+    for (var i = 0 ; i < guards.length ; i++) {
+      if(guards[i].id == data.value){
+        var bans = guards[i].childs;
+        var str = '';
+
+        if(bans.length > 0){
+          for (var j = 0 ; j < bans.length ; j++) {
+            if(j==0){
+              var current = 'current';
+        var hide = '';
+            }else{
+              var current = '';
+        var hide = 'hide';
+            }
+            str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+            var floors = bans[j].childs;
+
+            if(floors.length > 0){
+              for (var k = 0 ; k < floors.length ; k++) {
+                str += '<dl class="clearfix">\
+                          <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+                              <ul>';
+                var guards = floors[k].childs;
+                if(guards.length > 0){
+                  for (var h = 0 ; h < guards.length ; h++) {
+                    str += '<li>\
+                               <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+                            </li>';
+                  }
+                }
+                str += '</ul>\
+                          </dd></dl>';
+              }  
+            }
+            str += '</div>';
+
+          }   
+          str += '</div>';     
+          //console.log(str);
+          $('#firstpane').html(str);
+          form.render();
+        }
+        
+      }
+    }
+  }); 
+
+
+  //监听折叠
+ 
+  $("#firstpane").on('click','.menu_head .j-icon',function(){
+     if ($(this).parent().hasClass("current")) {
+          $(this).parent().removeClass("current").siblings("div.menu_body").slideUp("slow");
+      }
+      else {
+        $(this).parent().addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+        $(this).parent().siblings().removeClass("current");
+      }
+  });     
+   //楼栋全选 
+      form.on('checkbox(chooseAll)', function (data) {
+      var that = $(this);
+      var a = data.elem.checked;
+        $("input[name='guard[]'],input[name='floor[]']").each(function () {
+       if (a == true) {
+        that.parent().next("div.menu_body").find(".list").prop('checked',true);
+        form.render('checkbox');
+      } else {
+        that.parent().next("div.menu_body").find(".list").prop('checked',false);
+        form.render('checkbox');
+      }
+      
+        });
+      });
+    //楼层全选
+    form.on('checkbox(secondAll)', function (data) {
+          var that = $(this);
+          var b = data.elem.checked;
+      $("input[name='guard[]'],input[name='floor[]']").each(function () {
+           if (b == true) {
+            that.parent().next().find(".list").prop('checked',true);
+          that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',true);
+            form.render('checkbox');
+          } else {
+            that.parent().next().find(".list").prop('checked',false);
+          //that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',false);
+            form.render('checkbox');
+          }
+          
+      });
+    });
+      //判断层级勾选
+    form.on('checkbox(list)', function (data) {
+     var that = $(this);
+     var c = data.elem.checked;
+      if(c == true)
+      {
+        that.parents("dd").prev().find(".list").prop('checked',true);
+        form.render('checkbox');
+      }
+      else{
+        //that.parents("dd").prev().find(".list").prop('checked',false);
+        form.render('checkbox');
+      }
+      
+   });  
+
+ })
+</script>

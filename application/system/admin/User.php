@@ -80,7 +80,7 @@ class User extends Admin
                 
             }
             
-            $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->order('ctime desc')->select();
 
             $data['data'] = $temp;
             $data['count'] = UserModel::where($where)->count('id');
@@ -362,7 +362,6 @@ class User extends Admin
         // 获取门禁组权限
         $GuardModel = new GuardModel;
         $guardArr = GuardModel::getAllChild();
-        //halt($guardArr);
         $this->assign('guardArr', $guardArr);
         $roleArr = RoleModel::where([['status','eq',1],['id','>',2]])->column('id,name');
         $this->assign('roleArr', $roleArr);
@@ -391,6 +390,13 @@ class User extends Admin
                 return $this->error($result);
             }
 
+            $data['guard'] = [
+                'ban' => $data['ban'],
+                'floor' => $data['floor'],
+                'guard' => $data['guard'],
+            ];
+            unset($data['id'],$data['ban'],$data['floor']);
+            
             if (!UserModel::update($data)) {
                 return $this->error('编辑失败');
             }
@@ -402,7 +408,11 @@ class User extends Admin
         $id   = $this->request->param('id/d');
         $model = new UserModel();
         $row = $model->find($id);
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
         //halt($row);
+        $this->assign('guardArr', $guardArr);
         $this->assign('data_info',$row);
         return $this->fetch('edituserform');
     }

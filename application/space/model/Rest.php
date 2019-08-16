@@ -18,7 +18,24 @@ class Rest extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
-    
+    public function setFacilityIdsAttr($value)
+    {
+        if (empty($value)) return '';
+        return '|'.implode('|',$value).'|';
+    }
+
+    public function setDoorIdsAttr($value)
+    {
+        if (empty($value)) return '';
+        return '|'.implode('|',$value).'|';
+    }
+
+    public function setFloorNumberAttr($value)
+    {
+        if (empty($value)) return '';
+        return '|'.str_replace(',','|',$value).'|';
+    }
+
     public function checkWhere($data)
     {
 

@@ -14,21 +14,20 @@ namespace app\space\validate;
 use think\Validate;
 
 /**
- * 会议室验证器
+ * 空间场地验证器
  * @package app\system\validate
  */
-class Meeting extends Validate
+class Rest extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'meet_name|会议室名称'    	=> 'require',
-        'meet_area|面积'    	=> 'require|float',
+        'rest_name|场地名称'    	=> 'require',
+        'rest_type|场地类型'    	=> 'require',
+        'rest_area|面积'    	=> 'require|float',
         'ban_id|楼宇'    	=> 'require|number',
-        'floor_number|楼层'     => 'require',
-        'meet_volume|面积'    	=> 'require|float',
-        'meet_unit_price|单价'    	=> 'require|float',
-        'order_start_time|可预约起始时间'      => 'require',
-        'order_end_time|可预约结束时间'        => 'require',
+        'floor_number|所属楼层'     => 'require',
+        'order_start_time|可预约起始时间'    	=> 'require',
+        'order_end_time|可预约结束时间'    	=> 'require',
         '__token__'      	  	=> 'require|token',
     ];
 
@@ -40,7 +39,7 @@ class Meeting extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['meet_name','meet_area','ban_id','floor_number','meet_volume','order_start_time','order_end_time','meet_unit_price','__token__']);
+        return $this->only(['rest_name','rest_type','ban_id','floor_number','order_start_time','order_end_time','rest_area','__token__']);
     }
 
     

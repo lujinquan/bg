@@ -15,6 +15,7 @@ namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
+use app\common\model\SystemAnnex;
 use app\space\model\Ban as BanModel;
 use app\space\model\Rest as RestModel;
 
@@ -29,7 +30,7 @@ class Rest extends Admin
             $getData = $this->request->get();
             $RestModel = new RestModel;
             $where = $RestModel->checkWhere($getData);
-            $fields = 'a.rest_name,a.rest_type,a.floor_number,a.rest_volume,a.rest_unit_price,b.ban_id,b.ban_name';
+            $fields = 'a.rest_id,a.rest_name,a.rest_type,a.floor_number,a.rest_volume,b.ban_id,b.ban_name';
             $data = [];
             $data['data'] = Db::name('space_rest')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
             //halt($where);
@@ -52,8 +53,13 @@ class Rest extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            if(isset($data['file'])){ //附件
+                $data['imgs'] = implode(',',$data['file']);
+                (new \app\common\model\SystemAnnex)->updateAnnexEtime($data['file']);
+            }
             $RestModel = new RestModel;
             unset($data['rest_id']);
+            //halt($data);
             // 入库
             if (!$RestModel->allowField(true)->create($data)) {
                 return $this->error('添加失败');
@@ -82,7 +88,10 @@ class Rest extends Admin
             return $this->success('修改成功');
         }
         $id = input('param.id/d');
-        $row = BanModel::get($id);
+        $row = RestModel::get($id);
+        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+        //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
