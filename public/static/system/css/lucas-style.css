@@ -114,3 +114,4 @@ opacity: .8color: #333;}
 .menu_body dd li{ float: left; margin-right: 20px; margin-bottom: 10px;}
 .layui-form-item .menu_list .layui-form-checkbox[lay-skin=primary]{ margin-top: 0;}
 /* 工作人员账号 E */
+ .x-iframe{position: absolute;width: 100%;height: 100%;left: 0;top: 0;right: 0;bottom: 0;}

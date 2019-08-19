@@ -96,6 +96,10 @@
 						<input type="text" name="sites[]" value="{$v}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
 						<b class="j-explain-name hide">未租</b>
 						<i class="icon-cancel j-del"></i>
+						<div  class="j-hostile">
+							<span  class="j-type">企业</span>
+							<span  class="j-name">楚天新媒科技（武汉） 有限公司</span>
+						</div>
 					</li>
 					{/if}
 					{/volist}
@@ -152,7 +156,15 @@
       		selectM = layui.selectM;
 		//工位
 		$('.j-add').click(function(){
-		    var html = '<li><input type="text" name="sites[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input"><b class="j-explain-name hide">未租</b><i class="icon-cancel j-del"></i></li>';
+		    var html = `<li>
+			              <input type="text" name="sites[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input">
+						  <b class="j-explain-name hide">未租</b>
+						  <i class="icon-cancel j-del"></i>
+						  <div  class="j-hostile hide">
+							<span  class="j-type">企业</span>
+							<span  class="j-name">楚天新媒科技（武汉） 有限公司</span>
+						  </div>
+						</li>`;
 		    $('.j-add').parent().before(html);
 		});
 		$('.e-house').on('click','.j-del',function(){
@@ -226,7 +238,6 @@
             
 		})
 		//}
-		
 		var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
 
 		var formData = '{$data_info['floor_number']}';
@@ -237,7 +248,6 @@
 	  		}); 
 	  		console.log('被选中的楼层id：'+seletedFloorNumber);
 	  	}
-
 		//多选标签-基本配置
 	    var tagIns1 = selectM({
 	      //元素容器【必填】
@@ -246,9 +256,13 @@
 	      ,data: tagData
 	      ,selected: seletedFloorNumber
 	      //,max:10
-	      ,width:200
+	      //,width:200
 	      //添加验证
 	      ,verify:'required'      
 	    }); 
+		//已租入驻公司信息
+		$(".j-input-inline li").hover(function(){
+			$(this).find("")
+		})
 	});
 </script>
