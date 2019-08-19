@@ -53,8 +53,8 @@
    <div class="layui-form-item">
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-         <div class="layui-input-block">
-         <input type="checkbox" name="facility_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
+         <div class="layui-input-block j-input-facilities">
+         <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
        <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
        <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
          </div>
@@ -63,8 +63,8 @@
    <div class="layui-form-item">
     <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>路径门禁：</label>
-         <div class="layui-input-block">
-           <input type="checkbox" name="door_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|1|') !== false"}checked{/if} title="门禁1">
+         <div class="layui-input-block  j-input-route">
+           <input type="checkbox" name="door_ids[]" value="1" lay-verify="require|choiceroute" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|1|') !== false"}checked{/if} title="门禁1">
        <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|2|') !== false"}checked{/if} title="门禁2">
        <input type="checkbox" name="door_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['door_ids'],'|3|') !== false"}checked{/if} title="门禁3">
          </div>
@@ -73,8 +73,8 @@
     <div class="layui-form-item">
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>选择设备：</label>
-         <div class="layui-input-block">
-         <input type="checkbox" name="item_ids[]" value="1" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|') !== false"}checked{/if} title="WI-FI">
+         <div class="layui-input-block j-indent-equipment">
+         <input type="checkbox" name="item_ids[]" value="1" lay-verify="require|equipment" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|') !== false"}checked{/if} title="WI-FI">
          <input type="checkbox" name="item_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|2|') !== false"}checked{/if} title="投影仪">
          <input type="checkbox" name="item_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|3|') !== false"}checked{/if} title="智能电视">
          <input type="checkbox" name="item_ids[]" value="4" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|4|') !== false"}checked{/if} title="电脑">
@@ -156,6 +156,26 @@
       form = layui.form,
       selectN = layui.selectN,
       selectM = layui.selectM;
+	   //自定义验证规则
+	   form.verify({
+			choiceone: function () {
+		   if ($("input[name='facility_ids[]']:checked").length == 0) {
+					 return '请选择门禁设备';
+		   }
+		},
+			choiceroute: function () {
+			   if ($("input[name='door_ids[]']:checked").length == 0) {
+					 return '请选择路径门禁';
+			   } 
+			  
+			},
+			equipment: function () {
+			   if ($("input[name='item_ids[]']:checked").length == 0) {
+					 return '请选择设备';
+			   } 
+			}
+			
+		});
     //场地图片
     upload.render({
       elem: '#upload_img1',

@@ -58,8 +58,8 @@
 	 <div class="layui-form-item">
 	     <div class="layui-col-md8">
 	       <label class="layui-form-label">门禁设备：</label>
-	       <div class="layui-input-block">
-   			 <input type="checkbox" name="facility_ids[]" value="1" lay-skin="primary" title="设备1">
+	       <div class="layui-input-block j-input-facilities">
+   			 <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone"  lay-verType="tips" lay-skin="primary" title="设备1">
 			 <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" title="设备2">
 			 <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" title="设备3">
 	       </div>
@@ -68,8 +68,8 @@
 	 <div class="layui-form-item">
 		<div class="layui-col-md8">
 	       <label class="layui-form-label">路径门禁：</label>
-	       <div class="layui-input-block">
-	         <input type="checkbox" name="door_ids[]" value="1" lay-skin="primary" title="门禁1">
+	       <div class="layui-input-block j-input-route">
+	         <input type="checkbox" name="door_ids[]" value="1" lay-verify="require|choiceroute" lay-verType="tips" lay-skin="primary" title="门禁1">
 			 <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" title="门禁2">
 			 <input type="checkbox" name="door_ids[]" value="3" lay-skin="primary" title="门禁3">
 	       </div>
@@ -135,6 +135,21 @@
 			form = layui.form,
 			selectN = layui.selectN,
 			selectM = layui.selectM;
+		//自定义验证规则
+		 form.verify({
+					choiceone: function () {
+				 if ($("input[name='facility_ids[]']:checked").length == 0) {
+							 return '请选择门禁设备';
+				 }
+			  },
+				choiceroute: function () {
+				   if ($("input[name='door_ids[]']:checked").length == 0) {
+						 return '请选择路径门禁';
+				   } 
+				  
+				},
+					
+				});
 		//场地图片
 		upload.render({
 			elem: '#upload_img1',
