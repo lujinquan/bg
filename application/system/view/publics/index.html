@@ -54,6 +54,9 @@
 							<i class="layui-icon layui-icon-password blue-color"></i>
 							<input type="password" name="password" class="layui-input" placeholder="请输入密码" />
 						</div>
+                        <div>
+                            <a href="{:url('firstLogin')}">首次登录</a> - <a href="{:url('forget')}">忘记密码</a>
+                        </div>
 						{:token()}
 						<input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal  register-submit">
 					</form>

@@ -24,7 +24,7 @@ class SystemUserManage extends Validate
     	'username|账户名称' => 'require|unique:system_user',
         'nick|昵称'       => 'require|unique:system_user',
         //'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
-        'post|职务'       => 'require',
+        //'post|职务'       => 'require',
         //'pro_ids|授权项目' => 'require',
         'password|密码'   => 'require|confirm',
         //'mobile|手机号'   => 'requireWith:mobile|regex:^1\d{10}',
@@ -59,7 +59,7 @@ class SystemUserManage extends Validate
     //添加
     public function sceneAdd()
     {
-        return $this->only(['username', 'nick','post']);
+        return $this->only(['username', 'nick']);
         //return $this->only(['username', 'nick', 'role_id','post'])->remove('post',['require']);
     }
 

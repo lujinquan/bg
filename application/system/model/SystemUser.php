@@ -74,7 +74,8 @@ class SystemUser extends Model
     // 格式化授权项目
     public function setProIdsAttr($value)
     {
-        return (strpos($value,',') === false) ? $value : implode(',', $value);
+        //return (strpos($value,',') === false) ? $value : implode(',', $value);
+        return implode(',', $value);
     }
 
     // 权限

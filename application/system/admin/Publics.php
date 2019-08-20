@@ -119,6 +119,16 @@ class Publics extends Common
         return $this->fetch();
     }
 
+    public function firstLogin()
+    {
+        return $this->fetch();
+    }
+
+    public function forget()
+    {
+        return $this->fetch();
+    }
+
     /**
      * 登录页面
      * @author Lucas <598936602@qq.com>

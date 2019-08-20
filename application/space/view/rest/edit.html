@@ -30,11 +30,11 @@
 	      <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
 	      <div class="layui-input-inline">
 	        <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
-	  			    <option value="">请选择</option>
-	  			    {volist name="banArr" id="v"}
-	  			    <option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
-	  			    {/volist}
-	  			</select>
+  			    <option value="">请选择</option>
+  			    {volist name="banArr" id="v"}
+  			    <option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
+  			    {/volist}
+  			</select>
 	      </div>
 	    </div>
 	</div>
