@@ -76,6 +76,8 @@ b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;curso
 .layui-input-block.j-uplode-block{display: block;}
 .icon-cancel {background: url(../image/icon-cancel.png) no-repeat;width: 15px;height: 15px;position: absolute;top: -4px;right: -4px;}
 .j-from-box .j-input-inline li{position: relative; width: 20%; margin:0 30px 15px 0 ; float: left;}
+.j-from-box .j-input-inline li:hover .j-hostile{ display: block;}
+.j-from-box .j-input-inline li:hover .layui-input:hover{ border:#60D09C 1px solid ;}
 .j-from-box .j-input-inline .j-link-box li{ width: auto; line-height: 36px;margin: 0;}
 .j-from-box .j-input-inline .j-link-box li a{ color: #20A0FF;}
 /*------------------ 多图上传S ----------------*/
@@ -98,7 +100,7 @@ opacity: .8color: #333;}
 .j-tips i{ font-size: 8px;}
 .j-padding-right .layui-col-space30{margin: -15px -15px 0;}
 .j-padding-right .layui-col-space30>*{padding: 15px 15px 0;}
-.j-from-box .j-input-inline li .j-hostile{box-shadow:0px 0px 12px 0px rgba(0,0,0,0.16);border-radius:4px; background: #fff; padding: 30px 20px; box-sizing: border-box;position: absolute;top:-110px;font-size: 14px;}
+.j-from-box .j-input-inline li .j-hostile{box-shadow:0px 0px 12px 0px rgba(0,0,0,0.16);border-radius:4px; background: #fff; padding: 30px 20px; box-sizing: border-box;position: absolute;top:-110px;font-size: 14px;z-index: 888;}
 .j-from-box .j-input-inline li .j-hostile .j-type{ display: inline-block;width:60px;float: left; color:#9B9B9B;}
 .j-from-box .j-input-inline li .j-hostile .j-name{ display: block;padding-left: 80px; text-align: right; color: #181818;}
 /* 工位区 E */
@@ -114,3 +116,5 @@ opacity: .8color: #333;}
 .menu_body dd li{ float: left; margin-right: 20px; margin-bottom: 10px;}
 .layui-form-item .menu_list .layui-form-checkbox[lay-skin=primary]{ margin-top: 0;}
 /* 工作人员账号 E */
+ .x-iframe{position: absolute;width: 100%;height: 100%;left: 0;top: 45px;right: 0;bottom: 0;background: #fff;}
+ .layui-tab-title{z-index: 999;}
