@@ -41,7 +41,7 @@
 						<!-- <li>手机登录</li> -->
 					</ul>
 				</div>
-				<div class="j-errors j-visibility clearfix">asdas</div>
+				<div class="j-errors j-visibility clearfix">&nbsp;</div>
                 <!-- 账号登录 -->
 				<div class="j-logon-con">
 					<div class="j-logon-box">
@@ -54,8 +54,8 @@
 							<i class="layui-icon layui-icon-password blue-color"></i>
 							<input type="password" name="password" class="layui-input" placeholder="请输入密码" />
 						</div>
-                        <div>
-                            <a href="{:url('firstLogin')}">首次登录</a> - <a href="{:url('forget')}">忘记密码</a>
+                        <div class="j-logon-state">
+                            <a  class="f-left"  href="{:url('firstLogin')}">首次登录</a>  <a class="f-right" href="{:url('forget')}">忘记密码</a>
                         </div>
 						{:token()}
 						<input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal  register-submit">

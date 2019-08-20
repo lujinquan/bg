@@ -118,3 +118,18 @@ opacity: .8color: #333;}
 /* 工作人员账号 E */
  .x-iframe{position: absolute;width: 100%;height: 100%;left: 0;top: 45px;right: 0;bottom: 0;background: #fff;}
  .layui-tab-title{z-index: 999;}
+ /* 首次登陆 S */
+ .register-text-input{ border:1px solid #D3D3D3; height: 40px; line-height: 40px; margin-bottom: 15px;}
+ .register-text-input .j-input{margin-left: 70px; display: block;}
+.register-text-input  .j-input input{ border: none;height: 38px; line-height: 38px;  width: 100%;}
+.register-text-input label{ display: inline-block; background:rgba(245,245,245,1); width: 60px; text-align: center; color: #4A4A4A;}
+.j-vercode-box .j-vercode{border:1px solid #D3D3D3;height: 38px; line-height: 38px; width:234px; margin-right: 10px; text-indent: 10px;}
+.j-vercode-box .blue-color{ background: #4794FF; color: #fff;height: 40px; line-height: 40px; width: 100px; border: none; cursor: pointer;}
+.j-vercode-box .blue-color.on{ background: #bbb;}
+.j-setting-box .text-input{ font-size: 14px;}
+.register-submit{ width: 100%; background:#4794FF; height: 50px; line-height: 50px; margin-top: 30px; font-size: 16px;}
+.j-setting-box .j-return{ text-align: center; display: block; color: #4794FF; font-size: 16px; line-height: 50px;}
+.j-setting-box .layui-footer{ margin:30px auto 0 ; text-align: center;}
+.j-setting-box .layui-footer a{ color:#0084FF ; margin-right: 20px;}
+.j-no-back{ background: #f4f4f4;}
+/* 首次登陆 E */
