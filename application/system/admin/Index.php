@@ -46,41 +46,7 @@ class Index extends Admin
         return $this->fetch();
     }
 
-    public function setPassword()
-    {
-        //检查是否可以进入到当前页面
-        $systemUserModel = new SystemUser;
-        $password = $systemUserModel->where([['id','eq',ADMIN_ID]])->value('password');
-        if($password){
-            return $this->error('权限不足！');
-        }
 
-        if ($this->request->isAjax()) {
-            $data = $this->request->post();
-//halt($data);
-            $data['password'] = md5($data['password']);
-            $data['password_confirm'] = md5($data['password_confirm']);
-  
-            // 验证
-            $result = $this->validate($data, 'SystemUserManage.setPassword');
-            if($result !== true) {
-                return $this->error($result);
-            }
-            
-            unset($data['id'], $data['password_confirm']);
-
-            // 入库
-            
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            $row = $systemUserModel->where([['id','eq',ADMIN_ID]])->update($data);
-            //halt($res);
-            if (!$row) {
-                return $this->error('设置失败');
-            }
-            return $this->success('设置成功','index/index',['id'=>$row['id']]);
-        }
-        return $this->fetch('set_password');
-    }
 
     /**
      * 首页
@@ -114,6 +80,22 @@ class Index extends Admin
                     $this->error('项目选择失败');
                 }
             }
+        }
+        
+    }
+
+    /**
+     * 切换项目
+     * @author Lucas <598936602@qq.com>
+     * @return mixed
+     */
+    public function projectChange()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            // 数据验证
+            session('curr_project_id',null);
+            return $this->success('成功跳转到项目选择页',url('index'));
         }
         
     }

@@ -1,7 +1,7 @@
 <div class="layui-header" style="z-index:999!important;">
         <div class="fl header-logo"><img src="__ADMIN_IMG__/j-logo.png?v={:config('hisiphp.version')}" /></div>
         <!-- <div class="fl header-fold"><a href="javascript:;" title="打开/关闭左侧导航" class="aicon ai-shouqicaidan" id="foldSwitch"></a></div> -->
-        <div class="fl header-fold"><a href="javascript:;" title="切换项目" class="aicon ai-shouqicaidan" id="projectSwitch"></a></div>
+        <div class="fl header-fold"><a href="javascript:;" title="切换项目" class="aicon ai-shouqicaidan" id="projectChange"></a></div>
         <ul class="layui-nav fl nobg main-nav">
             {volist name="hisiMenus" id="vo"}
                 {if condition="($hisiCurParents['pid'] eq $vo['id'] and $ca neq 'plugins/run') or ($ca eq 'plugins/run' and $vo['id'] eq 3)"}

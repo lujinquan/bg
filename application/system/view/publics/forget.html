@@ -14,7 +14,7 @@
 <div class="j-setting-box">
 	<div class="j-setting-pass">
 		<h1 class="j-setting-title">忘记密码</h1>
-		<form class="layui-form">
+		<form action="{:url()}" method="post" class="layui-form">
 		  <div class="j-from-input">
 			<div class="j-errors j-visibility"><i class="layui-icon iconfont j-icon-baocuo"></i><label></label></div>
 			  <div class="text-input register-text-input">
@@ -26,6 +26,7 @@
 			  	<!-- <button id="get-code" class="blue-color">获取验证码</button> -->
 			  	<input type="button" class="blue-color" onClick="sendMessage1()" id="getsmscode" value="发送验证码" />
 			  </div>
+        {:token()}
 			  <input type="submit" value="下一步" lay-submit="" lay-filter="formPhone" class="layui-btn layui-btn-normal register-submit">
 			  <a class="j-return" href="#">返回登录</a>
 		  </div>
@@ -55,31 +56,32 @@
   			return false;
   		}
   
-          var that = $(this), _form = that.parents('form'),
-              account = $('input[name="username"]').val(),
-              pwd = $('input[name="password"]').val();
-              
-          //手机号格式正确，则后台验证是否存在当前有效手机号，如果有效则发送短信给用用户
-          $.ajax({
-              type: "POST",
-              url: '{:url('index')}',
-              data: {'type': 3,'username': phone},
-              success: function(res) {
-				  console.log(res);
-                  if (res.code == 1) {
-  					$(".j-errors").addClass("j-visibility");
-                      console.log(res.msg);
-                      //设置button效果，开始计时
-                      $("#getsmscode").attr("disabled", "true");
-                      $("#getsmscode").addClass("on");
-                      $("#getsmscode").val(curCount1+"s"+"重新发送");
-                      InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
-                  } else {
-  					$(".j-errors").removeClass("j-visibility");
-  					$(".j-errors").text(res.msg);
-                  }
+      var that = $(this), _form = that.parents('form'),
+          account = $('input[name="username"]').val(),
+          pwd = $('input[name="password"]').val(),
+          token = $('input[name="__token__"]').val();
+          
+      //手机号格式正确，则后台验证是否存在当前有效手机号，如果有效则发送短信给用用户
+      $.ajax({
+          type: "POST",
+          url: '{:url('sendMessage')}',
+          data: {'token': token,'username': phone},
+          success: function(res) {
+		          console.log(res);
+              if (res.code == 1) {
+			          $(".j-errors").addClass("j-visibility");
+                console.log(res.msg);
+                //设置button效果，开始计时
+                $("#getsmscode").attr("disabled", "true");
+                $("#getsmscode").addClass("on");
+                $("#getsmscode").val(curCount1+"s"+"重新发送");
+                InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
+              } else {
+      					$(".j-errors").removeClass("j-visibility");
+      					$(".j-errors").text(res.msg);
               }
-          });		 
+          }
+      });		 
   	}
   	window.SetRemainTime1 = function(){
   		if (curCount1 == 0) {                
@@ -96,35 +98,34 @@
   
       // 短信登录
       form.on('submit(formPhone)', function(data) {
-          var that = $(this), _form = that.parents('form'),
-              code = $('#vercode').val(),
-              phone = $.trim($('#cellphone').val());
-        
-          if (!phoneReg.test(phone)) {
-  			$(".j-errors").removeClass("j-visibility");
-  			$(".j-errors").text("请输入有效的手机号码");
-              return false;
-          }
-          //layer.msg('数据提交中...',{time:500000});
-          that.prop('disabled', true);
-          
-          $.ajax({
-              type: "POST",
-              url: _form.attr('action'),
-              data: {'type': 2,'username': phone, code:code},
-              success: function(res) {
-                 
-                      if (res.code == 1) {
-  						$(".j-errors").addClass("j-visibility");
-                          location.href = res.url;
-                      } else {
-  						$(".j-errors").removeClass("j-visibility");
-  						$(".j-errors").text(res.msg);
-                          that.prop('disabled', false);
-                      }
-              }
-          });
+        var that = $(this), _form = that.parents('form'),
+            code = $('#vercode').val(),
+            phone = $.trim($('#cellphone').val());
+      console.log(1);
+        if (!phoneReg.test(phone)) {
+    			$(".j-errors").removeClass("j-visibility");
+    			$(".j-errors").text("请输入有效的手机号码");
           return false;
+        }
+        //layer.msg('数据提交中...',{time:500000});
+        that.prop('disabled', true);
+        console.log(_form.attr('action'));
+        $.ajax({
+            type: "POST",
+            url: _form.attr('action'),
+            data: {'username': phone, code:code},
+            success: function(res) {  
+              if (res.code == 1) {
+			          $(".j-errors").addClass("j-visibility");
+                location.href = res.url+'?key='+res.data.key;
+              } else {
+    						$(".j-errors").removeClass("j-visibility");
+    						$(".j-errors").text(res.msg);
+                that.prop('disabled', false);
+              }
+            }
+        });
+        return false;
       });
   });
   </script>

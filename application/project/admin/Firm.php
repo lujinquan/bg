@@ -16,6 +16,7 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
+use app\project\model\MemberGroup as MemberGroupModel;
 
 
 class Firm extends Admin
@@ -27,17 +28,33 @@ class Firm extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $RestModel = new RestModel;
-            $where = $RestModel->checkWhere($getData);
-            $fields = 'a.rest_id,a.rest_name,a.rest_type,a.floor_number,a.rest_volume,b.ban_id,b.ban_name';
+            $MemberGroupModel = new MemberGroupModel;
+            $where = $MemberGroupModel->checkWhere($getData);
+            $fields = '*';
             $data = [];
-            $data['data'] = Db::name('space_rest')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            $data['data'] = $MemberGroupModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
-            $data['count'] = Db::name('space_rest')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('a.rest_id');
+            $data['count'] = $MemberGroupModel->where($where)->count('group_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
         }
+        $group = input('group','y');
+        $tabData = [];
+        $tabData['menu'] = [
+            [
+                'title' => '当前入驻',
+                'url' => '?group=y',
+            ],
+            [
+                'title' => '已停用',
+                'url' => '?group=n',
+            ]
+        ];
+        $tabData['current'] = url('?group='.$group);
+        $this->assign('group',$group);
+        $this->assign('hisiTabData', $tabData);
+        $this->assign('hisiTabType', 3);
         return $this->fetch();
     }
 
