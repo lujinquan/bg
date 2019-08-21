@@ -16,7 +16,7 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
-use app\project\model\MemberGroup as MemberGroupModel;
+use app\project\model\MemberFirm as MemberFirmModel;
 
 
 class Firm extends Admin
@@ -28,13 +28,13 @@ class Firm extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $MemberGroupModel = new MemberGroupModel;
-            $where = $MemberGroupModel->checkWhere($getData);
+            $MemberFirmModel = new MemberFirmModel;
+            $where = $MemberFirmModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $MemberGroupModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $MemberFirmModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
-            $data['count'] = $MemberGroupModel->where($where)->count('group_id');
+            $data['count'] = $MemberFirmModel->where($where)->count('firm_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);

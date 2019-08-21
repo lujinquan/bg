@@ -3,12 +3,12 @@ namespace app\project\model;
 
 use think\Model;
 
-class MemberGroup extends Model
+class MemberFirm extends Model
 {
 	// 设置模型名称
-    protected $name = 'member_group';
+    protected $name = 'member_firm';
     // 设置主键
-    protected $pk = 'group_id';
+    protected $pk = 'firm_id';
     // 定义时间戳字段名
     protected $createTime = 'ctime';
     // 自动写入时间戳
@@ -16,11 +16,13 @@ class MemberGroup extends Model
 
     protected $type = [
         'ctime' => 'timestamp:Y-m-d H:i:s',
+        'firm_start_time' => 'timestamp:Y-m-d H:i:s',
+        'firm_end_time' => 'timestamp:Y-m-d H:i:s',  
     ];
 
     public function member()
     {
-        return $this->hasMany('member', 'group_id', 'group_id')->bind('group_name');
+        return $this->hasMany('member', 'firm_id', 'firm_id')->bind('firm_name');
     }
 
     

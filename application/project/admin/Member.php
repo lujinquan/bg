@@ -32,7 +32,7 @@ class Member extends Admin
             $where = $MemberModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $MemberModel->with('member_group')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $MemberModel->with('member_firm')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
             $data['count'] = $MemberModel->where($where)->count('member_id');
             $data['code'] = 0;
