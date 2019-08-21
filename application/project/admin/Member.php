@@ -1,13 +1,13 @@
 <?php
 
 // +----------------------------------------------------------------------
-// | »ùÓÚThinkPHP5¿ª·¢
+// | Â»Ã¹Ã“ÃšThinkPHP5Â¿ÂªÂ·Â¢
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2021 http://www.mylucas.com.cn
 // +----------------------------------------------------------------------
-// | »ù´¡¿ò¼ÜÓÀ¾ÃÃâ·Ñ¿ªÔ´
+// | Â»Ã¹Â´Â¡Â¿Ã²Â¼ÃœÃ“Ã€Â¾ÃƒÃƒÃ¢Â·Ã‘Â¿ÂªÃ”Â´
 // +----------------------------------------------------------------------
-// | Author: Lucas <598936602@qq.com>£¬¿ª·¢ÕßQQÈº£º*
+// | Author: Lucas <598936602@qq.com>Â£Â¬Â¿ÂªÂ·Â¢Ã•ÃŸQQÃˆÂºÂ£Âº*
 // +----------------------------------------------------------------------
 
 
@@ -32,7 +32,7 @@ class Member extends Admin
             $where = $MemberModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $MemberModel->with('member_group')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $MemberModel->with('member_firm')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
             $data['count'] = $MemberModel->where($where)->count('member_id');
             $data['code'] = 0;
@@ -43,11 +43,11 @@ class Member extends Admin
         $tabData = [];
         $tabData['menu'] = [
             [
-                'title' => 'Õý³£',
+                'title' => 'æ­£å¸¸',
                 'url' => '?group=y',
             ],
             [
-                'title' => 'ÒÑÍ£ÓÃ',
+                'title' => 'å·²åœç”¨',
                 'url' => '?group=n',
             ]
         ];
@@ -55,19 +55,19 @@ class Member extends Admin
         $this->assign('group',$group);
         $this->assign('hisiTabData', $tabData);
         $this->assign('hisiTabType', 3);
-        return $this->fetch();
+        return $this->fetch('member/index');
     }
 
     public function add()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // Êý¾ÝÑéÖ¤
+            // ÃŠÃ½Â¾ÃÃ‘Ã©Ã–Â¤
             $result = $this->validate($data, 'Rest.add');
             if($result !== true) {
                 return $this->error($result);
             }
-            if(isset($data['file'])){ //¸½¼þ
+            if(isset($data['file'])){ //Â¸Â½Â¼Ã¾
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
@@ -75,11 +75,11 @@ class Member extends Admin
             $RestModel = new RestModel;
             unset($data['rest_id']);
             //halt($data);
-            // Èë¿â
+            // ÃˆÃ«Â¿Ã¢
             if (!$RestModel->allowField(true)->create($data)) {
-                return $this->error('ÐÂÔöÊ§°Ü');
+                return $this->error('ÃÃ‚Ã”Ã¶ÃŠÂ§Â°Ãœ');
             }
-            return $this->success('ÐÂÔö³É¹¦');
+            return $this->success('ÃÃ‚Ã”Ã¶Â³Ã‰Â¹Â¦');
         }
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
@@ -91,17 +91,17 @@ class Member extends Admin
         $AnnexModel = new AnnexModel;
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // Êý¾ÝÑéÖ¤
+            // ÃŠÃ½Â¾ÃÃ‘Ã©Ã–Â¤
             $result = $this->validate($data, 'Rest.add');
             if($result !== true) {
                 return $this->error($result);
             }
             $RestModel = new RestModel();
-            // Èë¿â
+            // ÃˆÃ«Â¿Ã¢
             if (!$RestModel->allowField(true)->update($data)) {
-                return $this->error('±à¼­Ê§°Ü');
+                return $this->error('Â±Ã Â¼Â­ÃŠÂ§Â°Ãœ');
             }
-            return $this->success('±à¼­³É¹¦');
+            return $this->success('Â±Ã Â¼Â­Â³Ã‰Â¹Â¦');
         }
         $id = input('param.id/d');
         $row = RestModel::get($id);
@@ -118,9 +118,9 @@ class Member extends Admin
         $ids = $this->request->param('id/a');        
         $res = RestModel::where([['rest_id','in',$ids]])->update(['status'=>0]);
         if($res){
-            $this->success('É¾³ý³É¹¦');
+            $this->success('Ã‰Â¾Â³Ã½Â³Ã‰Â¹Â¦');
         }else{
-            $this->error('É¾³ýÊ§°Ü');
+            $this->error('Ã‰Â¾Â³Ã½ÃŠÂ§Â°Ãœ');
         }
     }
 }

@@ -11,10 +11,10 @@
 
 namespace app\system\admin;
 
-use app\common\controller\Common;
-use app\system\model\SystemUser as UserModel;
 use think\captcha\Captcha;
 use SendMessage\ServerCodeAPI;
+use app\common\controller\Common;
+use app\system\model\SystemUser as UserModel;
 
 /**
  * 后台公共控制器
@@ -121,11 +121,152 @@ class Publics extends Common
 
     public function firstLogin()
     {
+        //验证是否可以设置密码
+        if ($this->request->isPost()) {
+            $model = new UserModel;
+            $type = $this->request->post('type/s');
+            $username   = $this->request->post('username/s');
+            $data       = [];
+            $code   = $this->request->post('code/d');
+
+            $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
+            if(!$row){
+                return $this->error('用户名不存在或被禁用');
+            }
+
+            $auth = new ServerCodeAPI();
+            
+            $res = $auth->CheckSmsYzm($username, $code);
+            $res = json_decode($res);
+            // 验证短信码是否正确
+            if($res->code = '200'){ 
+                $key = str_coding($username,'ENCODE');
+                return $this->success('验证码验证成功', url('publics/setPassword'),['key'=>$key]);
+            } else if($res->code == '413'){
+                return $this->error('验证失败');
+            } else {
+                return $this->error('请重新获取');
+            }
+
+        }
         return $this->fetch();
+    }
+
+    public function setPassword()
+    {
+        //检查是否可以进入到当前页面
+        $systemUserModel = new UserModel;
+
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            //halt($data);
+            $data['password'] = md5($data['password']);
+            $data['password_confirm'] = md5($data['password_confirm']);
+            
+            // 验证
+            $result = $this->validate($data, 'SystemUserManage.setPassword');
+            if($result !== true) {
+                return $this->error($result);
+            }
+
+            $key = $data['key'];
+            $key = str_replace(" ","+",$key); //加密过程中可能出现“+”号，在接收时接收到的是空格，需要先将空格替换成“+”号
+            $username = str_coding($key,'DECODE');
+            // dump(str_coding('18674012767','ENCODE'));
+            // halt($username);
+            $row = $systemUserModel->where([['username','eq',$username]])->field('password,status')->find();
+            if(!$row){
+                return $this->error('权限不足！');
+            }else{
+                if($row['status'] != 1){
+                    return $this->error('权限不足！');
+                }
+            }
+            
+            unset($data['key'], $data['password_confirm'],$data['token']);
+
+            // 入库
+            
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            $find = $systemUserModel->where([['username','eq',$username]])->update($data);
+            //halt($res);
+            if (!$find) {
+                return $this->error('设置失败');
+            }
+            return $this->success('设置成功','publics/index');
+        }
+        $key = input('get.key');
+        $key = str_replace(" ","+",$key); //加密过程中可能出现“+”号，在接收时接收到的是空格，需要先将空格替换成“+”号
+        $username = str_coding($key,'DECODE');
+        // dump(str_coding('18674012767','ENCODE'));
+        // halt($username);
+        $row = $systemUserModel->where([['username','eq',$username]])->field('password,status')->find();
+        if(!$row){
+            return $this->error('权限不足！');
+        }else{
+            if($row['status'] != 1){
+                return $this->error('权限不足！');
+            }
+        }
+        $this->assign('key',$key);
+        return $this->fetch();
+    }
+
+    public function sendMessage()
+    {
+        if ($this->request->isPost()) {
+            $model = new UserModel;
+            $type = $this->request->post('type/s');
+            $username   = $this->request->post('username/s');
+            $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
+            if(!$row){
+                return $this->error('用户名不存在或被禁用');
+            }
+            //验证通过即发送短信
+            $auth = new ServerCodeAPI();
+            $res = json_decode($auth->SendSmsCode($username));
+            if($res->code == '416'){
+                $this->error('验证次数过多，请更换登录方式');
+            }
+            return $this->success('用户名验证成功');
+        }
     }
 
     public function forget()
     {
+        //验证是否可以设置密码
+        if ($this->request->isPost()) {
+            $model = new UserModel;
+            $type = $this->request->post('type/s');
+            $username   = $this->request->post('username/s');
+            $data       = [];
+            $code   = $this->request->post('code/d');
+
+            $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
+            if(!$row){
+                return $this->error('用户名不存在或被禁用');
+            }else{
+                if(!$row['password']){
+                   return $this->error('当前账号尚未登录，请点击首次登录！'); 
+                }
+            }
+
+
+            $auth = new ServerCodeAPI();
+            
+            $res = $auth->CheckSmsYzm($username, $code);
+            $res = json_decode($res);
+            // 验证短信码是否正确
+            if($res->code = '200'){ 
+                $key = str_coding($username,'ENCODE');
+                return $this->success('验证码验证成功', url('publics/setPassword'),['key'=>$key]);
+            } else if($res->code == '413'){
+                return $this->error('验证失败');
+            } else {
+                return $this->error('请重新获取');
+            }
+
+        }
         return $this->fetch();
     }
 

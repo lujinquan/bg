@@ -47,13 +47,22 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         lockscreen();
     }
     $('.j-refresh').click(function () { 
-        console.log(1);
+        
         window.location.reload();
     });
     
     /* 导航高亮标记 */
     $('.admin-nav-item').click(function() {
         window.localStorage.setItem("adminNavTag", $(this).attr('href'));
+    });
+    /* 切换项目 */
+    $('#projectChange').click(function() {
+        $.get("/admin.php/system/index/projectChange", {val:1}, function(res) {
+            console.log(res.msg);
+            if (res.code) {
+                window.location.href = res.url;
+            }
+        });
     });
     if (window.localStorage.getItem("adminNavTag")) {
         $('#switchNav a[href="'+window.localStorage.getItem("adminNavTag")+'"]').parent('dd').addClass('layui-this').parents('li').addClass('layui-nav-itemed').siblings('li').removeClass('layui-nav-itemed');

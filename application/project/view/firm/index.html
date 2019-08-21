@@ -1,2 +1,73 @@
-{include file="system@block/layui" /}
-企业管理
+<div class="j-indent-boxs">
+
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="group_name" placeholder="企业名称" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="group_manager" placeholder="入驻时间" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="ctime" placeholder="到期时间" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+		  			    <option value="">请选择状态</option>
+		  			    <option value="0">未激活</option>
+		  			    <option value="1">已激活</option>
+		  			</select>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('edit')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('stop')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">管理</a>
+			<a href="{:url('del')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">发券</a>
+			<a href="{:url('stop')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery'], function() {
+        var $ = layui.$
+		    ,table = layui.table;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}?group={$group}' //数据接口
+            ,page: true //开启分页
+			//,height: 'full-280'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+            	{field: 'firm_name', align:'center',with:120, title: '企业名称'}
+                ,{field: 'firm_start_time', align:'center',with:100, title: '入驻时间'}
+                ,{field: 'firm_end_time', align:'center',with:100, title: '到期时间'}
+                ,{field: 'coupon_num', align:'center',with:100, title: '发券数量'}
+                ,{field: 'is_activate', align:'center',with:100, title: '状态', templet:function(d){
+                    
+						return '已入驻';
+                    
+                }}
+                ,{title: '操作', with:280, templet: '#buttonTpl',fixed:'right'}
+            ]]
+        });
+    });
+</script>

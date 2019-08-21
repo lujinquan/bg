@@ -52,7 +52,7 @@ return [
             'title' => '人员管理',
             'icon' => '',
             'module' => 'project',
-            'url' => 'project/staff/index',
+            'url' => 'project/member/index',
             'param' => '',
             'target' => '_self',
             'debug' => 0,
