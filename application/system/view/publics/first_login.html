@@ -28,7 +28,7 @@
 			  </div>
         {:token()}
 			  <input type="submit" value="下一步" lay-submit="" lay-filter="formPhone" class="layui-btn layui-btn-normal register-submit">
-			  <a class="j-return" href="#">返回登录</a>
+			  <a class="j-return" href="/">返回登录</a>
 		  </div>
 		</form>
 	</div>
@@ -64,20 +64,20 @@
           $.ajax({
               type: "POST",
               url: '{:url('sendMessage')}',
-              data: {'token': token,'username': phone},
+              data: {'token': token,'type':1,'username': phone},
               success: function(res) {
-				  console.log(res);
+				          console.log(res);
                   if (res.code == 1) {
-  					$(".j-errors").addClass("j-visibility");
-                      console.log(res.msg);
-                      //设置button效果，开始计时
-                      $("#getsmscode").attr("disabled", "true");
-                      $("#getsmscode").addClass("on");
-                      $("#getsmscode").val(curCount1+"s"+"重新发送");
-                      InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
+					          $(".j-errors").addClass("j-visibility");
+                    console.log(res.msg);
+                    //设置button效果，开始计时
+                    $("#getsmscode").attr("disabled", "true");
+                    $("#getsmscode").addClass("on");
+                    $("#getsmscode").val(curCount1+"s"+"重新发送");
+                    InterValObj1 = window.setInterval(SetRemainTime1, 1000); //启动计时器，1秒执行一次
                   } else {
-  					$(".j-errors").removeClass("j-visibility");
-  					$(".j-errors").text(res.msg);
+          					$(".j-errors").removeClass("j-visibility");
+          					$(".j-errors").text(res.msg);
                   }
               }
           });		 

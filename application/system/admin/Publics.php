@@ -15,6 +15,7 @@ use think\captcha\Captcha;
 use SendMessage\ServerCodeAPI;
 use app\common\controller\Common;
 use app\system\model\SystemUser as UserModel;
+use app\common\model\PhoneUseRecord;
 
 /**
  * 后台公共控制器
@@ -162,7 +163,7 @@ class Publics extends Common
             //halt($data);
             $data['password'] = md5($data['password']);
             $data['password_confirm'] = md5($data['password_confirm']);
-            
+        
             // 验证
             $result = $this->validate($data, 'SystemUserManage.setPassword');
             if($result !== true) {
@@ -218,16 +219,61 @@ class Publics extends Common
             $model = new UserModel;
             $type = $this->request->post('type/s');
             $username   = $this->request->post('username/s');
-            $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
-            if(!$row){
-                return $this->error('用户名不存在或被禁用');
+            $where = [];
+            if($type == 1){ //如果是首次登录则
+                $where[] = ['username','eq',$username];
+                $where[] = ['status','eq',1];
+                $row = $model->where($where)->find();
+                if(!$row){
+                    return $this->error('用户名不存在或被禁用');
+                }else{
+                    if($row['last_login_ip']){
+                        return $this->error('您的账号已登录过，请选择登录或忘记密码！');
+                    }
+                }
             }
+            if($type == 2){ //如果是首次登录则
+                $where[] = ['username','eq',$username];
+                $where[] = ['status','eq',1];
+                $row = $model->where($where)->find();
+                if(!$row){
+                    return $this->error('用户名不存在或被禁用');
+                }else{
+                    if(!$row['password']){
+                        return $this->error('您的账号尚未设置密码，请返回选择首次登录！');
+                    }
+                }
+            }
+
+            $todayBeginTime = strtotime(date('Y-m-d'));
+            $todayFinishTime = strtotime(date('Y-m-d',strtotime('+ 1 day')));
+            //dump($todayBeginTime);halt($todayFinishTime);
+            $phoneWhere = [];
+            $phoneWhere[] = ['phone','eq',$username];
+            $phoneWhere[] = ['phone_use_type','eq',$type];
+            $phoneWhere[] = ['ctime','between',[$todayBeginTime,$todayFinishTime]];
+            $phoneModel = new PhoneUseRecord;
+            $phoneUseTimes = $phoneModel->where($phoneWhere)->count('id');
+           //halt($phoneUseTimes);
+            if($phoneUseTimes > 4){
+                return $this->error('当前账号本次操作使用短信，今日次数已达到上限5次！');
+            }
+            //通过类型判断是否超出当日短信发送限额！
+            
             //验证通过即发送短信
             $auth = new ServerCodeAPI();
             $res = json_decode($auth->SendSmsCode($username));
+            //halt($res);
             if($res->code == '416'){
                 $this->error('验证次数过多，请更换登录方式');
             }
+            $filtData = [
+                'phone' => $username,
+                'phone_use_type' => $type,
+                'code' => $res->obj
+            ];
+
+            $phoneModel->allowField(true)->create($filtData);
             return $this->success('用户名验证成功');
         }
     }
