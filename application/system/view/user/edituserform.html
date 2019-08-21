@@ -1,6 +1,3 @@
-<style>
-    .page-tab-content{margin: 40px;}
-</style>
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
     <li class="layui-this">编辑账号</li>
@@ -11,7 +8,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
           <div class="layui-input-inline">
-            {$data_info['username']}
+            <div class="j-words-border">{$data_info['username']}</div>
           </div>
         </div>
     </div>
@@ -19,7 +16,7 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
           <div class="layui-input-inline">
-            {$data_info['nick']}
+            <div class="j-words-border">{$data_info['nick']}</div>
           </div>
         </div>
      </div>
@@ -52,7 +49,7 @@
     </div>   
     <div class="layui-form-item" pane="">
         <label class="layui-form-label"><i class="red"></i>门禁：</label>
-        <div class="layui-input-block j-input-width">
+        <div class="layui-input-inline">
 
           <select name="guard_group_id" class="field-role_id" lay-filter="filter" type="select">
                 <option value="">请选择</option>
@@ -109,15 +106,12 @@
      </div>
 </form>
 {include file="block/layui" /}
+<script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
 <script>    
 layui.use(['form','layer','jquery'], function(){
   var layer = layui.layer
       $= layui.jquery;
    var   form = layui.form;
-
-
-
-  
   form.on('select(filter)', function(data){
     var guards = {:json_encode($guardArr)};
     //console.log(guards);
@@ -169,64 +163,7 @@ layui.use(['form','layer','jquery'], function(){
   }); 
 
 
-  //监听折叠
  
-  $("#firstpane").on('click','.menu_head .j-icon',function(){
-     if ($(this).parent().hasClass("current")) {
-          $(this).parent().removeClass("current").siblings("div.menu_body").slideUp("slow");
-      }
-      else {
-        $(this).parent().addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
-        $(this).parent().siblings().removeClass("current");
-      }
-  });     
-   //楼栋全选 
-      form.on('checkbox(chooseAll)', function (data) {
-      var that = $(this);
-      var a = data.elem.checked;
-        $("input[name='guard[]'],input[name='floor[]']").each(function () {
-       if (a == true) {
-        that.parent().next("div.menu_body").find(".list").prop('checked',true);
-        form.render('checkbox');
-      } else {
-        that.parent().next("div.menu_body").find(".list").prop('checked',false);
-        form.render('checkbox');
-      }
-      
-        });
-      });
-    //楼层全选
-    form.on('checkbox(secondAll)', function (data) {
-          var that = $(this);
-          var b = data.elem.checked;
-      $("input[name='guard[]'],input[name='floor[]']").each(function () {
-           if (b == true) {
-            that.parent().next().find(".list").prop('checked',true);
-          that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',true);
-            form.render('checkbox');
-          } else {
-            that.parent().next().find(".list").prop('checked',false);
-          //that.parents(".menu_body").prev().find(".chooseAllMessage").prop('checked',false);
-            form.render('checkbox');
-          }
-          
-      });
-    });
-      //判断层级勾选
-    form.on('checkbox(list)', function (data) {
-     var that = $(this);
-     var c = data.elem.checked;
-      if(c == true)
-      {
-        that.parents("dd").prev().find(".list").prop('checked',true);
-        form.render('checkbox');
-      }
-      else{
-        //that.parents("dd").prev().find(".list").prop('checked',false);
-        form.render('checkbox');
-      }
-      
-   });  
 
  })
 </script>
