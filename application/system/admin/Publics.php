@@ -140,7 +140,7 @@ class Publics extends Common
             $res = $auth->CheckSmsYzm($username, $code);
             $res = json_decode($res);
             // 验证短信码是否正确
-            if($res->code = '200'){ 
+            if($res->code == '200'){ 
                 $key = str_coding($username,'ENCODE');
                 return $this->success('验证码验证成功', url('publics/setPassword'),['key'=>$key]);
             } else if($res->code == '413'){
@@ -161,6 +161,9 @@ class Publics extends Common
         if ($this->request->isAjax()) {
             $data = $this->request->post();
             //halt($data);
+            if(!$data['password']){
+                return $this->error('密码不能为空！');
+            }
             $data['password'] = md5($data['password']);
             $data['password_confirm'] = md5($data['password_confirm']);
         
@@ -303,7 +306,7 @@ class Publics extends Common
             $res = $auth->CheckSmsYzm($username, $code);
             $res = json_decode($res);
             // 验证短信码是否正确
-            if($res->code = '200'){ 
+            if($res->code == '200'){ 
                 $key = str_coding($username,'ENCODE');
                 return $this->success('验证码验证成功', url('publics/setPassword'),['key'=>$key]);
             } else if($res->code == '413'){

@@ -16,6 +16,7 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\project\model\Shack as ShackModel;
+use app\system\model\SystemGuard as GuardModel;
 use app\common\model\SystemAnnex as AnnexModel;
 
 class Shack extends Admin
@@ -31,7 +32,7 @@ class Shack extends Admin
             $where = $ShackModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $ShackModel->with(['member_group','SystemUser'])->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $ShackModel->with(['member_firm','SystemUser'])->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($data['data']);
             $data['count'] = $ShackModel->where($where)->count('id');
             $data['code'] = 0;
@@ -64,6 +65,10 @@ class Shack extends Admin
             }
             return $this->success('新增成功');
         }
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
+        $this->assign('guardArr', $guardArr);
         return $this->fetch();
     }
 

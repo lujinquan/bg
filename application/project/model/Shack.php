@@ -18,9 +18,9 @@ class Shack extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
-    public function MemberGroup()
+    public function MemberFirm()
     {
-        return $this->belongsTo('member_group', 'group_id', 'group_id')->bind('group_name');
+        return $this->belongsTo('member_firm', 'firm_id', 'firm_id')->bind('firm_name');
     }
 
     public function member()

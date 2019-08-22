@@ -193,7 +193,7 @@ class User extends Admin
             return $this->error('权限不足');
         }
         $projectModel = new Project;
-        $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
+        $proArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->column('id,project_name');
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
@@ -208,7 +208,7 @@ class User extends Admin
             }
             unset($data['id']);
 
-            
+            $data['group_id'] = GROUP_ID;
             $data['last_login_ip'] = '';
             $data['auth'] = '';
 

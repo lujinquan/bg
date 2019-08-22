@@ -12,7 +12,7 @@
 				   <div class="layui-col-md8">
 					 <label class="layui-form-label"><i class="red">*</i>企业名称：</label>
 					 <div class="layui-input-block j-name j-position">
-					   <input type="text" id="deptName" name="deptName"  lay-verType="tips" autocomplete="off" placeholder="请输入部门"
+					   <input type="text" id="deptName" name="firm_name"  lay-verType="tips" autocomplete="off" placeholder="请输入部门"
 					    class="layui-input" />
 					   <button class="layui-btn layui-btn-normal">
 						  <i class="layui-icon"></i>校验
@@ -25,7 +25,7 @@
 				 <div class="layui-inline">
 				   <label class="layui-form-label"><i class="red">*</i>联系人姓名：</label>
 				   <div class="layui-input-inline">
-					 <input type="text" name="business_contacts"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+					 <input type="text" name="firm_manager" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
 				   </div>
 				 </div>
 			  </div>
@@ -33,7 +33,7 @@
 				  <div class="layui-inline">
 					<label class="layui-form-label"><i class="red">*</i>联系人电话：</label>
 					<div class="layui-input-inline">
-					  <input type="text" name="business_phone"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+					  <input type="text" name="firm_tel"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
 					</div>
 				  </div>
 			   </div>
@@ -41,7 +41,7 @@
 				   <div class="layui-inline">
 					 <label class="layui-form-label">社会信用代码：</label>
 					 <div class="layui-input-inline">
-					   <input type="text" name="business_code"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+					   <input type="text" name="firm_credit_code"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
 					 </div>
 				   </div>
 				</div>
@@ -49,7 +49,12 @@
 					<div class="layui-inline">
 					  <label class="layui-form-label">所属行业：</label>
 					  <div class="layui-input-inline">
-						<input type="text" name="business_industry"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+						<select name="firm_industry_type"  lay-verType="tips" class="field-cid" type="select">
+				             <option value="">请选择</option>
+				             {volist name="params['firm_industry_type']" id="v"}
+				             <option value="{$key}">{$v}</option>
+				             {/volist}
+				         </select>
 					  </div>
 					</div>
 				 </div>
@@ -57,7 +62,8 @@
 					 <div class="layui-inline">
 					   <label class="layui-form-label">注册资本：</label>
 					   <div class="layui-input-inline">
-						 <input type="text" name="business_capital"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+						 <input type="text" name="firm_registered_capital"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+						 <b class="j-explain-name">万元</b>
 					   </div>
 					 </div>
 				  </div>

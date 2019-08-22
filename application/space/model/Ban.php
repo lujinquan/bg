@@ -33,7 +33,9 @@ class Ban extends Model
         if(isset($data['ban_address']) && $data['ban_address']){
             $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         }
+
         $where[] = ['status','eq',1];
+        $where[] = ['project_id','eq',PROJECT_ID];
 
         return $where;
     }
