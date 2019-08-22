@@ -1,3 +1,6 @@
+<style>
+	.layui-layout-body{overflow-y: auto; padding-bottom: 50px;}
+</style>
 <div class="j-indent-box">
 	<div class="layui-btn-group j-add-group clearfix">
 		<a href="{:url('addUserManage')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>新增授权</a>
@@ -22,7 +25,7 @@
 				  <div class="layui-input-inline" style="width:150px;">
 					  <select name="status">
 						  <option value="">请选择状态</option>
-						  <option value="1">正常</option>
+						  <option value="1">已激活</option>
 						  <option value="2">未激活</option>
 						</select>
 				  </div>
@@ -60,7 +63,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			//,height: 'full-280'
+			,height: 'full-300'
             ,skin: 'line'
             //,even: false
             ,limit: 10
@@ -68,25 +71,33 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {field: 'username', align:'center',with:80, title: '账号'}
-                ,{field: 'nick', align:'center',with:100, title: '姓名'}
-                ,{field: 'role_id', align:'center', with:100,title: '角色', templet:function(d){
+                {field: 'username', align:'left',minWidth:80, title: '账号'}
+                ,{field: 'nick', align:'left',minWidth:100, title: '姓名'}
+               /* ,{field: 'role_id', align:'left', minWidth:100,title: '角色', templet:function(d){
                     return d.role.name;
-                }}
-                ,{field: 'post', align:'center', width: 100, title: '职务'}
-                ,{field: 'pro_names', align:'center', minWidth: 150, title: '授权项目'}
-                ,{field: 'ctime',  align:'center',width: 150, title: '授权时间'}
-                ,{field: 'remark', align:'center', with:140,title: '备注'}
-                ,{field: 'last_login_ip', align:'center', title: '状态', width: 100, templet:function(d){
+                }} */
+                ,{field: 'post', align:'left', minWidth: 100, title: '职务'}
+                ,{field: 'pro_names', align:'left', minWidth: 150, title: '授权项目'}
+                ,{field: 'ctime',  align:'left',minWidth: 150, title: '授权时间'}
+                ,{field: 'last_login_ip', align:'left', title: '状态', minWidth: 150, templet:function(d){
                 	if(d.last_login_ip){
-                		return '已激活';
+                		return '<button class="j-table-button j-activated">已激活</button>';
                 	}else{
-                		return '未激活';
+                		return '<button class="j-table-button j-notactive">未激活</button>';
                 	}
                     //return d.role.name;
                 }}
-                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
+				 ,{field: 'remark', align:'left', minWidth:140,title: '备注'}
+                ,{title: '操作', minWidth:280,Width:280, templet: '#buttonTpl',fixed:'right',align:'left'}
             ]]
         });
+		// 鼠标滑过操作列
+		var tip_index = 0;
+		$(document).on('mouseenter', '.j-notactive', function(){
+			tip_index = layer.tips('<span style="color:#333;font-size:14px;">未激活状态表示该用户从未登录过</span>', this,{tips:[2,'#fff9bc'],time:3000000});
+		}).on('mouseleave',this, function(){
+			layer.close(tip_index);
+		});
+
     });
 </script>

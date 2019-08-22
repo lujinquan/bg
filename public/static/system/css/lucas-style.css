@@ -14,8 +14,10 @@ input:-webkit-autofill {
 .j-table-button{ width: 80px; height: 27px; line-height: 27px; text-align: center; border: 0; color: #fff; font-size: 14px;border-radius:2px;}
 .j-table-button.j-notactive{ background:#737F90;}
 .j-table-button.j-activated{ background:#60D09C;}
+.layui-form-label i.red{ margin-right: 5px;}
 /* 表格按钮状态 E*/
 /*---------------------公用样式 E--------------------*/
+.j-aicon-qiehuan i{ font-size: 22px;}
 /* 首页样式 S */
  .project-info, .card {border-radius: 4px;}
  .project-info {height: 100px;}
