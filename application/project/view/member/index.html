@@ -72,9 +72,9 @@
                 ,{field: 'ctime', align:'center',with:100, title: '入驻时间'}
                 ,{field: 'is_activate', align:'center',with:100, title: '状态', templet:function(d){
                     if(d.is_activate){
-                    	return '<button>已激活</button>';
+                    	return '<button class="j-table-button j-activated">已激活</button>';
                     }else{
-						return '未激活';
+						return '<button class="j-table-button j-notactive">未激活</button>';
                     }
                 }}
                 ,{title: '操作', with:280, templet: '#buttonTpl',fixed:'right'}

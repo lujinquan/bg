@@ -51,7 +51,7 @@
     background: #20A0FF;
     color: #ffffff;
 }
-.step-item-head.step-item-head-active + .step-item-main{
+.step-item-head.step-item-head-active ~  .step-item-main{
     color: #20A0FF;
 }
 

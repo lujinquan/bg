@@ -8,6 +8,13 @@ input:-webkit-autofill {
 .clearfix:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
 .fl{ float: left;}
 .fr{float: right;}
+.layui-elem-field.j-size-color legend{ font-size: 16px;  font-weight: bold; color: #20A0FF;}
+.j-top-formmargin{ margin-top: 30px;}
+/* 表格按钮状态 S*/
+.j-table-button{ width: 80px; height: 27px; line-height: 27px; text-align: center; border: 0; color: #fff; font-size: 14px;border-radius:2px;}
+.j-table-button.j-notactive{ background:#737F90;}
+.j-table-button.j-activated{ background:#60D09C;}
+/* 表格按钮状态 E*/
 /*---------------------公用样式 E--------------------*/
 /* 首页样式 S */
  .project-info, .card {border-radius: 4px;}
@@ -133,7 +140,7 @@ opacity: .8color: #333;}
 .j-setting-box .layui-footer a{ color:#0084FF ; margin-right: 20px;}
 .j-no-back{ background: #f4f4f4;}
 /* 首次登陆 E */
- /* 项目管理  S*/
+ /* ---------------项目管理---------------  S*/
  .layui-input-block.j-position{ position: relative;}
  .layui-input-block.j-position .layui-btn{/* position: absolute; right: -100px; top:0; */ margin: -2px 0 0 6px;}
  .layui-input-block.j-position .layui-input{display: inline-block; width: 88%;}
@@ -158,4 +165,12 @@ opacity: .8color: #333;}
 .j-right-button{ text-align: right; margin-top:60px;}
 .layui-carousel.j-carousel-box >[carousel-item]>*{background-color: none!important; position: initial;}
 .layui-carousel.j-carousel-box>[carousel-item]{ overflow: auto!important;}
- /* 项目管理 E*/
+/* 详情 S */
+.j-details-from{ padding: 0 10px;}
+.j-details-from .layui-form-item{ margin-bottom: 5px;}
+.j-no-disabled .layui-form-checked[lay-skin=primary] i{border-color:#737F90!important;background-color:#737F90;}
+.j-no-disabled .layui-checkbox-disbaled[lay-skin=primary] span{ color: #737F90;}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none;}
+input[type="number"]{-moz-appearance: textfield;}
+/* 详情 E */
+ /*------------------ 项目管理 -------------------------E*/
