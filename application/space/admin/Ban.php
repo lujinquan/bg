@@ -47,6 +47,7 @@ class Ban extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $data['project_id'] = PROJECT_ID;
             $BanModel = new BanModel();
             unset($data['ban_id']);
             // 入库

@@ -62,6 +62,7 @@ class Meeting extends Model
             $where[] = ['a.floor_name','like','%|'.$data['floor_number'].'|%'];
         }
         $where[] = ['a.status','eq',1];
+        $where[] = ['b.project_id','eq',PROJECT_ID];
 
         return $where;
     }

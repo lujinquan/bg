@@ -45,6 +45,7 @@ class Site extends Model
             $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         }
         $where[] = ['a.status','eq',1];
+        $where[] = ['b.project_id','eq',PROJECT_ID];
 
         return $where;
     }

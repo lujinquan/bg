@@ -48,10 +48,10 @@ class SystemUser extends Model
     }
 
     // 获取最后登录ip
-    public function setLastLoginIpAttr($value)
-    {
-        return get_client_ip();
-    }
+    // public function setLastLoginIpAttr($value)
+    // {
+    //     return get_client_ip();
+    // }
 
     // 格式化最后登录时间
     public function getLastLoginTimeAttr($value)
