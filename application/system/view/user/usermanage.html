@@ -1,5 +1,6 @@
 <style>
     .page-tab-content{margin: 40px;}
+	.layui-layout-body{overflow-y: auto; padding-bottom: 50px;}
 </style>
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
@@ -49,7 +50,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <a href="javascript:history.go(-1)"  class="layui-btn layui-btn-primary">取消</a>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
         </div>
      </div>
