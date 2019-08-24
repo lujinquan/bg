@@ -21,7 +21,17 @@ use app\space\model\Floor as FloorModel;
 
 class Floor extends Admin
 {
+    /**
+     * 初始化方法
+     */
+    protected function initialize()
+    {
+        parent::initialize();
 
+        $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+    }
+    
     public function index()
     {   
         if ($this->request->isAjax()) {
@@ -68,8 +78,7 @@ class Floor extends Admin
             }
             return $this->success('新增成功');
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+
         return $this->fetch();
     }
 
@@ -97,9 +106,7 @@ class Floor extends Admin
         $id = input('param.id/d');
         $row = FloorModel::with('ban')->find($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        //halt($row);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+        
         $this->assign('data_info',$row);
         return $this->fetch();
     }

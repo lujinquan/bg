@@ -21,6 +21,16 @@ use app\space\model\Rest as RestModel;
 
 class Rest extends Admin
 {
+    /**
+     * 初始化方法
+     */
+    protected function initialize()
+    {
+        parent::initialize();
+
+        $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+    }
 
     public function index()
     {   
@@ -39,8 +49,6 @@ class Rest extends Admin
             $data['msg'] = '';
             return json($data);
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         return $this->fetch();
     }
 
@@ -67,8 +75,6 @@ class Rest extends Admin
             }
             return $this->success('新增成功');
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         return $this->fetch();
     }
 
@@ -92,8 +98,6 @@ class Rest extends Admin
         $id = input('param.id/d');
         $row = RestModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();

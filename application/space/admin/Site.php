@@ -22,6 +22,16 @@ use app\space\model\Site as SiteModel;
 
 class Site extends Admin
 {
+    /**
+     * 初始化方法
+     */
+    protected function initialize()
+    {
+        parent::initialize();
+
+        $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+    }
 
     public function index()
     {   
@@ -40,8 +50,7 @@ class Site extends Admin
             $data['msg'] = '';
             return json($data);
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+
         return $this->fetch();
     }
 
@@ -67,8 +76,7 @@ class Site extends Admin
             }
             return $this->success('新增成功');
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+
         return $this->fetch();
     }
 
@@ -100,8 +108,6 @@ class Site extends Admin
         array_shift($row['sites']);
         array_pop($row['sites']);
         //halt($row);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
