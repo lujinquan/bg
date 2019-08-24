@@ -6,12 +6,13 @@
     <li class="layui-this">账号编辑</li>
   </ul>
 </div>
+<div class="j-details-from">
 <form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>账号名称：</label>
           <div class="layui-input-inline">
-            {$data_info['username']}
+            <div class="j-words-border">{$data_info['username']}</div>
             <!-- <input type="tel" readonly lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input field-username j-no-border"> -->
           </div>
         </div>
@@ -20,16 +21,25 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>真实姓名：</label>
           <div class="layui-input-inline">
-            {$data_info['nick']}
+           <div class="j-words-border"> {$data_info['nick']}</div>
             <!-- <input type="tel" name="nick" value="{$data_info['nick']}" readonly lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input field-nick j-no-border"> -->
           </div>
         </div>
      </div> 
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label">状态：</label>
+	       <div class="layui-input-inline">
+	        <div class="j-words-border">已激活</div>
+	       </div>
+	     </div>
+	  </div> 
      <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>职务：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input field-post">
+            <!-- <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input field-post"> -->
+			<div class="j-words-border">社区经理</div>
           </div>
         </div>
     </div>
@@ -52,13 +62,14 @@
         </div>
     </div>
     <input type="hidden" name="id" value="{$data_info['id']}">
-    <div class="layui-form-item">
+    <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
         </div>
      </div>
 </form>
+</div>
 {include file="block/layui" /}
 <script>
 var formData = {:json_encode($data_info)};

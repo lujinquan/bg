@@ -21,9 +21,17 @@
           </div>
         </div>
      </div>
+	  <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label">包含楼层数：</label>
+	       <div class="layui-input-inline">
+	         <div class="j-words-border">12</div>
+	       </div>
+	     </div>
+	  </div>
      <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i class="red">*</i>楼宇面积：</label>
+          <label class="layui-form-label"><i class="red">*</i>面积：</label>
           <div class="layui-input-inline">
             <input type="tel" name="ban_area" value="{$data_info['ban_area']}" lay-verify="required|number" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
             <b class="j-explain-name">m²</b>
@@ -31,7 +39,7 @@
         </div>
      </div>
      {:token()}
-    <div class="layui-form-item">
+    <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
           <button type="reset" class="layui-btn layui-btn-primary">取消</button>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>

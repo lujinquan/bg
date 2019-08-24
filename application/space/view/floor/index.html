@@ -6,12 +6,17 @@
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="ban_name" placeholder="楼宇名称" class="layui-input">
+				  	<select name="ban_floor" class="field-cid" type="select">
+						<option value="">所属楼层</option>
+						<option value="1">楼层1</option>
+					</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="ban_address" placeholder="楼宇地址" class="layui-input">
+				  	<select name="ban_building" class="field-cid" type="select">
+						<option value="">所属楼宇</option>
+						<option value="1">楼宇1</option>
+					</select>
 				  </div>
-				  
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
 					  <i class="layui-icon">&#xe615;</i>
@@ -43,7 +48,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			//,height: 'full-280'
+			,height: 'full-230'
             ,skin: 'line'
             //,even: false
             ,limit: 10
@@ -51,14 +56,14 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: '', align:'center',with:80, title: '序号', templet:function(d){
+            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
                     return d.LAY_INDEX;
                 }}
-                ,{field: 'ban_name', align:'center',with:80, title: '楼宇名称'}
-                ,{field: 'ban_address', align:'center',with:100, title: '地址'}
-                ,{field: 'floor_number', align:'center',with:100, title: '楼层'}
-                ,{field: 'floor_area', align:'center',with:100, title: '楼层面积'}
-                ,{title: '操作', with:280, templet: '#buttonTpl', fixed:'right'}
+				,{field: 'floor_number', align:'left',minWidth:100, title: '所属楼层'}
+                ,{field: 'ban_name', align:'left',minWidth:80, title: '所属楼宇'}
+                /* ,{field: 'ban_address', align:'left',minWidth:100, title: '地址'} */
+                ,{field: 'floor_area', align:'left',minWidth:100, title: '面积'}
+                ,{title: '操作', minWidth:280, Width:280,align:'left', templet: '#buttonTpl', fixed:'right'}
             ]]
         });
         $('#refresh').click(function(){

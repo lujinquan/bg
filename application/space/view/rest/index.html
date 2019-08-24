@@ -10,14 +10,23 @@
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 					  <select name="ban_id" class="field-cid" type="select">
-	      			    <option value="">请选择</option>
+	      			    <option value="">请选择楼宇</option>
 	      			    {volist name="banArr" id="v"}
 	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
 	      			    {/volist}
 	      			</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="floor_number" placeholder="请选择楼层" class="layui-input">
+						<select name="floor_number" class="field-cid" type="select">
+							<option value="">请选择楼层</option>
+							<option value="1">楼层1</option>
+						</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+						<select name="floor_number" class="field-cid" type="select">
+							<option value="">请选择类型</option>
+							<option value="1">类型1</option>
+						</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
@@ -50,7 +59,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			//,height: 'full-280'
+			,height: 'full-230'
             ,skin: 'line'
             //,even: false
             ,limit: 10
@@ -58,16 +67,16 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: '', align:'center',with:80, title: '序号', templet:function(d){
+            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
                     return d.LAY_INDEX;
                 }}
-                ,{field: 'rest_name', align:'center',with:80, title: '名称'}
-                ,{field: 'ban_name', align:'center',with:100, title: '楼宇'}
-                ,{field: 'rest_type', align:'center',with:100, title: '类型', templet:function(d){
-                    return params.rest_type[d.rest_type];
-                }}
-                ,{field: 'floor_number', align:'center',with:100, title: '楼层'}
-                ,{title: '操作', with:280, templet: '#buttonTpl', fixed:'right'}
+                ,{field: 'rest_name', align:'left',minWidth:80, title: '名称'}
+				,{field: 'rest_type', align:'left',minWidth:100, title: '类型', templet:function(d){
+				    return params.rest_type[d.rest_type];
+				}}
+                ,{field: 'ban_name', align:'left',minWidth:100, title: '楼宇'}
+                ,{field: 'floor_number', align:'left',minWidth:100, title: '楼层'}
+                ,{title: '操作', align:'left', minWidth:280,Width:280, templet: '#buttonTpl', fixed:'right'}
             ]]
         });
     });

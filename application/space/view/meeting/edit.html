@@ -3,12 +3,12 @@
     <li class="layui-this">编辑会议室</li>
   </ul>
 </div>
-<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+<form class="layui-form j-long-words j-top-margin" action="{:url()}" method="post" id="addForm">
   <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>会议室名称：</label>
           <div class="layui-input-inline j-name">
-            <input type="text" name="meet_name" value="{$data_info['meet_name']}" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+            <input type="text" name="meet_name" value="{$data_info['meet_name']}" lay-verify="required" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
           </div>
         </div>
      </div>
@@ -29,15 +29,37 @@
         <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
         <div class="layui-input-block" id="floor_number"></div>
   </div>
+  <div class="layui-form-item j-positions-size">
+      <div class="layui-inline">
+        <label class="layui-form-label"><i class="red">*</i>会议室图片：</label>
+        <div class="layui-input-block j-uplode-block" lay-verify="conferenceroom" lay-vertype="tips">
+           <div class="j-uplode-icon fl">
+             <i class="layui-icon  layui-icon-add-1"></i>
+             <button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
+           </div>
+           <div id="upload_img_list1" class="upload_img_list j-viewer-img">
+             {volist name="data_info['imgs']" id="vo"}
+             <dd class="item_img">
+               <div class="operate">
+                 <i class="layui-icon-close-fill layui-icon"></i>
+               </div>
+               <img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
+               <input type="hidden" name="{$vo['file_name']}">
+             </dd>
+             {/volist}
+           </div>
+        </div>
+      </div>
+  </div>
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>可预约时段：</label>
           <div class="layui-input-inline" style="width: 190px;">
-      <input type="text" name="order_start_time" value="{$data_info['order_start_time']}" class="layui-input" lay-verify="required" lay-verType="tips" id="test14" placeholder="H点m分">
+      <input type="text" name="order_start_time" value="{$data_info['order_start_time']}" class="layui-input" lay-verify="required" lay-verType="tips" id="test14" placeholder="请选择">
       </div>
       <div class="layui-form-mid">-</div>
       <div class="layui-input-inline" style="width: 190px;">
-      <input type="text" name="order_end_time" value="{$data_info['order_end_time']}" class="layui-input" lay-verify="required" lay-verType="tips" id="test15" placeholder="H点m分">
+      <input type="text" name="order_end_time" value="{$data_info['order_end_time']}" class="layui-input" lay-verify="required" lay-verType="tips" id="test15" placeholder="请选择">
       </div>
         </div>
      </div>
@@ -45,19 +67,29 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>租赁单价：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="meet_unit_price" value="{$data_info['meet_unit_price']}" placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="number" name="meet_unit_price" value="{$data_info['meet_unit_price']}" lay-verify="required|number" placeholder="请输入单价" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-inputs">
       <b class="j-explain-name">元/0.5h</b>
           </div>
         </div>
      </div>
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label"><i class="red">*</i>容纳人数：</label>
+	       <div class="layui-input-inline">
+	         <input type="number" name="meet_volume" value="{$data_info['meet_volume']}" placeholder="请输入容纳人数" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
+			 <b class="j-explain-name">人</b>
+	       </div>
+	     </div>
+	  </div>
    <div class="layui-form-item">
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-         <div class="layui-input-block j-input-facilities">
-         <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
-       <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
-       <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
-         </div>
+		 <div class="layui-input-block" id="door_equipment"  lay-verType="tips"></div>
+         <!-- <div class="layui-input-block j-input-facilities">
+			 <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
+		    <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
+		    <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
+         </div> -->
        </div>
    </div>
    <div class="layui-form-item">
@@ -72,7 +104,7 @@
     </div>
     <div class="layui-form-item">
        <div class="layui-col-md8">
-         <label class="layui-form-label"><i class="red">*</i>选择设备：</label>
+         <label class="layui-form-label">选择设备：</label>
          <div class="layui-input-block j-indent-equipment">
          <input type="checkbox" name="item_ids[]" value="1" lay-verify="require|equipment" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|') !== false"}checked{/if} title="WI-FI">
          <input type="checkbox" name="item_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|2|') !== false"}checked{/if} title="投影仪">
@@ -87,19 +119,12 @@
          </div>
        </div>
    </div>
-   <div class="layui-form-item">
-       <div class="layui-inline">
-         <label class="layui-form-label">容纳人数：</label>
-         <div class="layui-input-inline">
-           <input type="text" name="meet_volume" value="{$data_info['meet_volume']}" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
-         </div>
-       </div>
-    </div>
+   
    <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label"><i class="red">*</i>面积：</label>
+          <label class="layui-form-label">面积：</label>
           <div class="layui-input-inline">
-            <input type="tel" name="meet_area" value="{$data_info['meet_area']}" placeholder="" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+            <input type="number" name="meet_area" value="{$data_info['meet_area']}" placeholder="请输入面积" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
       <b class="j-explain-name">m²</b>
           </div>
         </div>
@@ -112,40 +137,19 @@
       </div>
     </div>
   </div>
-   <div class="layui-form-item j-positions-size">
-       <div class="layui-inline">
-         <label class="layui-form-label">会议室图片：</label>
-         <div class="layui-input-block j-uplode-block">
-            <div class="j-uplode-icon fl">
-              <i class="layui-icon  layui-icon-add-1"></i>
-              <button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
-            </div>
-            <div id="upload_img_list1" class="upload_img_list j-viewer-img">
-              {volist name="data_info['imgs']" id="vo"}
-              <dd class="item_img">
-                <div class="operate">
-                  <i class="layui-icon-close-fill layui-icon"></i>
-                </div>
-                <img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
-                <input type="hidden" name="{$vo['file_name']}">
-              </dd>
-              {/volist}
-            </div>
-         </div>
-       </div>
-   </div> 
      {:token()}
      <input type="hidden" name="meet_id" value="{$data_info['meet_id']}">
     <div class="layui-form-item">
         <div class="layui-input-block">
-          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button>
         </div>
      </div>
 </form>
 {include file="system@block/layui" /}
 <script>
-  var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];     
+  var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];  
+  var doorData = [{"id":1,"name":"门禁1"},{"id":2,"name":"门禁2"},{"id":3,"name":"门禁3"},{"id":4,"name":"门禁4"},{"id":5,"name":"门禁5"},{"id":6,"name":"门禁6"}]; 
   /*上传参数设定*/
   var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=space&water=no"; //上传楼层平面图
   var duotu = true; //是否为多图上传true false
@@ -158,22 +162,31 @@
       selectM = layui.selectM;
 	   //自定义验证规则
 	   form.verify({
-			choiceone: function () {
+			/* choiceone: function () {
 		   if ($("input[name='facility_ids[]']:checked").length == 0) {
 					 return '请选择门禁设备';
 		   }
-		},
+		}, */
 			choiceroute: function () {
 			   if ($("input[name='door_ids[]']:checked").length == 0) {
 					 return '请选择路径门禁';
 			   } 
 			  
-			},
+			}/* ,
 			equipment: function () {
 			   if ($("input[name='item_ids[]']:checked").length == 0) {
 					 return '请选择设备';
 			   } 
+			} */,
+			//验证会议室图片
+			conferenceroom: function () {
+				var img=$.trim($(".j-viewer-img").html());
+				if(img=="")
+				{
+					return '请提交会议室图片！';
+				}
 			}
+			
 			
 		});
     //场地图片
@@ -233,6 +246,17 @@
       //添加验证
       ,verify:'required'      
     }); 
+	//多选标签-门禁设备
+	var tagIns2 = selectM({
+	  //元素容器【必填】
+	  elem: '#door_equipment'
+	  //候选数据【必填】
+	  ,data: doorData
+	  //,max:10
+	  ,width:400
+	  //添加验证
+	  ,verify:'required'      
+	}); 
      //时间选择器
       laydate.render({
       elem: '#test14'

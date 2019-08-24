@@ -54,7 +54,7 @@
             {if (isset($v['childs']))}
                 {volist name="v['childs']" id="vv" key="kk"}
                 <li class="layui-nav-item {if condition="$kk eq 1"}layui-nav-itemed{/if}">
-                    <a href="javascript:;"><i class="{$vv['icon']}"></i>&nbsp;&nbsp;{$vv['title']}<span class="layui-nav-more"></span></a>
+                    <a class="j-two-name" href="javascript:;"><i class="{$vv['icon']}"></i>&nbsp;&nbsp;{$vv['title']}<span class="layui-nav-more"></span></a>
                     <dl class="layui-nav-child">
                         {if condition="$vv['title'] eq '快捷菜单'"}
                             <dd>

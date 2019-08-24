@@ -10,11 +10,18 @@
             <div class="layui-input-inline j-input-margin" style="width:150px;">
                 <input type="text" name="nick" placeholder="输入姓名" class="layui-input">
             </div>
-            
+            <div class="layui-input-inline" style="width:150px;">
+                <select name="role">
+                    <option value="">请选择角色</option>
+                    <option value="1">财务人员</option>
+                    <option value="2">营销人员</option>
+					<option value="3">一般员工</option>
+                  </select>
+            </div>
             <div class="layui-input-inline" style="width:150px;">
                 <select name="status">
                     <option value="">请选择状态</option>
-                    <option value="1">正常</option>
+                    <option value="1">已激活</option>
                     <option value="2">未激活</option>
                   </select>
             </div>
@@ -53,23 +60,30 @@
        
             ,defaultToolbar: ['filter']
             ,cols: [[ //表头
-                {field: 'username', with:80, title: '账号'}
-                ,{field: 'nick', with:100, title: '姓名'}
-                ,{field: 'role_id', width:200, title: '角色', templet:function(d){
+                {field: 'username', minWidth:80,align:'left', title: '账号'}
+                ,{field: 'nick', minWidth:100,align:'left', title: '姓名'}
+                ,{field: 'role_id', minWidth:200,align:'left', title: '角色', templet:function(d){
                     return d.role.name;
                 }}
-                ,{field: 'post', width: 100, title: '职务'}
-                ,{field: 'ctime',width: 150, title: '创建时间'}
-                ,{field: 'remark', with:140,title: '备注'}
-                ,{field: 'last_login_ip', title: '状态', width: 100, templet:function(d){
-                    if(d.last_login_ip){
-                        return '正常';
-                    }else{
-                        return '未激活';
-                    }
-                }}
-                ,{title: '操作', with:280, templet: '#buttonTpl',fixed:'right'}
+                ,{field: 'post', minWidth: 100,align:'left', title: '职务'}
+               /* ,{field: 'ctime',minWidth: 150,align:'left', title: '创建时间'} */
+			   ,{field: 'last_login_ip', title: '状态', minWidth: 150,align:'left', templet:function(d){
+			       if(d.last_login_ip){
+			           return '<button class="j-table-button j-activated">已激活</button>';
+			       }else{
+			           return '<button class="j-table-button j-notactive">未激活</button>';
+			       }
+			   }}
+                ,{field: 'remark', minWidth:140,align:'left',title: '备注'}
+                ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
             ]]
         });
+		// 鼠标滑过操作列
+		var tip_index = 0;
+		$(document).on('mouseenter', '.j-notactive', function(){
+			tip_index = layer.tips('<span style="color:#333;font-size:14px;">未激活状态表示该用户从未登录过</span>', this,{tips:[2,'#fff9bc'],time:3000000});
+		}).on('mouseleave',this, function(){
+			layer.close(tip_index);
+		});
     });
 </script>

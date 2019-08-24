@@ -13,8 +13,8 @@
 </script> -->
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
   <div class="j-operation-box">
-      <a href="{:url('editRole')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a> 
-      <a href="{:url('delRole')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+      <a href="{:url('editRole')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">权限编辑</a> 
+      <!-- <a href="{:url('delRole')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a> -->
   </div>
 </script>
 
@@ -43,11 +43,11 @@
             }
             ,defaultToolbar: ['filter']
             ,cols: [[ //表头
-                {field: 'name', title: '角色名称'}
-                ,{field: 'intro', title: '角色简介'}
-                ,{field: 'ctime', title: '创建时间'}
-                ,{field: 'status', title: '状态', templet: '#statusTpl'}
-                ,{title: '操作', templet: '#buttonTpl'}
+                {field: 'name', minWidth:100,align:'left',title: '角色名称'}
+                /* ,{field: 'intro', title: '角色简介'} */
+                ,{field: 'ctime',minWidth: 150,align:'left', title: '创建时间'}
+                ,{field: 'status', title: '状态', minWidth: 150,align:'left', templet: '#statusTpl'}
+                ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl'}
             ]]
         });
     });

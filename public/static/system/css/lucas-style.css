@@ -10,6 +10,8 @@ input:-webkit-autofill {
 .fr{float: right;}
 .layui-elem-field.j-size-color legend{ font-size: 16px;  font-weight: bold; color: #20A0FF;}
 .j-top-formmargin{ margin-top: 30px;}
+.layui-side .layui-this a, .layui-side .layui-this i.aicon{ font-weight: bold;}
+.layui-nav-tree .layui-nav-item.layui-nav-itemed a.j-two-name{font-weight: bold;}
 /* 表格按钮状态 S*/
 .j-table-button{ width: 80px; height: 27px; line-height: 27px; text-align: center; border: 0; color: #fff; font-size: 14px;border-radius:2px;}
 .j-table-button.j-notactive{ background:#737F90;}
@@ -76,7 +78,9 @@ input:-webkit-autofill {
 .layui-form-item  .layui-input-inline{position: relative;}
 .layui-form-item .layui-input-inline.j-name{ width:500px;}
 .layui-form-item .layui-input-inline.j-name .layui-input{ width: 190px;}
+.layui-form-item .layui-input-inline.j-name .layui-form-select{width: 190px;}
 .layui-form-item  .layui-input.j-explain-input,.j-from-box  .layui-input.j-explain-input {padding-right: 30px;}
+.layui-form-item  .layui-input.j-explain-inputs,.j-from-box  .layui-input.j-explain-inputs {padding-right: 50px;}
 b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;cursor: pointer;}
 .j-uplode-icon{position: relative;border: #D7D7D7 1px dashed;border-radius:4px; width: 100px; height: 100px; line-height: 100px; text-align: center;background:rgba(243,246,253,1);    margin: 0 10px 10px 0;}
 .j-uplode-icon i{ font-size:68px; color: #D7D7D7;}
@@ -86,16 +90,19 @@ b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;curso
 .icon-cancel {background: url(../image/icon-cancel.png) no-repeat;width: 15px;height: 15px;position: absolute;top: -4px;right: -4px;}
 .j-from-box .j-input-inline li{position: relative; width: 20%; margin:0 30px 15px 0 ; float: left;}
 .j-from-box .j-input-inline li:hover .j-hostile{ display: block;}
-.j-from-box .j-input-inline li:hover .layui-input:hover{ border:#60D09C 1px solid ;}
+/* .j-from-box .j-input-inline li:hover .layui-input:hover{ border:#60D09C 1px solid ;} */
 .j-from-box .j-input-inline .j-link-box li{ width: auto; line-height: 36px;margin: 0;}
 .j-from-box .j-input-inline .j-link-box li a{ color: #20A0FF;}
+.j-from-box .j-input-inline li.on .j-explain-input{ border: #60D09C 1px solid;}/* 已租颜色 */
+.j-from-box .j-input-inline li.on:hover .j-explain-input{border: #60D09C 1px solid;}
+.j-from-box .j-input-inline li.on  b.j-explain-name{ color: #60D09C;}
 /*------------------ 多图上传S ----------------*/
-.upload_img_list{ display: inline-block;}
+.upload_img_list{ display: initial;}
 .upload_img_list dd {position: relative;margin: 0 10px 10px 0;float: left; border: #D7D7D7 1px dashed;border-radius:4px;height:100px;width: 100px; text-align: center;}
 .upload_img_list .operate {position: absolute;top: -7px;right: -10px;z-index: 1}
 .upload_img_list .operate i {cursor: pointer;padding: 2px;line-height: 15px;text-align: center;color: #F14C3D;margin-left: 1px;float: left;filter: alpha(opacity=80);-moz-opacity: .8;-khtml-opacity: .8;
 opacity: .8color: #333;}
-.upload_img_list dd .img {height: 100px; width: 100px; padding: 10px; box-sizing: border-box;}
+.upload_img_list dd .img {height: 80px; width: 80px; padding: 10px; box-sizing: border-box;position: absolute;top: 50%;left: 50%;margin-top: -40px;margin-left: -40px;}
 .j-details-box .j-enclosure-label.j-uplode-icon button{position: absolute; left: 0; top:0; height: 38px;  width: 122px; overflow: hidden; opacity: 0;}
 /*------------------ 多图上传E ----------------*/
 /* 新增 E */

@@ -20,8 +20,16 @@
           </div>
         </div>
      </div>
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label">状态：</label>
+	       <div class="layui-input-inline">
+	         <div class="j-words-border">已激活</div>
+	       </div>
+	     </div>
+	  </div>
      <div class="layui-form-item">
-        <label class="layui-form-label">角色分组：</label>
+        <label class="layui-form-label">角色：</label>
         <div class="layui-input-inline">
             <select name="role_id" class="field-role_id" type="select">
                 <!-- <option value="">请选择</option> -->
@@ -61,7 +69,7 @@
             </select>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item j-hides hide">
           <label class="layui-form-label"></label>
           <div class="layui-input-block">
 
@@ -98,9 +106,9 @@
           </div>
     </div>
     <input type="hidden" name="id" value="{$data_info['id']}">
-    <div class="layui-form-item">
+    <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
-          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
         </div>
      </div>
@@ -113,6 +121,7 @@ layui.use(['form','layer','jquery'], function(){
       $= layui.jquery;
    var   form = layui.form;
   form.on('select(filter)', function(data){
+	  $(".j-hides").show();
     var guards = {:json_encode($guardArr)};
     //console.log(guards);
     for (var i = 0 ; i < guards.length ; i++) {

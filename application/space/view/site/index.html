@@ -10,18 +10,26 @@
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 				  	<select name="ban_id" class="field-cid" type="select">
-	      			    <option value="">请选择</option>
+	      			    <option value="">请选择楼宇</option>
 	      			    {volist name="banArr" id="v"}
 	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
 	      			    {/volist}
 	      			</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="ban_address" placeholder="楼宇地址" class="layui-input">
+				  	<select name="ban_class" class="field-cid" type="select">
+						<option value="">请选择类型</option>
+						<option value="1">独立工位区</option>
+						<option value="2">自由工位区</option>
+						<option value="3">联合工位区</option>
+					</select>
 				  </div>
-				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="floor_number" placeholder="楼层" class="layui-input">
-				  </div>
+				 <div class="layui-input-inline j-input-margin" style="width:150px;">
+				 	<select name="ban_floor" class="field-cid" type="select">
+						<option value="">请选择楼层</option>
+						<option value="1">楼层1</option>
+					</select>
+				 </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
 					  <i class="layui-icon">&#xe615;</i>
@@ -53,7 +61,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			//,height: 'full-280'
+			,height: 'full-230'
             ,skin: 'line'
             //,even: false
             ,limit: 10
@@ -61,14 +69,18 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {field: 'site_name', align:'center',with:80, title: '楼宇名称'}
-                ,{field: 'site_type', align:'center',with:100, title: '类型', templet:function(d){
+				{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+					return d.LAY_INDEX;
+				}},
+                {field: 'site_name', align:'left',minWidth:150, title: '楼宇名称'}
+                ,{field: 'site_type', align:'left',minWidth:100, title: '类型', templet:function(d){
                     return params.site_type[d.site_type];
                 }}
-                ,{field: 'ban_name', align:'center',with:100, title: '所属楼宇'}
-                ,{field: 'floor_number', align:'center',with:100, title: '楼层'}
-                ,{field: 'site_num', align:'center',with:100, title: '工位数'}
-                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
+                ,{field: 'ban_name', align:'left',minWidth:100, title: '所属楼宇'}
+                ,{field: 'floor_number', align:'left',minWidth:100, title: '所属楼层'}
+                ,{field: 'site_num', align:'left',minWidth:100, title: '工位数'}
+				,{field: 'site_sum', align:'left',minWidth:100, title: '入驻人数'}
+                ,{title: '操作', minWidth:280,Width:280, templet: '#buttonTpl',align:'left', width: 150,fixed:'right'}
             ]]
         });
     });

@@ -10,14 +10,17 @@
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 					  <select name="ban_id" class="field-cid" type="select">
-	      			    <option value="">请选择</option>
+	      			    <option value="">请选择楼宇</option>
 	      			    {volist name="banArr" id="v"}
 	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
 	      			    {/volist}
 	      			</select>
 				  </div>
-				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="floor_number" placeholder="请选择楼层" class="layui-input">
+				   <div class="layui-input-inline j-input-margin" style="width:150px;">
+						  <select name="floor_number" class="field-cid" type="select">
+							<option value="">请选择楼层</option>
+							<option value="1">楼层1</option>
+						</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
@@ -50,7 +53,7 @@
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
             ,page: true //开启分页
-			//,height: 'full-280'
+			,height: 'full-230'
             ,skin: 'line'
             //,even: false
             ,limit: 10
@@ -58,12 +61,15 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                {field: 'meet_name', align:'center',with:80, title: '名称'}
-                ,{field: 'ban_name', align:'center',with:100, title: '楼宇'}
-                ,{field: 'floor_number', align:'center',with:100, title: '楼层'}
-                ,{field: 'meet_volume', align:'center',with:100, title: '容纳人数'}
-                ,{field: 'meet_unit_price', align:'center',with:100, title: '租赁单价（元/0.5h）'}
-                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
+			    {field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+			        return d.LAY_INDEX;
+			    }},
+                {field: 'meet_name', align:'left',minWidth:80, title: '名称'}
+                ,{field: 'ban_name', align:'left',minWidth:100, title: '楼宇'}
+                ,{field: 'floor_number', align:'left',minWidth:100, title: '楼层'}
+                ,{field: 'meet_volume', align:'left',minWidth:100, title: '容纳人数'}
+                ,{field: 'meet_unit_price', align:'left',minWidth:100, title: '租赁单价（元/0.5h）'}
+                ,{title: '操作', minWidth:280, templet: '#buttonTpl', align:'left', width:280,fixed:'right'}
             ]]
         });
     });

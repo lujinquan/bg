@@ -41,16 +41,16 @@
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>工位区面积：</label>
+			<label class="j-form-label">工位区面积：</label>
 			<div class="j-input-inline">
-				<input type="text" name="site_area" lay-verify="required|number" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
+				<input type="number" name="site_area" lay-verify="number" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input j-explain-input">
 				<b class="j-explain-name">m²</b>
 			</div>
 		</div>
 		<div class="layui-col-md4 j-site_num">
 			<label class="j-form-label"><i class="red">*</i>工位数：</label>
 			<div class="j-input-inline">
-				<input type="text" name="site_num"  placeholder="请输入"  lay-verType="tips" autocomplete="off" class="layui-input">
+				<input type="number" name="site_num"  placeholder="请输入" lay-verify="required|number"   lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 	</div>
@@ -94,9 +94,9 @@
 		</div>
 	</div>
      {:token()}
-    <div class="layui-form-item">
+    <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
-          <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+          <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
           <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
         </div>
      </div>
@@ -131,10 +131,12 @@
 			if(sel == 3 || sel == 2){ //如果是自由工位区或者独立工位区
 				$(".j-workbayname,.j-workbays").hide();//隐藏工位名称和工位
 				$(".j-workbayname .layui-input").removeAttr("lay-verify");//去除工位名称必填
+				$(".j-site_num input").attr("lay-verify","required|number");
 				$(".j-site_num").show();
 			}else{ //如果是联合工位
 				$(".j-workbayname,.j-workbays").show();//显示工位名称和工位
 				$(".j-workbayname .layui-input").attr("lay-verify","required");//添加工位名称必填
+				$(".j-site_num input").removeAttr("lay-verify");
 				$(".j-site_num").hide();
 			}
 
