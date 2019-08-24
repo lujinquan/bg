@@ -21,7 +21,7 @@ class SystemUserManage extends Validate
 {
     //定义验证规则
     protected $rule = [
-    	'username|账户名称' => 'require|unique:system_user',
+    	'username|账户名称' => 'require|mobile|unique:system_user',
         'nick|昵称'       => 'require|unique:system_user',
         //'role_id|角色'    => 'requireWith:role_id|notIn:0,1',
         //'post|职务'       => 'require',

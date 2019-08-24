@@ -29,7 +29,8 @@ class Ban extends Validate
 
     //定义验证提示
     protected $message = [
-
+        '__token__.require' => '非法提交',
+        '__token__.token'   => '请不要重复提交表单'
     ];
 
     // 自定义更新场景

@@ -15,6 +15,7 @@ use Env;
 use hisi\Dir;
 use app\common\model\Cparam;
 use app\common\model\Project;
+use app\project\model\MemberFirm;
 use app\system\model\SystemUser;
 
 /**
@@ -36,7 +37,6 @@ class Index extends Admin
             $this->view->engine->layout(false);
             return $this->fetch('iframe');
         } else {
-            
             return $this->fetch('lead');
         }     
     }
@@ -133,6 +133,10 @@ class Index extends Admin
      */
     public function welcome()
     {
+        $MemberFirmModel = new MemberFirm;
+        //获取入驻企业
+        $firms = $MemberFirmModel->where([['status','eq',1],['project_id','eq',PROJECT_ID]])->count('firm_id');
+        $this->assign('firms',$firms);
         return $this->fetch('index');
     }
 

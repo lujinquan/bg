@@ -21,6 +21,16 @@ use app\space\model\Meeting as MeetingModel;
 
 class Meeting extends Admin
 {
+    /**
+     * 初始化方法
+     */
+    protected function initialize()
+    {
+        parent::initialize();
+
+        $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+    }
 
     public function index()
     {   
@@ -39,8 +49,7 @@ class Meeting extends Admin
             $data['msg'] = '';
             return json($data);
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+
         return $this->fetch();
     }
 
@@ -66,8 +75,7 @@ class Meeting extends Admin
             }
             return $this->success('新增成功');
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
+
         return $this->fetch();
     }
 
@@ -95,9 +103,6 @@ class Meeting extends Admin
         $id = input('param.id/d');
         $row = MeetingModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        //halt($row);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
