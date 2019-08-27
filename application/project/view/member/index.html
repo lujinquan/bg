@@ -33,11 +33,8 @@
 
 	{include file="system@block/layui" /}
 
-	
-
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
-
 			<a href="{:url('edit')}?id={{ d.member_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
 			{{# if (d.is_activate == 1) { }}
 			<a href="{:url('stop')}?id={{ d.member_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>

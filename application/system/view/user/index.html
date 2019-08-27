@@ -81,7 +81,7 @@
 		// 鼠标滑过操作列
 		var tip_index = 0;
 		$(document).on('mouseenter', '.j-notactive', function(){
-			tip_index = layer.tips('<span style="color:#333;font-size:14px;">未激活状态表示该用户从未登录过</span>', this,{tips:[2,'#fff9bc'],time:3000000});
+			tip_index = layer.tips('<span style="color:#333;font-size:14px;">未激活状态表示该用户从未登录过</span>', this,{tips:[2,'#fff9bc'],time:5000});
 		}).on('mouseleave',this, function(){
 			layer.close(tip_index);
 		});

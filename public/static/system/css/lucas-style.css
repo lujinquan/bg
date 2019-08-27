@@ -18,6 +18,12 @@ input:-webkit-autofill {
 .j-table-button.j-activated{ background:#60D09C;}
 .layui-form-label i.red{ margin-right: 5px;}
 /* 表格按钮状态 E*/
+/* 带tab切换页面样式调整 */
+.layui-card{
+    background-color: #fff;
+    padding: 5px 8px;
+    margin: 8px;	
+}
 /*---------------------公用样式 E--------------------*/
 .j-aicon-qiehuan i{ font-size: 22px;}
 /* 首页样式 S */
