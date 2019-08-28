@@ -18,9 +18,9 @@ class Member extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
-    public function MemberFirm()
+    public function firm()
     {
-        return $this->belongsTo('member_firm', 'firm_id', 'firm_id')->bind('firm_name');
+        return $this->belongsTo('firm', 'firm_id', 'firm_id')->bind('firm_name');
     }
 
     

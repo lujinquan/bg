@@ -3,7 +3,7 @@ namespace app\project\model;
 
 use think\Model;
 
-class MemberFirm extends Model
+class Firm extends Model
 {
 	// 设置模型名称
     protected $name = 'member_firm';
@@ -16,6 +16,7 @@ class MemberFirm extends Model
 
     protected $type = [
         'ctime' => 'timestamp:Y-m-d H:i:s',
+        'firm_established_time' => 'timestamp:Y-m-d',
         'firm_start_time' => 'timestamp:Y-m-d H:i:s',
         'firm_end_time' => 'timestamp:Y-m-d H:i:s',  
     ];

@@ -64,41 +64,6 @@ class Api extends Common
         }
     }
 
-	public function ceshi()
-	{
-		$data = [
-			"code"=> 0,
-			"msg"=> "",
-			"count"=> 100,
-			"data"=> [
-				[
-					"userName"=> "测试用户1",
-					"userCode"=> "170001",
-					"deptName"=> "技术部门1"
-				], [
-					"userName"=> "测试用户2",
-					"userCode"=> "170002",
-					"deptName"=> "行政部门1"
-				], [
-					"userName"=> "测试用户3",
-					"userCode"=> "170003",
-					"deptName"=> "测试部门2"
-				], [
-					"userName"=> "测试用户4",
-					"userCode"=> "170004",
-					"deptName"=> "测试部门2"
-				], [
-					"userName"=> "测试用户5",
-					"userCode"=> "170005",
-					"deptName"=> "测试部门3"
-				]
-			]
-		];
-		return json($data);
-						
-		
-	}
-
     /**
      * 获取帮助文档数据
      * @return json

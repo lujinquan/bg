@@ -16,7 +16,7 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
-use app\project\model\MemberFirm as MemberFirmModel;
+use app\project\model\Firm as FirmModel;
 
 
 class Firm extends Admin
@@ -28,13 +28,13 @@ class Firm extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $MemberFirmModel = new MemberFirmModel;
-            $where = $MemberFirmModel->checkWhere($getData);
+            $FirmModel = new FirmModel;
+            $where = $FirmModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $MemberFirmModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $FirmModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
-            $data['count'] = $MemberFirmModel->where($where)->count('firm_id');
+            $data['count'] = $FirmModel->where($where)->count('firm_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -62,8 +62,12 @@ class Firm extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if($data['firm_id']){ //二次录入
+                $result = $this->validate($data, 'Firm.add');
+            }else{ //初次录入
+                $result = $this->validate($data, 'Firm.edit');
+            }
             // 数据验证
-            $result = $this->validate($data, 'Rest.add');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -72,17 +76,15 @@ class Firm extends Admin
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            $RestModel = new RestModel;
-            unset($data['rest_id']);
-            //halt($data);
+            $FirmModel = new FirmModel;
+
+            
             // 入库
-            if (!$RestModel->allowField(true)->create($data)) {
+            if (!$FirmModel->allowField(true)->create($data)) {
                 return $this->error('新增失败');
             }
             return $this->success('新增成功');
         }
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         return $this->fetch();
     }
 
@@ -112,6 +114,34 @@ class Firm extends Admin
         $this->assign('data_info',$row);
         return $this->fetch();
     }
+
+    // public function detail()
+    // {
+    //     $AnnexModel = new AnnexModel;
+    //     if ($this->request->isPost()) {
+    //         $data = $this->request->post();
+    //         // 数据验证
+    //         $result = $this->validate($data, 'Rest.add');
+    //         if($result !== true) {
+    //             return $this->error($result);
+    //         }
+    //         $RestModel = new RestModel();
+    //         // 入库
+    //         if (!$RestModel->allowField(true)->update($data)) {
+    //             return $this->error('编辑失败');
+    //         }
+    //         return $this->success('编辑成功');
+    //     }
+    //     $id = input('param.id/d');
+    //     $row = RestModel::get($id);
+    //     $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+    //     $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
+    //     $this->assign('banArr',$banArr);
+    //     $this->assign('data_info',$row);
+    //     return $this->fetch();
+    // }
+
+
 
     public function del()
     {

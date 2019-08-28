@@ -16,6 +16,7 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\project\model\Shack as ShackModel;
+use app\project\model\Firm as FirmModel;
 use app\system\model\SystemGuard as GuardModel;
 use app\common\model\SystemAnnex as AnnexModel;
 
@@ -32,7 +33,7 @@ class Shack extends Admin
             $where = $ShackModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $ShackModel->with(['member_firm','SystemUser'])->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $ShackModel->with(['firm','SystemUser'])->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($data['data']);
             $data['count'] = $ShackModel->where($where)->count('id');
             $data['code'] = 0;
@@ -41,6 +42,73 @@ class Shack extends Admin
         }
         return $this->fetch();
     }
+
+    public function getFirms()
+    {
+        $keywords = input('param.keywords/s');
+        $where = [];
+        $where[] = ['status','eq',1];
+        // 查询公司名称
+        if($keywords){
+            $where[] = ['firm_name','like','%'.$keywords.'%'];
+        }
+        $data = [];
+        $data['data'] = FirmModel::where($where)->field('firm_id as userCode,firm_name as userName,firm_name as deptName')->select();
+        $data['count'] = FirmModel::where($where)->count();
+        return json($data);
+
+    }
+
+    public function getFirmDetail()
+    {
+        $firm_name = input('param.firm_name');
+        $where = [];
+        $where[] = ['firm_name','eq',$firm_name];
+        $row = FirmModel::where($where)->find();
+        if($row){
+            $data = [];
+            $data['data'] = $row;
+            $data['code'] = 1;
+            return json($data);
+        }else{
+            return $this->error('系统中无该公司数据');
+        }
+    }
+
+    // public function ceshi()
+    // {
+    //     $data = [
+    //         "code"=> 0,
+    //         "msg"=> "",
+    //         "count"=> 100,
+    //         "data"=> [
+    //             [
+    //                 "userName"=> "测试用户1",
+    //                 "userCode"=> "170001",
+    //                 "deptName"=> "技术部门1"
+    //             ], [
+    //                 "userName"=> "测试用户2",
+    //                 "userCode"=> "170002",
+    //                 "deptName"=> "行政部门1"
+    //             ], [
+    //                 "userName"=> "测试用户3",
+    //                 "userCode"=> "170003",
+    //                 "deptName"=> "测试部门2"
+    //             ], [
+    //                 "userName"=> "测试用户4",
+    //                 "userCode"=> "170004",
+    //                 "deptName"=> "测试部门2"
+    //             ], [
+    //                 "userName"=> "测试用户5",
+    //                 "userCode"=> "170005",
+    //                 "deptName"=> "测试部门3"
+    //             ]
+    //         ]
+    //     ];
+    //     return json($data);
+                        
+        
+    // }
 
     public function add()
     {

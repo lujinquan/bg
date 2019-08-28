@@ -15,7 +15,7 @@ use Env;
 use hisi\Dir;
 use app\common\model\Cparam;
 use app\common\model\Project;
-use app\project\model\MemberFirm;
+use app\project\model\Firm;
 use app\system\model\SystemUser;
 
 /**
@@ -133,9 +133,9 @@ class Index extends Admin
      */
     public function welcome()
     {
-        $MemberFirmModel = new MemberFirm;
+        $FirmModel = new Firm;
         //获取入驻企业
-        $firms = $MemberFirmModel->where([['status','eq',1],['project_id','eq',PROJECT_ID]])->count('firm_id');
+        $firms = $FirmModel->where([['status','eq',1],['project_id','eq',PROJECT_ID]])->count('firm_id');
         $this->assign('firms',$firms);
         return $this->fetch('index');
     }

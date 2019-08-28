@@ -97,7 +97,7 @@ layui.define(['jquery', 'table'], function(exports) {
 	function getSug(opt) {
 		sessionStorage.setItem("inputId", opt.id)
 		let kw = $.trim($(opt.obj).val());
-		console.log('关键词：',kw);
+		//console.log('关键词：',kw);
 		if (kw == "") {
 			$("#" + opt.id).next().hide().html("");
 			return false;
