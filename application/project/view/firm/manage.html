@@ -1,2 +1,167 @@
+<!-- 内容区 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">管理</li></ul>
+</div>
+<form class="layui-form j-top-margin j-long-words" action="{:url('firm/add')}" method="post" id="addForm">
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">
+        <i class="red">*</i>入驻时间：</label>
+      <div class="layui-input-inline" style="width: 190px;">
+        <input type="text" name="firm_start_time" class="layui-input" lay-vertype="tips" id="test3" placeholder="请选择时间"></div>
+      <div class="layui-form-mid">-</div>
+      <div class="layui-input-inline" style="width: 190px;">
+        <input type="text" name="firm_end_time" class="layui-input" lay-vertype="tips" id="test4" placeholder="请选择时间"></div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">
+      <i class="red">*</i>联合工位区：</label>
+    <div class="layui-input-block">
+      <div id="transfer1" class="demo-transfer"></div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">
+      <i class="red">*</i>独立工位区：</label>
+    <div class="layui-input-block">
+      <div id="transfer2" class="demo-transfer"></div>
+    </div>
+  </div>
+  <div class="layui-form-item" pane="">
+    <label class="layui-form-label">
+      <i class="red">*</i>门禁：</label>
+    <div class="layui-input-inline">
+      <select name="" class="field-role_id" lay-verType="tips" lay-filter="filter" type="select">
+        <option value="">请选择</option>
+        <option value="1">门禁1</option></select>
+    </div>
+  </div>
+  <div class="layui-form-item j-hides hide">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <div id="firstpane" class="menu_list"></div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-col-md8">
+      <label class="layui-form-label">备注：</label>
+      <div class="layui-input-block">
+        <input type="text" name="meet_remark" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+    </div>
+  </div>
+  <input type="hidden" name="firm_id" value="">
+  <div class="layui-form-item j-item-top">
+    <div class="layui-input-block">
+      <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button></div>
+  </div>
+</form>
+<!-- 内容区 -->
 {include file="system@block/layui" /}
-管理页面
+<script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript">   
+		   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer'], function() {
+		    var laydate = layui.laydate,
+		      $ = layui.$,
+		      upload = layui.upload,
+		      form = layui.form,
+			  transfer = layui.transfer,
+			  layer = layui.layer,
+			  step = layui.step,
+			  selectN = layui.selectN,
+			  selectM = layui.selectM,
+			  util = layui.util,
+			  yutons_sug = layui.yutons_sug;
+			  /* 穿梭框显示搜索框 */
+			  /* var data1 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据
+			  var data2 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据 */
+              var data1 = {:json_encode($siteArr[1])};
+              var data2 = {:json_encode($siteArr[2])};
+			  //联合办公区
+			  transfer.render({
+				elem: '#transfer1'
+				,data: data1
+				,title: ['全选', '全选']
+				,showSearch: true
+			  });
+			  //独立办公区
+			   transfer.render({
+				elem: '#transfer2'
+				,data: data2
+				,title: ['全选', '全选']
+				,showSearch: true
+			  });
+			  //门禁
+			  form.on('select(filter)', function(data){
+			   $(".j-hides").show();
+			    var guards = {:json_encode($guardArr)};
+			    //console.log(guards);
+			    for (var i = 0 ; i < guards.length; i++) {
+			      if(guards[i].id == data.value){
+			        var bans = guards[i].childs;
+			        var str = '';
+			  
+			        if(bans.length > 0){
+			          for (var j = 0 ; j < bans.length; j++) {
+			            if(j==0){
+			              var current = 'current';
+			  			  var hide = '';
+			            }else{
+			              var current = '';
+			  			  var hide = 'hide';
+			            }
+			            str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+			            var floors = bans[j].childs;
+			  
+			            if(floors.length > 0){
+			              for (var k = 0 ; k < floors.length; k++) {
+			                str += '<dl class="clearfix">\
+			                          <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+			                              <ul>';
+			                var guards = floors[k].childs;
+			                if(guards.length > 0){
+			                  for (var h = 0 ; h < guards.length; h++) {
+			                    str += '<li>\
+			                               <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+			                            </li>';
+			                  }
+			                }
+			                str += '</ul>\
+			                          </dd></dl>';
+			              }  
+			            }
+			            str += '</div>';
+			  
+			          }   
+			          str += '</div>';     
+			          //console.log(str);
+			          $('#firstpane').html(str);
+			          form.render();
+			        }
+			        
+			      }
+			    }
+			  });
+            //入驻开始时间
+            laydate.render({
+            	elem: '#test3'
+            });
+            //入驻结束时间
+            laydate.render({
+            	elem: '#test4'
+            });	
+			//多选标签-基本配置
+			var tagIns1 = selectM({
+			  //元素容器【必填】
+			  elem: '#floor_number'
+			  //候选数据【必填】
+			  ,data: tagData
+			  //,max:10
+			  ,width:400
+			  //添加验证
+			  //,verify:'required'      
+			});
+		  }); 
+		</script>

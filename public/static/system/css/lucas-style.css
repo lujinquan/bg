@@ -188,4 +188,9 @@ opacity: .8color: #333;}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none;}
 input[type="number"]{-moz-appearance: textfield;}
 /* 详情 E */
+/* 编辑 S */
+.j-operation-box .j-enterprise i{ color: #20A0FF;}
+.layui-btn-group.j-add-group.j-multiple-box .layui-btn { margin-right:10px!important;}
+.j-add-group .layui-btn .layui-icon{ font-weight: 100; margin-right: 5px;}
+/* 编辑 E */
  /*------------------ 项目管理 -------------------------E*/
