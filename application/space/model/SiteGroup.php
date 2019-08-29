@@ -3,12 +3,12 @@ namespace app\space\model;
 
 use think\Model;
 
-class Site extends Model
+class SiteGroup extends Model
 {
 	// 设置模型名称
-    protected $name = 'space_site';
+    protected $name = 'space_site_group';
     // 设置主键
-    protected $pk = 'site_id';
+    protected $pk = 'site_group_id';
     // 定义时间戳字段名
     protected $createTime = 'ctime';
     // 自动写入时间戳

@@ -33,10 +33,10 @@
 
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
-			<a href="{:url('edit')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-			<a href="{:url('stop')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">管理</a>
-			<a href="{:url('del')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">发券</a>
-			<a href="{:url('stop')}?id={{ d.group_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>
+			<a href="{:url('edit')}?id={{ d.firm_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('manage')}?id={{ d.firmp_id }}" class="layui-btn layui-btn-xs layui-btn-normal">管理</a>
+			<a href="{:url('coupon')}?id={{ d.firm_id }}" class="layui-btn layui-btn-xs layui-btn-normal">发券</a>
+			<a href="{:url('stop')}?id={{ d.firm_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>
 		</div>
 	</script>
 	<script type="text/html" id="toolbar"></script>

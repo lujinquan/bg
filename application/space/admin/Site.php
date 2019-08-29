@@ -18,7 +18,7 @@ use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
-use app\space\model\Site as SiteModel;
+use app\space\model\SiteGroup as SiteGroupModel;
 
 class Site extends Admin
 {
@@ -39,13 +39,13 @@ class Site extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $SiteModel = new SiteModel;
-            $where = $SiteModel->checkWhere($getData);
-            $fields = 'a.site_id,a.site_name,a.site_type,a.site_num,a.floor_number,b.ban_name,b.ban_address';
+            $SiteGroupModel = new SiteGroupModel;
+            $where = $SiteGroupModel->checkWhere($getData);
+            $fields = 'a.site_group_id,a.site_group_name,a.site_group_type,a.site_num,a.floor_number,b.ban_name,b.ban_address';
             $data = [];
-            $data['data'] = Db::name('space_site')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            $data['data'] = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
             //halt($data['data']);
-            $data['count'] = $SiteModel->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('site_id');
+            $data['count'] = $SiteGroupModel->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('site_group_id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -59,7 +59,7 @@ class Site extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'Site.add');
+            $result = $this->validate($data, 'SiteGroup.add');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -68,10 +68,10 @@ class Site extends Admin
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            $SiteModel = new SiteModel;
+            $SiteGroupModel = new SiteGroupModel;
             unset($data['site_id']);
             // 入库
-            if (!$SiteModel->allowField(true)->create($data)) {
+            if (!$SiteGroupModel->allowField(true)->create($data)) {
                 return $this->error('新增失败');
             }
             return $this->success('新增成功');
@@ -86,7 +86,7 @@ class Site extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'Site.add');
+            $result = $this->validate($data, 'SiteGroup.add');
             if($result !== true) {
                 return $this->error($result);
             }
@@ -94,15 +94,15 @@ class Site extends Admin
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            $SiteModel = new SiteModel();
+            $SiteGroupModel = new SiteGroupModel();
             // 入库
-            if (!$SiteModel->allowField(true)->update($data)) {
+            if (!$SiteGroupModel->allowField(true)->update($data)) {
                 return $this->error('编辑失败');
             }
             return $this->success('编辑成功');
         }
         $id = input('param.id/d');
-        $row = SiteModel::get($id)->toArray();
+        $row = SiteGroupModel::get($id)->toArray();
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $row['sites'] = explode('|',$row['sites']);
         array_shift($row['sites']);
@@ -115,7 +115,7 @@ class Site extends Admin
     public function del()
     {
         $ids = $this->request->param('id/a');        
-        $res = SiteModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
+        $res = SiteGroupModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
         if($res){
             $this->success('删除成功');
         }else{

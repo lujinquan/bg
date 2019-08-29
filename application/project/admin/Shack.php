@@ -15,6 +15,8 @@ namespace app\project\admin;
 
 use think\Db;
 use app\system\admin\Admin;
+use app\space\model\Ban as BanModel;
+use app\space\model\SiteGroup as SiteGroupModel;
 use app\project\model\Shack as ShackModel;
 use app\project\model\Firm as FirmModel;
 use app\system\model\SystemGuard as GuardModel;
@@ -133,11 +135,48 @@ class Shack extends Admin
             }
             return $this->success('新增成功');
         }
+        
+        // 获取工位区
+        $siteGroupModel = new SiteGroupModel;
+        $sites = $siteGroupModel->where([['status','eq',1]])->field('site_group_id,site_group_type,site_group_name')->select();
+        $siteArr = [];
+        $siteArr[1] = [];
+        $siteArr[2] = [];
+        foreach ($sites as $k => $v) {
+            $siteArr[$v['site_group_type']][] = [
+                'value' => $v['site_group_id'],
+                'title' => $v['site_group_name'],
+            ];
+        }
+        $this->assign('siteArr',$siteArr);
+        // 获取楼宇
+        $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
         // 获取门禁组权限
         $GuardModel = new GuardModel;
         $guardArr = GuardModel::getAllChild();
         $this->assign('guardArr', $guardArr);
-        return $this->fetch();
+
+        $type = input('param.type/d');
+        switch ($type) {
+            case 1: // 企业入驻
+                $html = 'addfirm';
+                break;
+            case 2: // 个人入驻
+                $html = 'addpersion';
+                break;
+            case 3: // 自由工位区入驻
+                $html = 'addsitegroup';
+                break;
+            case 4: //其他场地入驻
+                $html = 'addrest';
+                break;
+
+            default: //企业入驻
+                $html = 'addfirm';
+                break;
+        }
+        return $this->fetch($html);
     }
 
     public function edit()

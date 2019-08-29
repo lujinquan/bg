@@ -1,0 +1,72 @@
+			<form class="layui-form j-top-margin j-long-words" action="{:url('member/add')}" method="post" >
+			  <div class="j-padding-box">
+				<div class="j-admin-box clearfix">
+					<div class="j-admin-title clearfix">
+						<span class="j-name fl">管理员<label class="j-tips">( <i class="layui-icon layui-icon-tips"></i> 拥有企业所有管理权限 )</label></span>
+						<span class="j-button fr">
+							<button  class="layui-btn layui-btn-normal layui-btn-sm layui-icon"><i class="layui-icon layui-icon-download-circle"></i>批量导入</button>
+				       </span>
+					</div>
+					<div class="j-admin-con clearfix">
+						<div class="j-admin-list clearfix">
+							<ul>
+								<li  class="j-required-li">
+									 <input type="text" name="member_name[]"  lay-verify="required"  placeholder="姓名" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+									 <i class="red">*</i>
+								</li>
+								<li  class="j-required-li">
+									 <input type="text" name="member_tel[]"  lay-verify="required|phone"  placeholder="电话" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+									 <i class="red">*</i>
+								</li>
+								<li>
+									 <input type="text" name="member_post[]"  placeholder="职位" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+								<li>
+									 <input type="text" name="member_department[]"  placeholder="部门" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+								<li>
+									 <input type="text" name="member_card[]"  placeholder="身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="j-admin-box j-staff clearfix">
+					<div class="j-admin-title clearfix">
+						<span class="j-name fl">一般员工</span>
+					</div>
+					<div class="j-admin-con clearfix">
+						<div class="j-admin-list clearfix">
+							<ul>
+								<li class="j-required-li">
+									 <input type="text" name="member_name[]"  lay-verify="required"  placeholder="姓名" lay-verType="tips" autocomplete="off" class="layui-input  j-required-input">
+									 <i class="red">*</i>
+								</li>
+								<li  class="j-required-li">
+									 <input type="text" name="member_tel[]"  lay-verify="required|phone"  placeholder="电话" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+									 <i class="red">*</i>
+								</li>
+								<li>
+									 <input type="text" name="member_post[]"  placeholder="职位" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+								<li>
+									 <input type="text" name="member_department[]"  placeholder="部门" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+								<li>
+									 <input type="text" name="member_card[]"  placeholder="身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+								</li>
+							</ul>
+						</div>
+						<div class="j-add-personnel"><i class="layui-icon layui-icon-add-1"></i><label>添加人员</label></div>
+					</div>
+				</div>
+				<input type="hidden" name="firm_id" value="1">
+				<div class="layui-form-item j-right-button">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-primary pre">返回上一步</button>
+						<button type="reset" class="layui-btn layui-btn-primary">取消</button>
+						<button class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit">完成</button>
+					</div>
+				</div>
+			 </div>
+			</form>

@@ -32,7 +32,7 @@ class Member extends Admin
             $where = $MemberModel->checkWhere($getData);
             $fields = '*';
             $data = [];
-            $data['data'] = $MemberModel->with('member_firm')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            $data['data'] = $MemberModel->with('firm')->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             //halt($where);
             $data['count'] = $MemberModel->where($where)->count('member_id');
             $data['code'] = 0;
@@ -62,24 +62,53 @@ class Member extends Admin
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // Êý¾ÝÑéÖ¤
-            $result = $this->validate($data, 'Rest.add');
-            if($result !== true) {
-                return $this->error($result);
+            
+            // $result = $this->validate($data, 'Member.add');
+            // if($result !== true) {
+            //     return $this->error($result);
+            // }
+            // if(isset($data['file'])){ 
+            //     $data['imgs'] = implode(',',$data['file']);
+            //     $AnnexModel = new AnnexModel;
+            //     $AnnexModel->updateAnnexEtime($data['file']);
+            // }
+            $MemberModel = new MemberModel;
+            $result = [];
+            $sum = count($data['member_name']);
+            //dump($sum);halt($data);
+            for ($i=0; $i < $sum; $i++) { 
+                if($i == 0){
+                    $result[$i] = [
+                        'member_name' =>$data['member_name'][$i],
+                        'member_tel' =>$data['member_tel'][$i],
+                        'member_post' =>$data['member_post'][$i],
+                        'member_department' =>$data['member_department'][$i],
+                        'member_card' =>$data['member_card'][$i],
+                        'member_type' => 1, //企业管理员
+                        'project_id' => PROJECT_ID,
+                        'firm_id' => $data['firm_id'],
+                        'is_activate' => 1,
+                    ];
+                }else{
+                    $result[$i] = [
+                        'member_name' =>$data['member_name'][$i],
+                        'member_tel' =>$data['member_tel'][$i],
+                        'member_post' =>$data['member_post'][$i],
+                        'member_department' =>$data['member_department'][$i],
+                        'member_card' =>$data['member_card'][$i],
+                        'member_type' => 2, //企业管理员
+                        'project_id' => PROJECT_ID,
+                        'firm_id' => $data['firm_id'],
+                        'is_activate' => 1,
+                    ];
+                }
             }
-            if(isset($data['file'])){ //¸½¼þ
-                $data['imgs'] = implode(',',$data['file']);
-                $AnnexModel = new AnnexModel;
-                $AnnexModel->updateAnnexEtime($data['file']);
+            //halt($result);
+            
+            if (!$MemberModel->allowField(true)->saveAll($result)) {
+                return $this->error('新增失败');
             }
-            $RestModel = new RestModel;
-            unset($data['rest_id']);
-            //halt($data);
-            // Èë¿â
-            if (!$RestModel->allowField(true)->create($data)) {
-                return $this->error('ÐÂÔöÊ§°Ü');
-            }
-            return $this->success('ÐÂÔö³É¹¦');
+            return $this->success('新增成功');
         }
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
@@ -99,9 +128,9 @@ class Member extends Admin
             $RestModel = new RestModel();
             // Èë¿â
             if (!$RestModel->allowField(true)->update($data)) {
-                return $this->error('±à¼­Ê§°Ü');
+                return $this->error('修改失败');
             }
-            return $this->success('±à¼­³É¹¦');
+            return $this->success('修改成功');
         }
         $id = input('param.id/d');
         $row = RestModel::get($id);
@@ -118,9 +147,9 @@ class Member extends Admin
         $ids = $this->request->param('id/a');        
         $res = RestModel::where([['rest_id','in',$ids]])->update(['status'=>0]);
         if($res){
-            $this->success('É¾³ý³É¹¦');
+            $this->success('删除成功');
         }else{
-            $this->error('É¾³ýÊ§°Ü');
+            $this->error('删除失败');
         }
     }
 }

@@ -108,7 +108,7 @@ layui.define(['jquery', 'table'], function(exports) {
 			type: "get",
 			url: opt.urlBak+kw,
 			success: function(data) {
-				console.log('返回的数据：',data);
+				//console.log('返回的数据：',data);
 				let html = "";
 				layui.each(data.data, (index, item) => {
 					//if (item[sessionStorage.getItem("inputId")].indexOf(decodeURI(kw)) >= 0) {

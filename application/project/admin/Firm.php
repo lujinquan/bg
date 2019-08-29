@@ -63,9 +63,9 @@ class Firm extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             if($data['firm_id']){ //二次录入
-                $result = $this->validate($data, 'Firm.add');
-            }else{ //初次录入
                 $result = $this->validate($data, 'Firm.edit');
+            }else{ //初次录入
+                $result = $this->validate($data, 'Firm.add');
             }
             // 数据验证
             if($result !== true) {
@@ -78,75 +78,131 @@ class Firm extends Admin
             }
             $FirmModel = new FirmModel;
 
-            
-            // 入库
-            if (!$FirmModel->allowField(true)->create($data)) {
-                return $this->error('新增失败');
-            }
-            return $this->success('新增成功');
+            if($data['firm_id']){ //如果存在即是编辑
+                if (!$RestModel->allowField(true)->update($data)) {
+                    return $this->error('编辑失败');
+                }
+                return $this->success('编辑成功');
+            }else{ //如果不存在即是新增 
+                // 入库
+                $res = $FirmModel->allowField(true)->create($data);
+                //halt($res);
+                if (!$res) {
+                    return $this->error('新增失败');
+                }
+                return $this->success('新增成功','',['firm_id'=>$res['firm_id']]);
+            }    
         }
         return $this->fetch();
     }
 
+    /**
+     * 企业编辑
+     * @return [type] [description]
+     */
     public function edit()
     {
         $AnnexModel = new AnnexModel;
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'Rest.add');
-            if($result !== true) {
-                return $this->error($result);
-            }
-            $RestModel = new RestModel();
+            // $result = $this->validate($data, 'Firm.add');
+            // if($result !== true) {
+            //     return $this->error($result);
+            // }
+            $FirmModel = new FirmModel;
             // 入库
-            if (!$RestModel->allowField(true)->update($data)) {
+            if (!$FirmModel->allowField(true)->update($data)) {
                 return $this->error('编辑失败');
             }
             return $this->success('编辑成功');
         }
-        $id = input('param.id/d');
-        $row = RestModel::get($id);
+        $id = input('param.firm_id/d');
+        $row = FirmModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
         //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
 
-    // public function detail()
-    // {
-    //     $AnnexModel = new AnnexModel;
-    //     if ($this->request->isPost()) {
-    //         $data = $this->request->post();
-    //         // 数据验证
-    //         $result = $this->validate($data, 'Rest.add');
-    //         if($result !== true) {
-    //             return $this->error($result);
-    //         }
-    //         $RestModel = new RestModel();
-    //         // 入库
-    //         if (!$RestModel->allowField(true)->update($data)) {
-    //             return $this->error('编辑失败');
-    //         }
-    //         return $this->success('编辑成功');
-    //     }
-    //     $id = input('param.id/d');
-    //     $row = RestModel::get($id);
-    //     $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-    //     $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-    //     $this->assign('banArr',$banArr);
-    //     $this->assign('data_info',$row);
-    //     return $this->fetch();
-    // }
+    /**
+     * 企业管理
+     * @return [type] [description]
+     */
+    public function manage()
+    {
+        $AnnexModel = new AnnexModel;
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 数据验证
+            // $result = $this->validate($data, 'Firm.add');
+            // if($result !== true) {
+            //     return $this->error($result);
+            // }
+            $FirmModel = new FirmModel;
+            // 入库
+            if (!$FirmModel->allowField(true)->update($data)) {
+                return $this->error('编辑失败');
+            }
+            return $this->success('编辑成功');
+        }
+        $id = input('param.firm_id/d');
+        $row = FirmModel::get($id);
+        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        //halt($row);
+        $this->assign('data_info',$row);
+        return $this->fetch();
+    }
 
+    /**
+     * 抵用券发放
+     * @return [type] [description]
+     */
+    public function coupon()
+    {
+        $AnnexModel = new AnnexModel;
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 数据验证
+            // $result = $this->validate($data, 'Firm.add');
+            // if($result !== true) {
+            //     return $this->error($result);
+            // }
+            $FirmModel = new FirmModel;
+            // 入库
+            if (!$FirmModel->allowField(true)->update($data)) {
+                return $this->error('编辑失败');
+            }
+            return $this->success('编辑成功');
+        }
+        $id = input('param.firm_id/d');
+        $row = FirmModel::get($id);
+        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        //halt($row);
+        $this->assign('data_info',$row);
+        return $this->fetch();
+    }
+
+    /**
+     * 企业停用
+     * @return [type] [description]
+     */
+    public function stop()
+    {
+        $ids = $this->request->param('id/a');        
+        $res = FirmModel::where([['firm_id','in',$ids]])->update(['status'=>0]);
+        if($res){
+            $this->success('停用成功');
+        }else{
+            $this->error('删除失败');
+        }
+    }
 
 
     public function del()
     {
         $ids = $this->request->param('id/a');        
-        $res = RestModel::where([['rest_id','in',$ids]])->update(['status'=>0]);
+        $res = FirmModel::where([['firm_id','in',$ids]])->update(['status'=>0]);
         if($res){
             $this->success('删除成功');
         }else{
