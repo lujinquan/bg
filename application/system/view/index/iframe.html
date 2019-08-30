@@ -53,6 +53,13 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                     });
                 }, change: function(id) {
                   element.tabChange('hisiTab', id);
+				  //tab点击编辑后返回列表问题
+				  var othis = $('.layui-tab-title').find('>li[lay-id="' + id + '"]'),
+					  index = othis.parent().children('li').index(othis),
+					  parents = othis.parents('.layui-tab').eq(0),
+					  item = parents.children('.layui-tab-content').children('.layui-tab-item'),
+					  src = item.eq(index).find('iframe').attr("src");
+				     item.eq(index).find('iframe').attr("src", src);
                 }
             };
         $('.admin-nav-item').click(function(event) {
