@@ -45,6 +45,8 @@
     color: #fff;
     border-radius: 50%;
     background: #DADADA;
+	border: #FCFCFC 5px solid;
+	top:-5px;
 }
 
 .step-item-head.step-item-head-active {
