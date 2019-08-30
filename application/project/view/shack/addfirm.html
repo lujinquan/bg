@@ -16,7 +16,7 @@
 {include file="system@block/layui" /}
 <script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
 <script type="text/javascript">   
-           var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];  
+            
 		  /*上传参数设定*/
 		  var upurl = "{:url('system/Api/upload')}?input=Licence&group=ban&water=no"; //上传营业执照
 		  var duotu = true; //是否为多图上传true false
@@ -36,6 +36,9 @@
 
 			  $('.j-jiaoyan').click(function(){
 			  	var firm_name = $('#deptName').val();
+			  	if(!firm_name){
+			  		return false;
+			  	}
 			  	$.ajax({
 					type: 'post',
 					url: '{:url("project/shack/getFirmDetail")}',
@@ -54,6 +57,20 @@
 							$('#firm_established_time').addClass('layui-hide').after('<div class="layui-input-inline" id="new_firm_established_time"><div class="j-words-border">'+forData.firm_established_time+'</div></div>'); // 成立日期
 							$('input[name=firm_registered_address]').parent().html('<div class="j-words-border" id="firm_registered_address">'+forData.firm_registered_address+'</div>'); // 注册地址
 							$('input[name=firm_scope]').parent().html('<div class="j-words-border" id="new_firm_scope">'+forData.firm_scope+'</div>'); // 经营范围
+
+							if(forData.imgs){
+								var str = '';
+								for (var i in forData.imgs) {
+									str += '<dd class="item_img">\
+									<div class="operate">\
+										<i class="layui-icon-close-fill layui-icon"></i>\
+									</div>\
+									<img data-original="'+ forData.imgs[i].file+'" src="'+forData.imgs[i].file +'" class="img" />\
+								</dd>';
+								}
+								$('#upload_img_list1').html(str);
+							}
+						    
 							$('input[name=coupon_num]').val(forData.coupon_num); // 抵用券发放数量
 							$('input[name=coupon_issue_time]').val(forData.coupon_issue_time); // 发放起始时间
 							$('input[name=firm_remark]').val(forData.firm_remark); // 备注
@@ -71,6 +88,7 @@
 							$('#new_firm_established_time').addClass('layui-hide'); // 成立日期
 							$('#firm_registered_address').parent().html('<input type="text" name="firm_registered_address" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 注册地址
 							$('#new_firm_scope').parent().html('<input type="text" name="firm_scope" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 经营范围
+							$('#upload_img_list1').html('');
 							$('input[name=coupon_num]').val(''); // 抵用券发放数量
 							$('input[name=coupon_issue_time]').val(''); // 发放起始时间
 							$('input[name=firm_remark]').val(''); // 备注
@@ -82,9 +100,7 @@
 			  	return false;
 			  });
 
-			  
-			  
-			  
+
 			  //搜索
 			  //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
 			  //初始化部门输入提示框
@@ -103,16 +119,39 @@
 			  transfer.render({
 				elem: '#transfer1'
 				,data: data1
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
 			  //独立办公区
 			   transfer.render({
 				elem: '#transfer2'
 				,data: data2
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
+			var firm_id = $('input[name=firm_id]').val();
+			var upurl1 = "{:url('import')}?firm_id=" + firm_id + "&input=ImportMember&group=project&water=no";
+			upload.render({
+		      elem: '#import',
+		      url: upurl1,
+		      size: 1024,
+		      exts:'xlsx|xls',
+		      accept: 'file',
+		      field: 'ImportMember',
+		      before: function(obj) {
+		        layer.msg('导入中...', {
+		          icon: 16,
+		          shade: 0.01,
+		          time: 0
+		        })
+		      },
+		      done: function(res) {
+		      	layer.close(layer.msg()); //关闭上传提示窗口
+		      	// if(res.code){
+		      	// 	layer.msg(res.msg);
+		      	// }
+		      }
+		  });
 		    //场地图片
 		    upload.render({
 		      elem: '#upload_img1',
@@ -199,17 +238,7 @@
 			    }
 			  }
 			});
-			//多选标签-基本配置
-			var tagIns1 = selectM({
-			  //元素容器【必填】
-			  elem: '#floor_number'
-			  //候选数据【必填】
-			  ,data: tagData
-			  //,max:10
-			  ,width:400
-			  //添加验证
-			  //,verify:'required'      
-			});
+			
 			//成立日期
 			laydate.render({
 				elem: '#test1'
@@ -261,28 +290,28 @@
 		            options = new Function('return '+ that.attr('lay-data'))();
 		        }
 		        that.prop('disabled', true).text('提交中...');
-		        // $.ajax({
-		        //     type: "POST",
-		        //     url: _form.attr('action'),
-		        //     data: _form.serialize(),
-		        //     success: function(res) {
-		        //         that.text(res.msg);
-		        //         if (res.code == 0) {
-		        //             that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
-		        //             setTimeout(function(){
-		        //                 that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
-		        //             }, 3000);
-		        //         } else {
-		        //             setTimeout(function() {
-		        //                 //that.text(text).prop('disabled', false);
-		        //                 that.prop('disabled', false);
-		        //                 $('input[name=firm_id]').val(res.data.firm_id);
-		        //                 step.next('#stepForm');
-		        //             }, 3000);
-		        //         }
-		        //     }
-		        // });
-		        step.next('#stepForm');
+		        $.ajax({
+		            type: "POST",
+		            url: _form.attr('action'),
+		            data: _form.serialize(),
+		            success: function(res) {
+		                that.text(res.msg);
+		                if (res.code == 0) {
+		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+		                    setTimeout(function(){
+		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+		                    }, 3000);
+		                } else {
+		                    setTimeout(function() {
+		                        //that.text(text).prop('disabled', false);
+		                        that.prop('disabled', false);
+		                        $('input[name=firm_id]').val(res.data.firm_id);
+		                        step.next('#stepForm');
+		                    }, 3000);
+		                }
+		            }
+		        });
+		        //step.next('#stepForm');
 			    return false;
 			});
 
@@ -303,28 +332,27 @@
 		            options = new Function('return '+ that.attr('lay-data'))();
 		        }
 		        that.prop('disabled', true).text('提交中...');
-		        // $.ajax({
-		        //     type: "POST",
-		        //     url: _form.attr('action'),
-		        //     data: _form.serialize(),
-		        //     success: function(res) {
-		        //         that.text(res.msg);
-		        //         if (res.code == 0) {
-		        //             that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
-		        //             setTimeout(function(){
-		        //                 that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
-		        //             }, 3000);
-		        //         } else {
-		        //             setTimeout(function() {
-		        //                 //that.text(text).prop('disabled', false);
-		        //                 that.prop('disabled', false);
-		        //                 $('input[name=firm_id]').val(res.data.firm_id);
-		        //                 step.next('#stepForm');
-		        //             }, 3000);
-		        //         }
-		        //     }
-		        // });
-			    step.next('#stepForm');
+		        $.ajax({
+		            type: "POST",
+		            url: _form.attr('action'),
+		            data: _form.serialize(),
+		            success: function(res) {
+		                that.text(res.msg);
+		                if (res.code == 0) {
+		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+		                    setTimeout(function(){
+		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+		                    }, 3000);
+		                } else {
+		                    setTimeout(function() {
+		                        //that.text(text).prop('disabled', false);
+		                        that.prop('disabled', false);
+		                        $('input[name=firm_id]').val(res.data.firm_id);
+		                        step.next('#stepForm');
+		                    }, 3000);
+		                }
+		            }
+		        });
 			    return false;
 			});
 			//上一步
@@ -361,9 +389,6 @@
 			    var that = $(this);
 			    that.parent().remove();
 			});
-			
-			
-
 			
 		  });
 		  //图片查看

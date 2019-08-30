@@ -16,11 +16,13 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
-use app\space\model\SiteGroup as SiteGroupModel;
-use app\project\model\Shack as ShackModel;
 use app\project\model\Firm as FirmModel;
+use app\project\model\Shack as ShackModel;
+use app\project\model\Member as MemberModel;
 use app\system\model\SystemGuard as GuardModel;
 use app\common\model\SystemAnnex as AnnexModel;
+use app\space\model\SiteGroup as SiteGroupModel;
+include EXTEND_PATH.'phpexcel/PHPExcel.php';
 
 class Shack extends Admin
 {
@@ -45,6 +47,10 @@ class Shack extends Admin
         return $this->fetch();
     }
 
+    /**
+     * 获取企业列表
+     * @return [type] [description]
+     */
     public function getFirms()
     {
         $keywords = input('param.keywords/s');
@@ -61,6 +67,52 @@ class Shack extends Admin
 
     }
 
+    /**
+     * 获取企业人员列表
+     * @return [type] [description]
+     */
+    public function getMembers()
+    {
+        $keywords = input('param.keywords/s');
+        $where = [];
+        $where[] = ['status','eq',1];
+        // 查询公司名称
+        if($keywords){
+            $where[] = ['member_name','like','%'.$keywords.'%'];
+        }
+        $data = [];
+        $data['code'] = 0;
+        $data['data'] = MemberModel::with('firm')->where($where)->field('firm_id ,member_id,member_name,member_tel')->select();
+        $data['count'] = MemberModel::where($where)->count();
+        //halt($data);
+        return json($data);
+
+    }
+
+    /**
+     * 获取企业信息
+     * @return [type] [description]
+     */
+    public function getMemberDetail()
+    {
+        $member_name = input('param.member_name');
+        $where[] = ['member_name','eq',$member_name];
+        //halt($where);
+        $row = MemberModel::where($where)->find();
+        if($row){
+            $data = [];
+            $data['data'] = $row;
+            $data['code'] = 1;
+            return json($data);
+        }else{
+            return $this->error('系统中无该人员数据');
+        }
+    }
+
+    /**
+     * 获取企业信息
+     * @return [type] [description]
+     */
     public function getFirmDetail()
     {
         $firm_name = input('param.firm_name');
@@ -68,6 +120,7 @@ class Shack extends Admin
         $where[] = ['firm_name','eq',$firm_name];
         $row = FirmModel::where($where)->find();
         if($row){
+            $row['imgs'] = AnnexModel::changeFormat($row['firm_imgs']);
             $data = [];
             $data['data'] = $row;
             $data['code'] = 1;
@@ -75,6 +128,62 @@ class Shack extends Admin
         }else{
             return $this->error('系统中无该公司数据');
         }
+    }
+
+    public function import($from = 'input', $group = 'sys', $water = '', $thumb = '', $thumb_type = '', $input = 'file')
+    {
+
+        $res = AnnexModel::upload($from, $group, $water, $thumb, $thumb_type, $input);
+        //halt($res['data']['file']);
+        //$fileName = "./upload/project/file/20190830/d1f12e109079fb4886b53beaee1e4c95.xls";
+        $fileName = '.'.$res['data']['file'];
+        $keyNames = ['member_name','member_tel','member_post','member_department','member_card'];
+        $extension = strtolower( pathinfo($fileName, PATHINFO_EXTENSION) );
+     
+        if ($extension =='xlsx') {
+            $objReader = new \PHPExcel_Reader_Excel2007();
+            $objPhpExcel = $objReader ->load($fileName);
+        } else if ($extension =='xls') {
+            $objReader = new \PHPExcel_Reader_Excel5();
+            $objPhpExcel = $objReader ->load($fileName);
+        } else if ($extension=='csv') {
+            $PHPReader = new \PHPExcel_Reader_CSV();
+     
+            //默认输入字符集
+            $PHPReader->setInputEncoding('GBK');
+     
+            //默认的分隔符
+            $PHPReader->setDelimiter(',');
+     
+            //载入文件
+            $objPhpExcel = $PHPReader->load($fileName);
+        }
+     
+        $sheet = $objPhpExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();//获得总行数
+        $highestColumn = $sheet->getHighestColumn();//获得总列数
+        $to = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI'];
+        $k = 0;
+        $data = [];
+        $hightNum = array_search($highestColumn,$to);
+        if($hightNum <2){
+            return $this->error('导入数据为空');
+        }
+        for($j=2;$j<=$highestRow;$j++)
+        {
+            for ($i=0;$i<=$hightNum;$i++){
+                $data[$j][$keyNames[$i]] = $objPhpExcel->getActiveSheet()->getCell($to[$i].$j)->getValue();
+            }
+            $data[$j]['firm_id'] = 1;
+            $data[$j]['project_id'] = PROJECT_ID;
+        }
+        $MemberModel = new MemberModel;
+        //halt($data);
+        if (!$MemberModel->allowField(true)->saveAll($data)) {
+            return $this->error('导入失败');
+        }
+        //halt($data);
+        return $this->success('导入成功');
     }
 
     // public function ceshi()
@@ -117,20 +226,38 @@ class Shack extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'Rest.add');
-            if($result !== true) {
-                return $this->error($result);
+            // $result = $this->validate($data, 'Rest.add');
+            // if($result !== true) {
+            //     return $this->error($result);
+            // }
+            if (isset($data['member_name'])) {
+                $memberModel = new MemberModel;
+                if(isset($data['member_id'])){
+                    $memberModel->allowField(true)->save($data);
+                }else{
+                    $memberModel->allowField(true)->create($data);
+                }  
             }
+
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            $RestModel = new RestModel;
-            unset($data['rest_id']);
+            if(isset($data['guard'])){
+                $data['guard'] = [
+                    'ban' => $data['ban'],
+                    'floor' => $data['floor'],
+                    'guard' => $data['guard'],
+                ];
+            }
+            
+            $data['cuid'] = ADMIN_ID;
+            $ShackModel = new ShackModel;
+            //unset($data['id']);
             //halt($data);
             // 入库
-            if (!$RestModel->allowField(true)->create($data)) {
+            if (!$ShackModel->allowField(true)->create($data)) {
                 return $this->error('新增失败');
             }
             return $this->success('新增成功');

@@ -15,7 +15,10 @@ class Shack extends Model
     protected $autoWriteTimestamp = true;
 
     protected $type = [
+        'shack_start_time' => 'timestamp:Y-m-d',
+        'shack_end_time' => 'timestamp:Y-m-d',
         'ctime' => 'timestamp:Y-m-d H:i:s',
+        'guard' =>  'json',
     ];
 
     public function firm()

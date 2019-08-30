@@ -1,77 +1,101 @@
-			<form class="layui-form j-top-margin j-long-words" action="{:url()}" method="post" >
-				<div class="layui-form-item">
-					<div class="layui-inline">
-					  <label class="layui-form-label"><i class="red">*</i> 入驻时间：</label>
-					  <div class="layui-input-inline" style="width: 190px;">
-				  <input type="text" name="firm_start_time" class="layui-input"  lay-vertype="tips" id="test3" placeholder="请选择时间">
-				  </div>
-				  <div class="layui-form-mid">-</div>
-				  <div class="layui-input-inline" style="width: 190px;">
-				  <input type="text" name="firm_end_time" class="layui-input"  lay-vertype="tips" id="test4" placeholder="请选择时间">
-				  </div>
-					</div>
-				 </div>
-				  <div class="layui-form-item">
-				     <div class="layui-inline">
-				       <label class="layui-form-label"><i class="red">*</i>楼宇：</label>
-				       <div class="layui-input-inline">
-				         <select name="ban_id"  lay-verType="tips" class="field-cid" type="select">
-				             <option value="">请选择</option>
-				             {volist name="banArr" id="v"}
-		      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
-		      			    {/volist}
-				         </select>
-				       </div>
-				     </div>
-				 </div>
-				 <div class="layui-form-item">
-				       <label class="layui-form-label"><i class="red">*</i>楼层：</label>
-				       <div class="layui-input-block" id="floor_number"  lay-verType="tips"></div>
-				 </div>
-				 <div class="layui-form-item">
-				       <label class="layui-form-label"><i class="red">*</i>联合工位区：</label>
-				       <div class="layui-input-block">
-						   <div id="transfer1" class="demo-transfer"></div>
-					   </div>
-				 </div>
-				  <div class="layui-form-item">
-				       <label class="layui-form-label"><i class="red">*</i>独立工位区：</label>
-				       <div class="layui-input-block">
-						   <div id="transfer2" class="demo-transfer"></div>
-					   </div>
-				 </div>
-				 <div class="layui-form-item" pane="">
-				     <label class="layui-form-label"><i class="red">*</i>门禁：</label>
-				     <div class="layui-input-inline">
-				       <select name="" class="field-role_id"  lay-verType="tips" lay-filter="filter" type="select">
-				             <option value="">请选择</option>
-				             {volist name="guardArr" id="v"}
-				             {if condition="$v['pid'] == 0"}
-				             <option value="{$v['id']}">{$v['title']}</option>
-				             {/if}
-				             {/volist}
-				         </select>
-				     </div>
-				 </div>
-				 <div class="layui-form-item j-hides hide">
-				       <label class="layui-form-label"></label>
-				       <div class="layui-input-block">
-				          <div id="firstpane" class="menu_list"></div>
-				       </div>
-				 </div>
-				<div class="layui-form-item">
-					   <div class="layui-col-md8">
-						 <label class="layui-form-label">备注：</label>
-						 <div class="layui-input-block">
-						   <input type="text" name="shack_remarks"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
-						 </div>
-					   </div>
-				 </div>
-				<div class="layui-form-item">
-					<div class="layui-input-block">
-						<button type="button" class="layui-btn layui-btn-primary pre">返回上一步</button>
-						<button type="reset" class="layui-btn layui-btn-primary">取消</button>
-						<button class="layui-btn layui-btn-normal" lay-submit lay-filter="formStep2">确认</button>
-					</div>
-				</div>
-			</form>
+<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">
+				<i class="red">
+					*
+				</i>
+				入驻时间：
+			</label>
+			<div class="layui-input-inline" style="width: 190px;">
+				<input type="text" name="shack_start_time" class="layui-input" lay-vertype="tips"
+				id="test3" placeholder="请选择时间">
+			</div>
+			<div class="layui-form-mid">
+				-
+			</div>
+			<div class="layui-input-inline" style="width: 190px;">
+				<input type="text" name="shack_end_time" class="layui-input" lay-vertype="tips"
+				id="test4" placeholder="请选择时间">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">
+			<i class="red">
+				*
+			</i>
+			联合工位区：
+		</label>
+		<div class="layui-input-block">
+			<div id="transfer1" class="demo-transfer">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">
+			<i class="red">
+				*
+			</i>
+			独立工位区：
+		</label>
+		<div class="layui-input-block">
+			<div id="transfer2" class="demo-transfer">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item" pane="">
+		<label class="layui-form-label">
+			<i class="red">
+				*
+			</i>
+			门禁：
+		</label>
+		<div class="layui-input-inline">
+			<select name="" class="field-role_id" lay-verType="tips" lay-filter="filter"
+			type="select">
+				<option value="">
+					请选择
+				</option>
+				{volist name="guardArr" id="v"} {if condition="$v['pid'] == 0"}
+				<option value="{$v['id']}">
+					{$v['title']}
+				</option>
+				{/if} {/volist}
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item j-hides hide">
+		<label class="layui-form-label">
+		</label>
+		<div class="layui-input-block">
+			<div id="firstpane" class="menu_list">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-col-md8">
+			<label class="layui-form-label">
+				备注：
+			</label>
+			<div class="layui-input-block">
+				<input type="text" name="shack_remarks" placeholder="备注描述..." lay-verType="tips"
+				autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="firm_id" value="">
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button type="button" class="layui-btn layui-btn-primary pre">
+				返回上一步
+			</button>
+			<button type="reset" class="layui-btn layui-btn-primary">
+				取消
+			</button>
+			<button class="layui-btn layui-btn-normal" lay-submit lay-filter="formStep2">
+				确认
+			</button>
+		</div>
+	</div>
+</form>

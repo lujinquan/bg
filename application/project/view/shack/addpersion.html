@@ -4,13 +4,12 @@
 	   <li class="layui-this">个人入驻</li>
 	</ul>
 </div>
-<form class="layui-form j-top-margin j-long-words" action="{:url('firm/add')}" method="post" id="addForm">
+<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post" id="addForm">
 	<div class="layui-form-item">
 		   <div class="layui-col-md8">
 			 <label class="layui-form-label"><i class="red">*</i>姓名：</label>
 			 <div class="layui-input-block j-name j-position">
-			   <input type="text" id="deptName" name="firm_name"  lay-verType="tips" autocomplete="off" placeholder="请输入部门"
-				class="layui-input" />
+				<input type="text" id="member_name" name="member_name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input" />
 			   <button class="layui-btn layui-btn-normal j-jiaoyan">
 				  <i class="layui-icon"></i>校验
 				 </button>
@@ -21,22 +20,26 @@
 		  <div class="layui-inline">
 			<label class="layui-form-label"><i class="red">*</i>电话：</label>
 			<div class="layui-input-inline">
-			  <input type="tel" name="firm_tel"  lay-verify="required|phone"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+			  <input type="tel" name="member_tel"  lay-verify="required|phone"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		  </div>
 	   </div>
 	   <div class="layui-form-item">
 	       <label class="layui-form-label">性别：</label>
-	       <div class="layui-input-block">
-	         <input type="radio" name="sex" value="男" title="男" checked="">
-	         <input type="radio" name="sex" value="女" title="女">
+	       <div class="layui-input-block" id="member_sex1">
+	         <input type="radio" name="member_sex" value="1" title="男" checked="">
+	         <input type="radio" name="member_sex" value="0" title="女">
+	       </div>
+			<div class="layui-input-block layui-hide" id="member_sex2">
+	         <input type="radio" name="member_sex" value="1" title="男">
+	         <input type="radio" name="member_sex" value="0" title="女" checked="">
 	       </div>
 	    </div>
 	   <div class="layui-form-item">
 	   		  <div class="layui-inline">
 	   			<label class="layui-form-label">身份证号：</label>
 	   			<div class="layui-input-inline">
-	   			  <input type="text" name="firm_tel"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+	   			  <input type="text" name="member_card"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
 	   			</div>
 	   		  </div>
 	    </div>
@@ -44,7 +47,7 @@
 			   <div class="layui-col-md8">
 				 <label class="layui-form-label">备注：</label>
 				 <div class="layui-input-block">
-				   <input type="text" name="firm_remark"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
+				   <input type="text" name="member_remark"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
 				 </div>
 			   </div>
 		 </div>
@@ -52,31 +55,15 @@
 		 	<div class="layui-inline">
 		 	  <label class="layui-form-label"><i class="red">*</i> 入驻时间：</label>
 		 	  <div class="layui-input-inline" style="width: 190px;">
-		   <input type="text" name="firm_start_time" class="layui-input"  lay-vertype="tips" id="test3" placeholder="请选择时间">
+		   <input type="text" name="shack_start_time" class="layui-input"  lay-vertype="tips" id="test3" placeholder="请选择时间">
 		   </div>
 		   <div class="layui-form-mid">-</div>
 		   <div class="layui-input-inline" style="width: 190px;">
-		   <input type="text" name="firm_end_time" class="layui-input"  lay-vertype="tips" id="test4" placeholder="请选择时间">
+		   <input type="text" name="shack_end_time" class="layui-input"  lay-vertype="tips" id="test4" placeholder="请选择时间">
 		   </div>
 		 	</div>
 		  </div>
-		   <div class="layui-form-item">
-		      <div class="layui-inline">
-		        <label class="layui-form-label"><i class="red">*</i>楼宇：</label>
-		        <div class="layui-input-inline">
-		          <select name="ban_id"  lay-verType="tips" class="field-cid" type="select">
-		              <option value="">请选择</option>
-		              {volist name="banArr" id="v"}
-		 		    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
-		 		    {/volist}
-		          </select>
-		        </div>
-		      </div>
-		  </div>
-		  <div class="layui-form-item">
-		        <label class="layui-form-label"><i class="red">*</i>楼层：</label>
-		        <div class="layui-input-block" id="floor_number"  lay-verType="tips"></div>
-		  </div>
+
 		  <div class="layui-form-item">
 		        <label class="layui-form-label"><i class="red">*</i>联合工位区：</label>
 		        <div class="layui-input-block">
@@ -108,11 +95,11 @@
 		           <div id="firstpane" class="menu_list"></div>
 		        </div>
 		  </div>
-		<input type="hidden" name="firm_id" value="">
+		<input type="hidden" name="member_id" value="">
 		<div class="layui-form-item j-item-top">
 		   <div class="layui-input-block">
 			 <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-			 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button>
+			 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button>
 		   </div>
 		</div>
 	</form>
@@ -120,7 +107,7 @@
 {include file="system@block/layui" /}
 <script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
 <script type="text/javascript">   
-           var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];  
+           
 		   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
 		    var laydate = layui.laydate,
 		      $ = layui.$,
@@ -136,46 +123,34 @@
 
 
 			  $('.j-jiaoyan').click(function(){
-			  	var firm_name = $('#deptName').val();
+			  	var member_name = $('#member_name').val();
 			  	$.ajax({
 					type: 'post',
-					url: '{:url("project/shack/getFirmDetail")}',
-					data: "firm_name=" + firm_name,
+					url: '{:url("project/shack/getMemberDetail")}',
+					data: "member_name=" + member_name,
 					success: function(datas) {
-						console.log(datas);
+						//console.log(datas);
 						if(datas.code){
 							var forData = datas.data;
-							
-							$('input[name=firm_manager]').val(forData.firm_manager); // 联系人姓名
-							$('input[name=firm_tel]').val(forData.firm_tel); // 联系人电话
-							$('input[name=firm_credit_code]').parent().html('<div class="j-words-border" id="firm_credit_code">'+forData.firm_credit_code+'</div>'); // 社会信用代码
-							$('#industry_type').addClass('layui-hide').after('<div class="layui-input-inline" id="new_industry_type"><div class="j-words-border">'+params.firm_industry_type[forData.firm_industry_type]+'</div></div>'); // 所属行业
-							$('input[name=firm_registered_capital]').parent().html('<div class="j-words-border" id="new_firm_registered_capital">'+forData.firm_registered_capital+'万元</div>'); // 注册资本
-							$('input[name=firm_legaler]').parent().html('<div class="j-words-border" id="new_firm_legaler">'+forData.firm_legaler+'</div>'); // 法人姓名
-							$('#firm_established_time').addClass('layui-hide').after('<div class="layui-input-inline" id="new_firm_established_time"><div class="j-words-border">'+forData.firm_established_time+'</div></div>'); // 成立日期
-							$('input[name=firm_registered_address]').parent().html('<div class="j-words-border" id="firm_registered_address">'+forData.firm_registered_address+'</div>'); // 注册地址
-							$('input[name=firm_scope]').parent().html('<div class="j-words-border" id="new_firm_scope">'+forData.firm_scope+'</div>'); // 经营范围
-							$('input[name=coupon_num]').val(forData.coupon_num); // 抵用券发放数量
-							$('input[name=coupon_issue_time]').val(forData.coupon_issue_time); // 发放起始时间
-							$('input[name=firm_remark]').val(forData.firm_remark); // 备注
-							$('input[name=firm_id]').val(forData.firm_id); // 公司id
-							// 营业执照没处理
+							if(forData.member_sex){
+								$('#member_sex1').addClass('layui-show').removeClass('layui-hide');
+								$('#member_sex2').addClass('layui-hide').removeClass('layui-show');
+							}else{
+								$('#member_sex2').addClass('layui-show').removeClass('layui-hide');
+								$('#member_sex1').addClass('layui-hide').removeClass('layui-show');
+							}
+							// 电话
+							//$('input[name=member_sex]').eq(forData.member_sex).removeAttr('checked');
+							$('input[name=member_tel]').val(forData.member_tel); // 电话
+							$('input[name=member_card]').val(forData.member_card); // 身份证号
+							$('input[name=member_remark]').val(forData.member_remark); // 备注
+							$('input[name=member_id]').val(forData.member_id); // 备注
 						}else{
-							$('input[name=firm_manager]').val(''); // 联系人姓名
-							$('input[name=firm_tel]').val(''); // 联系人电话
-							$('#firm_credit_code').parent().html('<input type="text" name="firm_credit_code" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 社会信用代码
-							$('#industry_type').addClass('layui-show').removeClass('layui-hide');
-							$('#new_industry_type').addClass('layui-hide'); // 所属行业
-							$('#new_firm_registered_capital').parent().html('<input type="text" name="firm_registered_capital" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input"><b class="j-explain-name">万元</b>');// 注册资本
-							$('#new_firm_legaler').parent().html('<input type="text" name="firm_legaler" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 法人姓名
-							$('#firm_established_time').addClass('layui-show').removeClass('layui-hide'); // 所属行业
-							$('#new_firm_established_time').addClass('layui-hide'); // 成立日期
-							$('#firm_registered_address').parent().html('<input type="text" name="firm_registered_address" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 注册地址
-							$('#new_firm_scope').parent().html('<input type="text" name="firm_scope" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 经营范围
-							$('input[name=coupon_num]').val(''); // 抵用券发放数量
-							$('input[name=coupon_issue_time]').val(''); // 发放起始时间
-							$('input[name=firm_remark]').val(''); // 备注
-							$('input[name=firm_id]').val(''); //公司id
+							$('#member_sex1').addClass('layui-show').removeClass('layui-hide');
+							$('#member_sex2').addClass('layui-hide').removeClass('layui-show');
+							$('input[name=member_tel]').val(''); // 电话
+							$('input[name=member_card]').val(''); // 身份证号
+							$('input[name=member_remark]').val(''); // 备注
 						}
 						
 					}
@@ -186,33 +161,33 @@
 			  //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
 			  //初始化部门输入提示框
 			   yutons_sug.render({
-				id: "deptName", //设置容器唯一id
-				height: "167",
+				id: "member_name", //设置容器唯一id
+				height: "200",
 				cols: [
 					[{
-						field: 'userName',
+						field: 'member_name',
 						title: '姓名'
 					}, {
-						field: 'userCode',
+						field: 'firm_name',
 						title: '公司'
 					}, {
-						field: 'deptName',
+						field: 'member_tel',
 						title: '联系电话'
 					}]
 				], //设置表头
 				params: [
 				{
-					name: 'userName',
-					field: 'userName'
+					name: 'member_name',
+					field: 'member_name'
 				}, {
-					name: 'userCode',
-					field: 'userCode'
+					name: 'firm_name',
+					field: 'firm_name'
 				}, {
-					name: 'deptName',
-					field: 'deptName'
+					name: 'member_tel',
+					field: 'member_tel'
 				}],
 				type: 'sugTable', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
-				url: "/admin.php/project/shack/getFirms?keywords=" //设置异步数据接口,url为必填项
+				url: "/admin.php/project/shack/getMembers?keywords=" //设置异步数据接口,url为必填项
 			  });
 			  
 			 
@@ -224,14 +199,14 @@
 			  transfer.render({
 				elem: '#transfer1'
 				,data: data1
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
 			  //独立办公区
 			   transfer.render({
 				elem: '#transfer2'
 				,data: data2
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
 			//门禁
@@ -285,17 +260,7 @@
 			    }
 			  }
 			});
-			//多选标签-基本配置
-			var tagIns1 = selectM({
-			  //元素容器【必填】
-			  elem: '#floor_number'
-			  //候选数据【必填】
-			  ,data: tagData
-			  //,max:10
-			  ,width:400
-			  //添加验证
-			  //,verify:'required'      
-			});
+			
 			//入驻开始时间
 			laydate.render({
 				elem: '#test3'

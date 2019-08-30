@@ -15,9 +15,9 @@ namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
-use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
+use app\common\model\SystemAnnex as AnnexModel;
 
 class Floor extends Admin
 {
