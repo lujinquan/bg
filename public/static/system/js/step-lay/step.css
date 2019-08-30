@@ -51,10 +51,6 @@
     background: #20A0FF;
     color: #ffffff;
 }
-.step-item-head.step-item-head-active ~  .step-item-main{
-    color: #20A0FF;
-}
-
 .step-item-main {
     display: block;
     position: relative;
@@ -66,9 +62,11 @@
 
 .step-item-main-title {
     font-weight: bolder;
-    color: #555555;
+    color: #9B9B9B;
 }
-
+.step-item-head.step-item-head-active + div.step-item-main .step-item-main-title{
+	color: #20A0FF
+}
 .step-item-main-desc {
     color: #aaaaaa;
 }
