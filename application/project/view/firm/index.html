@@ -13,7 +13,7 @@
 					  <input type="text" name="shack_end_time" placeholder="到期时间" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					 <select name="shack_status" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
+					 <select name="shack_status"   lay-verType="tips" class="field-cid" type="select">
 		  			    <option value="">请选择状态</option>
 		  			    {volist name="params['shack_status']" id="v"}
 		                <option value="{$key}">{$v}</option>
