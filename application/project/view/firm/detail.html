@@ -1,2 +1,136 @@
-{include file="system@block/layui" /}
-详情页
+<!-- 内容区 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">详情</li></ul>
+</div>
+<div class="j-details-from">
+  <form class="layui-form j-top-margin" method="post" id="addForm">
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>企业信息</legend></fieldset>
+    <div class="layui-form-item">
+      <label class="layui-form-label">企业名称：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">北京时标文化传播有限公司</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">联系人姓名：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">李某某</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">联系人电话：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">15677777777</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">社会信用代码：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">1031021021000</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">所属行业：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">互联网</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">注册资金：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">1000000</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">法人姓名：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">周某某</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">成立日期：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">2014/06/03</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">注册地址：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">湖北省武汉市</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">经营范围：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">我是内容描述</div></div>
+    </div>
+    <div class="layui-form-item j-positions-size">
+      <div class="layui-inline">
+        <label class="layui-form-label">营业执照：</label>
+        <div class="layui-input-block j-uplode-block">
+          <div class="upload_img_list j-viewer-img">
+            <dd class="item_img">
+              <img src="/upload/ban/image/20190822/0b3e8ba58e28639abd9d080b07decd5e.png" class="img"></dd>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-col-md8">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+          <input type="text" name="meet_remark" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+      </div>
+    </div>
+    <!-- 工位信息 S-->
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>工位信息</legend></fieldset>
+    <div class="layui-form-item">
+      <label class="layui-form-label">入驻时间：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">2019/01/02 —— 2020/01/01</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">楼宇：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">楼宇三</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">楼层：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">12</div></div>
+    </div>
+    <div class="layui-form-item j-no-disabled">
+      <label class="layui-form-label">联合工位区：</label>
+      <div class="layui-input-block j-input-route">
+        <input type="checkbox" name="union_ids[]" value="1" lay-skin="primary" title="A301" checked="" disabled>
+        <input type="checkbox" name="union_ids[]" value="2" lay-skin="primary" title="A302" checked="" disabled></div>
+    </div>
+    <div class="layui-form-item j-no-disabled">
+      <label class="layui-form-label">门禁：</label>
+      <div class="layui-input-block j-input-route">
+        <input type="checkbox" name="door_ids[]" value="1" lay-skin="primary" title="门禁一" checked="" disabled>
+        <input type="checkbox" name="door_ids[]" value="2" lay-skin="primary" title="门禁二" checked="" disabled></div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-col-md8">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+          <input type="text" name="meet_remarks" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+      </div>
+    </div>
+    <!-- 工位信息E -->
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>其它</legend></fieldset>
+    <div class="layui-form-item j-positions-size">
+      <div class="layui-inline">
+        <label class="layui-form-label">合同：</label>
+        <div class="layui-input-block j-uplode-block">
+          <div class="upload_img_list j-viewer-img">
+            <dd class="item_img">
+              <img src="/upload/ban/image/20190822/0b3e8ba58e28639abd9d080b07decd5e.png" class="img"></dd>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item j-top-formmargin">
+      <div class="layui-input-block">
+        <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button></div>
+    </div>
+    </from>
+</div>
+<!-- 内容区 -->{include file="system@block/layui" /}
