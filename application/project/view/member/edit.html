@@ -1,2 +1,125 @@
+<!-- 内容区 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">编辑</li></ul>
+</div>
+<form class="layui-form j-top-margin j-long-words" action="{:url('firm/add')}" method="post" id="addForm">
+  <fieldset class="layui-elem-field layui-field-title j-size-color">
+  	<legend>基础信息</legend>
+  </fieldset>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+  	<label class="layui-form-label"><i class="red">*</i>姓名：</label>
+  	<div class="layui-input-inline j-name">
+  	  <input type="text" name="enterprise_name" lay-verify="required" placeholder="请输入姓名" lay-verType="tips" autocomplete="off" class="layui-input">
+  	</div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+  	<label class="layui-form-label"><i class="red">*</i>电话：</label>
+  	<div class="layui-input-inline">
+  	  <input type="tel" name="enterprise_telephone" lay-verify="required|phone" placeholder="请输入电话" lay-verType="tips" autocomplete="off" class="layui-input">
+  	</div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><i class="red">*</i>身份证号：</label>
+    <div class="layui-input-inline">
+	  <input type="text" name="member_card" lay-verify="required" placeholder="请输入身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+  	<label class="layui-form-label"><i class="red">*</i>性别：</label>
+  	 <div class="layui-input-block">
+  		<div class="j-words-border">女</div>
+  	</div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">职位：</label>
+    <div class="layui-input-inline">
+  	  <input type="text" name="member_position"  placeholder="请输入职位" lay-verType="tips" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">部门：</label>
+    <div class="layui-input-inline">
+  	  <input type="text" name="member_department"  placeholder="请输入部门" lay-verType="tips" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+  	   <div class="layui-col-md8">
+  		 <label class="layui-form-label">所属企业：</label>
+  		 <div class="layui-input-block">
+			  <div class="j-words-border">楚天新媒</div>
+  		 </div>
+  	   </div>
+   </div>
+   <div class="layui-form-item">
+   	   <div class="layui-col-md8">
+   		 <label class="layui-form-label">入驻时间：</label>
+   		 <div class="layui-input-block">
+   			  <div class="j-words-border">2019/01/02</div>
+   		 </div>
+   	   </div>
+    </div>
+	<div class="layui-form-item">
+		   <div class="layui-col-md8">
+			 <label class="layui-form-label">状态：</label>
+			 <div class="layui-input-block">
+				  <div class="j-words-border">未激活</div>
+			 </div>
+		   </div>
+	 </div>
+  <fieldset class="layui-elem-field layui-field-title j-size-color">
+  	<legend>权限设置</legend>
+  </fieldset>
+  <div class="layui-form-item">
+  	   <div class="layui-col-md8">
+  		 <label class="layui-form-label">企业管理员：</label>
+  		 <div class="layui-input-block">
+  			  <div class="j-words-border">李么么</div>
+  		 </div>
+  	   </div>
+   </div>
+  <div class="layui-form-item" pane="">
+    <label class="layui-form-label">
+      <i class="red">*</i>门禁：</label>
+    <div class="layui-input-inline">
+      <select name="" class="field-role_id" lay-verType="tips" lay-filter="filter" type="select">
+        <option value="">请选择</option>
+        <option value="1">门禁1</option>
+	  </select>
+    </div>
+  </div>
+  <div class="layui-form-item j-hides hide">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <div id="firstpane" class="menu_list"></div>
+    </div>
+  </div>
+  <div class="layui-form-item j-item-top">
+    <div class="layui-input-block">
+      <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button></div>
+  </div>
+</form>
+<!-- 内容区 -->
 {include file="system@block/layui" /}
-人员修改页面
+<script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript">   
+		   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer'], function() {
+		    var laydate = layui.laydate,
+		      $ = layui.$,
+		      upload = layui.upload,
+		      form = layui.form,
+			  transfer = layui.transfer,
+			  layer = layui.layer,
+			  step = layui.step,
+			  selectN = layui.selectN,
+			  selectM = layui.selectM,
+			  util = layui.util,
+			  yutons_sug = layui.yutons_sug;
+
+		  }); 
+		</script>

@@ -118,6 +118,7 @@ opacity: .8color: #333;}
 .j-from-box .j-form-label.j-add{ text-align: left; color: #20A0FF; font-size: 16px; cursor: pointer;}
 .layui-form.j-top-margin.j-padding-right{padding: 20px 200px 0 0;}
 .j-words-border{ line-height: 36px; color: #4A4A4A;}
+.j-words-border label{ color:#20A0FF;}
 .j-tips{ color: #FFB84D; font-size: 12px; margin-top: 10px;}
 .j-tips i{ font-size: 8px;}
 .j-padding-right .layui-col-space30{margin: -15px -15px 0;}
