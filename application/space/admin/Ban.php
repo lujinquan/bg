@@ -107,7 +107,11 @@ class Ban extends Admin
             $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
             if(!password_verify($password, $realPassword)){
                 $this->error('密码效验失败');
-            }      
+            }   
+            $floors = FloorModel::where([['ban_id','eq',$id]])->count('floor_id'); 
+            if($floors){
+                $this->error('请先删除该楼宇下所有楼层');   
+            }
             $res = BanModel::where([['ban_id','eq',$id]])->update(['status'=>0]);
             if($res){
                 $this->success('删除成功');

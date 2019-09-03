@@ -33,7 +33,7 @@ class Firm extends Admin
             $getData = $this->request->get();
             $ShackModel = new ShackModel;
             $where = $ShackModel->checkWhere($getData);
-            $fields = 'b.firm_name,b.coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.id';
+            $fields = 'b.firm_name,b.firm_coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.id';
             $data = [];
             $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->field($fields)->page($page)->order('a.ctime desc')->limit($limit)->select();
             foreach ($temps as $k => &$v) {
