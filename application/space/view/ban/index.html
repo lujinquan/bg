@@ -29,7 +29,7 @@
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
 			<a href="{:url('edit')}?id={{ d.ban_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-			<a href="{:url('del')}?id={{ d.ban_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+			<a href="{:url('del')}?id={{ d.ban_id }}" hisi-data="{width: '400px', height: '230px'}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">删除</a>
 	
 		</div>
 	</script>
@@ -56,10 +56,30 @@
                 }}
                 ,{field: 'ban_name', align:'left',minWidth:100, title: '楼宇名称'}
                 ,{field: 'ban_address',align:'left',minWidth:150, title: '地址'}
-				,{field: 'ban_floornumber',align:'left',minWidth:100, title: '包含楼层数'}
-				,{field: 'ban_extensive',align:'left',minWidth:100, title: '面积'}
+				,{field: 'floor_numbers',align:'left',minWidth:100, title: '包含楼层数'}
+				,{field: 'floor_areas',align:'left',minWidth:100, title: '面积'}
                 ,{title: '操作', minWidth:280, with:280,align:'left',templet: '#buttonTpl',fixed:'right'}
             ]]
         });
+        $(document).on('click', '.j-tr-pop-del', function() {
+			$(".layui-layer-btn").after($(".layui-layer-btn1"));
+	        var that = $(this),
+	            href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href');
+	        layer.open('删除之后无法恢复，您确定要删除吗？', {icon: 7,title:false, closeBtn:0,offset: 'auto', btn: ['确定','取消']}, function(index){
+	            if (!href) {
+	                layer.msg('请设置data-href参数');
+	                return false;
+	            }
+	            $.get(href, function(res) {
+	                if (res.code == 0) {
+	                    layer.msg(res.msg);
+	                } else {
+	                    that.parents('tr').remove();
+	                }
+	            });
+	            layer.close(index);
+	        });
+	        return false;
+	    });
     });
 </script>

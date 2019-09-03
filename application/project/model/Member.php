@@ -16,6 +16,9 @@ class Member extends Model
 
     protected $type = [
         'ctime' => 'timestamp:Y-m-d H:i:s',
+        'member_coupon_issue_time' => 'timestamp:Y-m-d', 
+        'member_coupon_shou_use_start_time' => 'timestamp:Y-m-d', 
+        'member_coupon_shou_use_end_time' => 'timestamp:Y-m-d', 
     ];
 
     public function firm()
@@ -29,7 +32,11 @@ class Member extends Model
 
         if(!$data){
             $data = request()->param();
-        }  
+        } 
+        // 检索楼宇名称
+        if(isset($data['firm_id']) && $data['firm_id']){
+            $where[] = ['firm_id','eq',$data['firm_id']];
+        } 
         // 检索楼宇名称
         if(isset($data['ban_name']) && $data['ban_name']){
             $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];

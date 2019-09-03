@@ -17,8 +17,9 @@
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 					  <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
 		  			    <option value="">请选择</option>
-		  			    <option value="0">未激活</option>
-		  			    <option value="1">已激活</option>
+		  			    {volist name="params['shack_status']" id="v"}
+		                <option value="{$key}">{$v}</option>
+		                {/volist}
 		  			</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>

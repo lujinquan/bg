@@ -19,7 +19,9 @@ class Firm extends Model
         'firm_established_time' => 'timestamp:Y-m-d',
         'firm_start_time' => 'timestamp:Y-m-d H:i:s',
         'firm_end_time' => 'timestamp:Y-m-d H:i:s',  
-        'coupon_issue_time' => 'timestamp:Y-m-d', 
+        'firm_coupon_issue_time' => 'timestamp:Y-m-d', 
+        'firm_coupon_shou_use_start_time' => 'timestamp:Y-m-d', 
+        'firm_coupon_shou_use_end_time' => 'timestamp:Y-m-d', 
     ];
 
     public function member()

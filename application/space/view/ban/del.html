@@ -1,0 +1,16 @@
+{include file="system@block/layui" /}
+<form class="layui-form" action="{:url()}" method="post">
+	<div class="layui-form-item">
+	    <label class="layui-form-label"><i class="red">*</i>登录密码</label>
+	    <div class="layui-input-inline">
+	        <input type="password" class="layui-input field-username" name="password" lay-verify="required" autocomplete="off" placeholder="请输入密码">
+	    </div>
+	</div>
+	<input type="hidden" name="id" value="{$ban_id}">
+	<div class="layui-form-item">
+	    <div class="layui-input-block">
+	        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+	        <!-- <a href="" class="layui-btn layui-btn-primary ml10"><i class="aicon ai-fanhui"></i>返回</a> -->
+	    </div>
+	</div>
+</form>

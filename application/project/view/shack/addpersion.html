@@ -99,7 +99,7 @@
 		<div class="layui-form-item j-item-top">
 		   <div class="layui-input-block">
 			 <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-			 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button>
+			 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button>
 		   </div>
 		</div>
 	</form>
@@ -198,6 +198,7 @@
 			  //联合办公区
 			  transfer.render({
 				elem: '#transfer1'
+				,id:'demo1'
 				,data: data1
 				,title: ['未选', '已选']
 				,showSearch: true
@@ -205,10 +206,12 @@
 			  //独立办公区
 			   transfer.render({
 				elem: '#transfer2'
+				,id:'demo2'
 				,data: data2
 				,title: ['未选', '已选']
 				,showSearch: true
 			  });
+			   
 			//门禁
 			form.on('select(filter)', function(data){
 			 $(".j-hides").show();
@@ -259,6 +262,62 @@
 			      
 			    }
 			  }
+			});
+
+			// 第一步的提交
+			form.on('submit(formStep)', function (data) {
+				//获得右侧数据
+				var getData1 = transfer.getData('demo1');
+				//console.log(getData1);
+				var arr = new Array(); 
+				for (var i in getData1) {
+					arr.push(getData1[i].value);
+				}
+				var getData2 = transfer.getData('demo2');
+				//console.log(getData2);
+				//var arr2 = new Array(); 
+				for (var i in getData2) {
+					arr.push(getData2[i].value);
+				}
+				//return false;
+		 	    var _form = '', 
+	            that = $(this), 
+	            text = that.text(),
+	            options = {pop: false, refresh: true, jump: false, callback: null};
+		        if ($(this).attr('data-form')) {
+		            _form = $(that.attr('data-form'));
+		        } else {
+		            _form = that.parents('form');
+		        }
+		        if (that.attr('hisi-data')) {
+		            options = new Function('return '+ that.attr('hisi-data'))();
+		        } else if (that.attr('lay-data')) {
+		            options = new Function('return '+ that.attr('lay-data'))();
+		        }
+		        formData = $.param({'site_group':arr})+'&'+_form.serialize();
+		        //formData = $.param({'sites1':arr1,'sites2':arr2})+'&'+_form.serialize();
+		        console.log(formData);
+		        that.prop('disabled', true).text('提交中...');
+		        $.ajax({
+		            type: "POST",
+		            url: _form.attr('action'),
+		            data: formData,
+		            success: function(res) {
+		                that.text(res.msg);
+		                if (res.code == 0) {
+		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+		                    setTimeout(function(){
+		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+		                    }, 3000);
+		                } else {
+		                    setTimeout(function() {
+		                        //that.text(text).prop('disabled', false);
+		                        that.prop('disabled', false);
+		                    }, 3000);
+		                }
+		            }
+		        });
+			    return false;
 			});
 			
 			//入驻开始时间

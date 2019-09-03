@@ -18,7 +18,11 @@ class Ban extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
-    
+    public function floor()
+    {
+        return $this->hasMany('floor', 'ban_id', 'ban_id')->bind('floor_number');
+    }
+
     public function checkWhere($data)
     {
 

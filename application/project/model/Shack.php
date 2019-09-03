@@ -19,16 +19,17 @@ class Shack extends Model
         'shack_end_time' => 'timestamp:Y-m-d',
         'ctime' => 'timestamp:Y-m-d H:i:s',
         'guard' =>  'json',
+        'site_group' =>  'json',
     ];
 
     public function firm()
     {
-        return $this->belongsTo('firm', 'firm_id', 'firm_id')->bind('firm_name');
+        return $this->belongsTo('firm', 'firm_id', 'firm_id')->bind('firm_name,firm_tel,firm_manager,firm_credit_code,firm_industry_type,firm_registered_capital,firm_registered_address,firm_legaler,firm_established_time,firm_scope,firm_start_time,firm_end_time,firm_remark,firm_imgs,firm_coupon_num,firm_coupon_shou_num,firm_coupon_shou_use_start_time,firm_coupon_shou_use_end_time,firm_coupon_issue_time');
     }
 
     public function member()
     {
-        return $this->belongsTo('member', 'member_id', 'member_id')->bind('member_name');
+        return $this->belongsTo('member', 'member_id', 'member_id')->bind('member_name,member_tel,member_sex,member_card,member_remark,member_coupon_num,member_coupon_shou_num,member_coupon_shou_use_start_time,member_coupon_shou_use_end_time,member_coupon_issue_time');
     }
 
     public function setShackTypeAttr($value)
@@ -49,14 +50,14 @@ class Shack extends Model
             $data = request()->param();
         }  
         // 检索楼宇名称
-        if(isset($data['ban_name']) && $data['ban_name']){
-            $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];
-        }
+        // if(isset($data['ban_name']) && $data['ban_name']){
+        //     $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];
+        // }
         // 检索地址
-        if(isset($data['ban_address']) && $data['ban_address']){
-            $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
-        }
-        $where[] = ['status','eq',1];
+        // if(isset($data['ban_address']) && $data['ban_address']){
+        //     $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
+        // }
+        $where[] = ['shack_status','eq',1];
 
         return $where;
     }

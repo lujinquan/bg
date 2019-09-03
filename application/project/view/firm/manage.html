@@ -9,12 +9,13 @@
       <label class="layui-form-label">
         <i class="red">*</i>入驻时间：</label>
       <div class="layui-input-inline" style="width: 190px;">
-        <input type="text" name="firm_start_time" class="layui-input" lay-vertype="tips" id="test3" placeholder="请选择时间"></div>
+        <input type="text" name="shack_start_time" value="{$data_info['shack_start_time']}" class="layui-input" lay-vertype="tips" id="test3" placeholder="请选择时间"></div>
       <div class="layui-form-mid">-</div>
       <div class="layui-input-inline" style="width: 190px;">
-        <input type="text" name="firm_end_time" class="layui-input" lay-vertype="tips" id="test4" placeholder="请选择时间"></div>
+        <input type="text" name="shack_end_time" value="{$data_info['shack_end_time']}" class="layui-input" lay-vertype="tips" id="test4" placeholder="请选择时间"></div>
     </div>
   </div>
+  {if condition="$data_info['firm_id']"}
   <div class="layui-form-item">
     <label class="layui-form-label">
       <i class="red">*</i>联合工位区：</label>
@@ -29,6 +30,15 @@
       <div id="transfer2" class="demo-transfer"></div>
     </div>
   </div>
+  {else /}
+  <div class="layui-form-item">
+    <label class="layui-form-label">
+      <i class="red">*</i>自由工位区：</label>
+    <div class="layui-input-block">
+      <div id="transfer3" class="demo-transfer"></div>
+    </div>
+  </div>
+  {/if}
   <div class="layui-form-item" pane="">
     <label class="layui-form-label">
       <i class="red">*</i>门禁：</label>
@@ -48,10 +58,10 @@
     <div class="layui-col-md8">
       <label class="layui-form-label">备注：</label>
       <div class="layui-input-block">
-        <input type="text" name="meet_remark" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+        <input type="text" name="shack_remark" value="{$data_info['shack_remark']}" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
     </div>
   </div>
-  <input type="hidden" name="firm_id" value="">
+  <input type="hidden" name="id" value="{$data_info['id']}">
   <div class="layui-form-item j-item-top">
     <div class="layui-input-block">
       <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -79,18 +89,26 @@
 			  var data2 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据 */
               var data1 = {:json_encode($siteArr[1])};
               var data2 = {:json_encode($siteArr[2])};
+              var data3 = {:json_encode($siteArr[3])};
 			  //联合办公区
 			  transfer.render({
 				elem: '#transfer1'
 				,data: data1
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
 			  //独立办公区
 			   transfer.render({
 				elem: '#transfer2'
 				,data: data2
-				,title: ['全选', '全选']
+				,title: ['未选', '已选']
+				,showSearch: true
+			  });
+			   //独立办公区
+			   transfer.render({
+				elem: '#transfer3'
+				,data: data3
+				,title: ['未选', '已选']
 				,showSearch: true
 			  });
 			  //门禁

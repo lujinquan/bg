@@ -1,10 +1,12 @@
 <!-- 内容区 -->
+
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
     <li class="layui-this">会议室抵用券发放</li></ul>
 </div>
 <div class="j-details-from">
   <form class="layui-form j-long-words " method="post" id="addForm">
+    {if condition="$data_info['firm_id']"}
     <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
       <legend>自动发放</legend>
 	</fieldset>
@@ -12,7 +14,7 @@
       <div class="layui-inline">
         <label class="layui-form-label">发放数量：</label>
         <div class="layui-input-inline">
-          <input type="number" name="automatic_permits" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-inputs">
+          <input type="number" name="firm_coupon_num" value="{$data_info['firm_coupon_num']}" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-inputs">
           <b class="j-explain-name">张/月</b></div>
       </div>
     </div>
@@ -34,7 +36,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label">首次发放时间：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">2019/08/01</div></div>
+        <div class="j-words-border">{$data_info['firm_coupon_issue_time']}</div></div>
     </div>
     <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
       <legend>手动发放</legend>
@@ -43,20 +45,76 @@
       <div class="layui-inline">
         <label class="layui-form-label">发放数量：</label>
         <div class="layui-input-inline">
-          <input type="number" name="manual_permits" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+          <input type="number" name="firm_coupon_shou_num" value="{$data_info['firm_coupon_shou_num']}" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
           <b class="j-explain-name">张</b></div>
       </div>
     </div>
     <div class="layui-form-item">
       <div class="layui-inline">
-        <label class="layui-form-label">入驻时间：</label>
+        <label class="layui-form-label">使用期限：</label>
         <div class="layui-input-inline" style="width: 190px;">
-          <input type="text" name="order_start_time" class="layui-input test-item" lay-vertype="tips" id="test1" placeholder="请选择开始时间"></div>
+          <input type="text" name="firm_coupon_shou_use_start_time" value="{$data_info['firm_coupon_shou_use_start_time']}" class="layui-input test-item" lay-vertype="tips" id="test1" placeholder="请选择开始时间"></div>
         <div class="layui-form-mid">-</div>
         <div class="layui-input-inline" style="width: 190px;">
-          <input type="text" name="order_end_time" class="layui-input test-item" lay-vertype="tips" id="test2" placeholder="请选择结束时间"></div>
+          <input type="text" name="firm_coupon_shou_use_end_time" value="{$data_info['firm_coupon_shou_use_end_time']}" class="layui-input test-item" lay-vertype="tips" id="test2" placeholder="请选择结束时间"></div>
       </div>
     </div>
+    <input type="hidden" name="firm_id" value="{$data_info['firm_id']}">
+    {else /}
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>自动发放</legend>
+  </fieldset>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">发放数量：</label>
+        <div class="layui-input-inline">
+          <input type="number" name="member_coupon_num" value="{$data_info['member_coupon_num']}" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-inputs">
+          <b class="j-explain-name">张/月</b></div>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">可用抵用券：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">11张</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">过期数量：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">10张</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">已发放总量：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">21张</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">首次发放时间：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">{$data_info['member_coupon_issue_time']}</div></div>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>手动发放</legend>
+  </fieldset>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">发放数量：</label>
+        <div class="layui-input-inline">
+          <input type="number" name="member_coupon_shou_num" value="{$data_info['member_coupon_shou_num']}" lay-verify="number" placeholder="0" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
+          <b class="j-explain-name">张</b></div>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">使用期限：</label>
+        <div class="layui-input-inline" style="width: 190px;">
+          <input type="text" name="member_coupon_shou_use_start_time" value="{$data_info['member_coupon_shou_use_start_time']}" class="layui-input test-item" lay-vertype="tips" id="test1" placeholder="请选择开始时间"></div>
+        <div class="layui-form-mid">-</div>
+        <div class="layui-input-inline" style="width: 190px;">
+          <input type="text" name="member_coupon_shou_use_end_time" value="{$data_info['member_coupon_shou_use_end_time']}" class="layui-input test-item" lay-vertype="tips" id="test2" placeholder="请选择结束时间"></div>
+      </div>
+    </div>
+    <input type="hidden" name="member_id" value="{$data_info['member_id']}">
+    {/if}
     <div class="layui-form-item j-top-formmargin">
       <div class="layui-input-block">
         <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -64,7 +122,9 @@
     </div>
     </from>
 </div>
-<!-- 内容区 -->{include file="system@block/layui" /}
+
+<!-- 内容区 -->
+{include file="system@block/layui" /}
 <script>layui.use(['jquery', 'laydate', 'upload', 'form'],
   function() {
     var laydate = layui.laydate,

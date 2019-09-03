@@ -35,11 +35,23 @@ class Shack extends Admin
             $getData = $this->request->get();
             $ShackModel = new ShackModel;
             $where = $ShackModel->checkWhere($getData);
-            $fields = '*';
+            //$fields = '*';
             $data = [];
-            $data['data'] = $ShackModel->with(['firm','SystemUser'])->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
-            //halt($data['data']);
-            $data['count'] = $ShackModel->where($where)->count('id');
+            $fields = 'b.firm_name,b.firm_coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.shack_type,a.id,from_unixtime(a.ctime) ctime,d.nick';
+            $data = [];
+            $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->join('system_user d','a.cuid = d.id','left')->where($where)->field($fields)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            foreach ($temps as $k => &$v) {
+                if($v['member_name']){
+                    $v['group_name'] = $v['member_name'];
+                }
+                if($v['firm_name']){
+                    $v['group_name'] = $v['firm_name'];
+                }
+                //$v['shack_type'] = explode('|',$v['shack_type']);
+            }
+            $data['data']  = array_slice($temps, ($page- 1) * $limit, $limit);
+            //halt($where);
+            $data['count'] = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -233,7 +245,14 @@ class Shack extends Admin
             if (isset($data['member_name'])) {
                 $memberModel = new MemberModel;
                 if(isset($data['member_id'])){
-                    $memberModel->allowField(true)->save($data);
+                    $memSaveData = [
+                        'member_name' => $data['member_name'],
+                        'member_tel' => $data['member_tel'],
+                        'member_sex' => $data['member_sex'],
+                        'member_card' => $data['member_card'],
+                        'member_remark' => $data['member_remark'],
+                    ];
+                    $memberModel->allowField(true)->save($memSaveData);
                 }else{
                     $memberModel->allowField(true)->create($data);
                 }  
@@ -251,16 +270,16 @@ class Shack extends Admin
                     'guard' => $data['guard'],
                 ];
             }
-            
+
             $data['cuid'] = ADMIN_ID;
             $ShackModel = new ShackModel;
             //unset($data['id']);
             //halt($data);
             // 入库
             if (!$ShackModel->allowField(true)->create($data)) {
-                return $this->error('新增失败');
+                return $this->error('入驻失败');
             }
-            return $this->success('新增成功');
+            return $this->success('入驻成功');
         }
         
         // 获取工位区
@@ -324,7 +343,22 @@ class Shack extends Admin
             return $this->success('编辑成功');
         }
         $id = input('param.id/d');
-        $row = RestModel::get($id);
+        $row = ShackModel::get($id);
+        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
+        $this->assign('banArr',$banArr);
+        //halt($row);
+        $this->assign('data_info',$row);
+        return $this->fetch();
+    }
+
+    public function detail()
+    {
+        
+        
+        $id = input('param.id/d');
+        $row = ShackModel::get($id);
+        $AnnexModel = new AnnexModel;
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);

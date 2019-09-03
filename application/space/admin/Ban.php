@@ -10,10 +10,12 @@
 // | Author: Lucas <598936602@qq.com>，开发者QQ群：*
 // +----------------------------------------------------------------------
 
-
 namespace app\space\admin;
+
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
+use app\space\model\Floor as FloorModel;
+use app\system\model\SystemUser as UserModel;
 
 class Ban extends Admin
 {
@@ -28,8 +30,16 @@ class Ban extends Admin
             $where = $banModel->checkWhere($getData);
             $fields = 'ban_id,ban_name,ban_area,ban_address';
             $data = [];
-            $data['data'] = $banModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
-            //halt($where);
+            $temp = $banModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
+            foreach($temp as &$t){
+                $f = FloorModel::where([['ban_id','eq',$t['ban_id']]])->field('group_concat(floor_number) floor_numbers,sum(floor_area) floor_areas')->find();
+                
+                $t['floor_numbers'] = $f['floor_numbers'];
+                $t['floor_areas'] = $f['floor_areas'];
+                //$t['floor_numbers'] = $t->floor();
+            }
+            //halt($temp);
+            $data['data'] = $temp;
             $data['count'] = $banModel->where($where)->count('ban_id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -91,13 +101,23 @@ class Ban extends Admin
 
     public function del()
     {
-        $ids = $this->request->param('id/a');        
-        $res = BanModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
-        if($res){
-            $this->success('删除成功');
-        }else{
-            $this->error('删除失败');
+        if ($this->request->isPost()) {
+            $id = $this->request->param('id');
+            $password = $this->request->param('password');
+            $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
+            if(!password_verify($password, $realPassword)){
+                $this->error('密码效验失败');
+            }      
+            $res = BanModel::where([['ban_id','eq',$id]])->update(['status'=>0]);
+            if($res){
+                $this->success('删除成功');
+            }else{
+                $this->error('删除失败');
+            }
         }
+        $ban_id = $this->request->param('id'); 
+        $this->assign('ban_id',$ban_id);
+        return $this->fetch();
     }
     
 }

@@ -17,7 +17,10 @@ use think\Db;
 use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
 use app\project\model\Firm as FirmModel;
-
+use app\project\model\Member as MemberModel;
+use app\project\model\Shack as ShackModel;
+use app\space\model\SiteGroup as SiteGroupModel;
+use app\system\model\SystemGuard as GuardModel;
 
 class Firm extends Admin
 {
@@ -28,13 +31,22 @@ class Firm extends Admin
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $FirmModel = new FirmModel;
-            $where = $FirmModel->checkWhere($getData);
-            $fields = '*';
+            $ShackModel = new ShackModel;
+            $where = $ShackModel->checkWhere($getData);
+            $fields = 'b.firm_name,b.coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.id';
             $data = [];
-            $data['data'] = $FirmModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
-            //halt($where);
-            $data['count'] = $FirmModel->where($where)->count('firm_id');
+            $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->field($fields)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            foreach ($temps as $k => &$v) {
+                if($v['member_name']){
+                    $v['group_name'] = $v['member_name'];
+                }
+                if($v['firm_name']){
+                    $v['group_name'] = $v['firm_name'];
+                }
+            }
+            $data['data']  = array_slice($temps, ($page- 1) * $limit, $limit);
+            //halt($data['data']);
+            $data['count'] = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->count('id');
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -102,25 +114,77 @@ class Firm extends Admin
      */
     public function edit()
     {
-        $AnnexModel = new AnnexModel;
+        
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 数据验证
-            // $result = $this->validate($data, 'Firm.add');
-            // if($result !== true) {
-            //     return $this->error($result);
-            // }
-            $FirmModel = new FirmModel;
-            // 入库
-            if (!$FirmModel->allowField(true)->update($data)) {
-                return $this->error('编辑失败');
+
+            /*企业编辑实际上是入驻的个人或者企业的编辑*/
+
+            if(isset($data['member_id'])){ //如果入驻的单位是个体户
+                //数据验证【待补充】
+                
+                //更新个人基础信息member
+                $MemberModel = new MemberModel;
+                $memberUpdateData = [
+                    'member_id' => $data['member_id'],
+                    'member_name' => $data['member_name'], //更新个人户姓名
+                    'member_tel' => $data['member_tel'], //更新个体户电话
+                    'member_remark' => $data['member_remark'], //更新个体户备注信息
+                ];
+                if (!$MemberModel->allowField(true)->update($memberUpdateData)) {
+                    return $this->error('修改失败');
+                }
+                
+                //更新入驻信息shack
+                if(isset($data['file']) && $data['file']){
+                    $shackUpdateData = [
+                        'id' => $data['id'],
+                        'imgs' => implode(',',$data['file']), //更新入驻合同附件
+                    ];
+                    $ShackModel = new ShackModel;
+                    if (!$ShackModel->allowField(true)->update($shackUpdateData)) {
+                        return $this->error('修改失败');
+                    }
+                }
+                return $this->success('修改成功');
             }
-            return $this->success('编辑成功');
+
+            if(isset($data['firm_id'])){ //如果入驻的单位是企业
+                //数据验证【待补充】
+                
+                //更新企业基础信息firm
+                $FirmModel = new FirmModel;
+                $firmUpdateData = [
+                    'firm_id' => $data['firm_id'],
+                    'firm_tel' => $data['firm_tel'], //更新联系人电话
+                    'firm_manager' => $data['firm_manager'], //更新联系人姓名
+                    'firm_industry_type' => $data['firm_industry_type'], //更新企业所属行业
+                    'firm_remark' => $data['firm_remark'], //更新企业备注信息
+                ];
+                if (!$FirmModel->allowField(true)->update($firmUpdateData)) {
+                    return $this->error('修改失败');
+                }
+
+                //更新入驻信息shack
+                if(isset($data['file']) && $data['file']){
+                    $shackUpdateData = [
+                        'id' => $data['id'],
+                        'imgs' => implode(',',$data['file']), //更新入驻合同附件
+                    ];
+                    $ShackModel = new ShackModel;
+                    if (!$ShackModel->allowField(true)->update($shackUpdateData)) {
+                        return $this->error('修改失败');
+                    }
+                }
+                return $this->success('修改成功');
+            }
+
+           
         }
-        $id = input('param.firm_id/d');
-        $row = FirmModel::get($id);
+
+        $id = input('param.id/d');
+        $row = ShackModel::with(['firm','member'])->find($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
@@ -146,11 +210,32 @@ class Firm extends Admin
             }
             return $this->success('编辑成功');
         }
-        $id = input('param.firm_id/d');
-        $row = FirmModel::get($id);
+        $id = input('param.id/d');
+        $row = ShackModel::with(['firm','member'])->find($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        //halt($row);
         $this->assign('data_info',$row);
+
+        // 获取工位区
+        $siteGroupModel = new SiteGroupModel;
+        $sites = $siteGroupModel->where([['status','eq',1]])->field('site_group_id,site_group_type,site_group_name')->select();
+        $siteArr = [];
+        $siteArr[1] = [];
+        $siteArr[2] = [];
+        $siteArr[3] = [];
+        foreach ($sites as $k => $v) {
+            $siteArr[$v['site_group_type']][] = [
+                'value' => $v['site_group_id'],
+                'title' => $v['site_group_name'],
+            ];
+        }
+        $this->assign('siteArr',$siteArr);
+
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
+        $this->assign('guardArr', $guardArr);
+
+        
         return $this->fetch();
     }
 
@@ -163,21 +248,28 @@ class Firm extends Admin
         $AnnexModel = new AnnexModel;
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // 数据验证
-            // $result = $this->validate($data, 'Firm.add');
-            // if($result !== true) {
-            //     return $this->error($result);
-            // }
-            $FirmModel = new FirmModel;
-            // 入库
-            if (!$FirmModel->allowField(true)->update($data)) {
-                return $this->error('编辑失败');
+
+            /*企业编辑实际上是入驻的个人或者企业的编辑*/
+            //$find = ShackModel::get($data['id']);
+            if(isset($data['member_id'])){ //如果入驻的单位是个体户
+                $MemberModel = new MemberModel;
+                if (!$MemberModel->allowField(true)->update($data)) {
+                    return $this->error('发券失败');
+                }
+                return $this->success('发券成功'); 
             }
-            return $this->success('编辑成功');
+            if(isset($data['firm_id'])){ //如果入驻的单位是企业
+                $FirmModel = new FirmModel;
+                if (!$FirmModel->allowField(true)->update($data)) {
+                    return $this->error('发券失败');
+                }
+                return $this->success('发券成功');
+            }
+    
         }
         $id = input('param.firm_id/d');
-        $row = FirmModel::get($id);
-        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        $row = ShackModel::with(['firm','member'])->find($id);
+        //$row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();

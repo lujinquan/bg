@@ -15,6 +15,7 @@ namespace app\project\admin;
 
 use think\Db;
 use app\system\admin\Admin;
+use app\space\model\Ban as BanModel;
 use app\project\model\Member as MemberModel;
 use app\common\model\SystemAnnex as AnnexModel;
 
@@ -133,8 +134,8 @@ class Member extends Admin
             return $this->success('修改成功');
         }
         $id = input('param.id/d');
-        $row = RestModel::get($id);
-        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        $row = MemberModel::get($id);
+        //$row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
         //halt($row);
