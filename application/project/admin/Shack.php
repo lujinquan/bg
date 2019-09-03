@@ -354,8 +354,6 @@ class Shack extends Admin
 
     public function detail()
     {
-        
-        
         $id = input('param.id/d');
         $row = ShackModel::get($id);
         $AnnexModel = new AnnexModel;

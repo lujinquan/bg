@@ -190,6 +190,19 @@ class Firm extends Admin
     }
 
     /**
+     * 企业详情
+     * @return [type] [description]
+     */
+    public function detail()
+    {
+        $id = input('param.id/d');
+        $row = ShackModel::with(['firm','member'])->find($id);
+        $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        $this->assign('data_info',$row);
+        return $this->fetch();
+    }
+
+    /**
      * 企业管理
      * @return [type] [description]
      */

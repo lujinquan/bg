@@ -57,7 +57,18 @@ class Shack extends Model
         // if(isset($data['ban_address']) && $data['ban_address']){
         //     $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         // }
-        $where[] = ['shack_status','eq',1];
+        //$where[] = ['shack_status','eq',1];
+        if(isset($data['group'])){
+            if($data['group'] == 'y'){
+                $where[] = ['shack_status','eq',1];
+            }else{
+                $where[] = ['shack_status','eq',0];
+            }
+
+        }else{
+            $where[] = ['shack_status','eq',1];
+        }
+        
 
         return $where;
     }
