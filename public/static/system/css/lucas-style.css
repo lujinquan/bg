@@ -158,8 +158,8 @@ opacity: .8color: #333;}
 /* 首次登陆 E */
  /* ---------------项目管理---------------  S*/
  .layui-input-block.j-position{ position: relative;}
- .layui-input-block.j-position .layui-btn{/* position: absolute; right: -100px; top:0; */ margin: -2px 0 0 6px;}
- .layui-input-block.j-position .layui-input{display: inline-block; width: 88%;}
+ .layui-input-block.j-position .layui-btn{position: absolute; right:0px; top:0; /* margin: -2px 0 0 6px; */}
+/* .layui-input-block.j-position .layui-input{display: inline-block; width: 88%;} */
  .layui-form-item.j-item-top{ margin-top: 30px;}
  .j-long-words .layui-form-label{ width: 100px;}
 .j-long-words  .layui-input-block{ margin-left: 120px;}
@@ -181,6 +181,8 @@ opacity: .8color: #333;}
 .j-right-button{ text-align: right; margin-top:60px;}
 .layui-carousel.j-carousel-box >[carousel-item]>*{background-color: none!important; position: initial;}
 .layui-carousel.j-carousel-box>[carousel-item]{ overflow: auto!important;}
+#sugItem .layui-table-cell{min-height: auto;}
+#sugItem .layui-table-box{box-shadow:0px 2px 12px 0px rgba(207,215,227,0.3);}
 /* 详情 S */
 .j-details-from{ padding: 0 10px;}
 .j-details-from .layui-form-item{ margin-bottom: 5px;}
