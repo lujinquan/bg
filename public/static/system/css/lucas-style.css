@@ -182,7 +182,7 @@ opacity: .8color: #333;}
 .layui-carousel.j-carousel-box >[carousel-item]>*{background-color: none!important; position: initial;}
 .layui-carousel.j-carousel-box>[carousel-item]{ overflow: auto!important;}
 #sugItem .layui-table-cell{min-height: auto;}
-#sugItem .layui-table-box{box-shadow:0px 2px 12px 0px rgba(207,215,227,0.3);}
+#sugItem .layui-table-view{box-shadow:0px 2px 12px 0px rgba(207,215,227,0.3);}
 /* 详情 S */
 .j-details-from{ padding: 0 10px;}
 .j-details-from .layui-form-item{ margin-bottom: 5px;}
