@@ -278,9 +278,9 @@ class Shack extends Admin
             //halt($data);
             // 入库
             if (!$ShackModel->allowField(true)->create($data)) {
-                return $this->error('入驻失败');
+                return $this->error('分配失败');
             }
-            return $this->success('入驻成功');
+            return $this->success('分配成功');
         }
         
         // 获取工位区

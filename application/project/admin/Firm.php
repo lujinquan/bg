@@ -91,18 +91,18 @@ class Firm extends Admin
             $FirmModel = new FirmModel;
 
             if($data['firm_id']){ //如果存在即是编辑
-                if (!$RestModel->allowField(true)->update($data)) {
-                    return $this->error('编辑失败');
+                if (!$FirmModel->allowField(true)->update($data)) {
+                    return $this->error('录入失败');
                 }
-                return $this->success('编辑成功');
+                return $this->success('录入成功');
             }else{ //如果不存在即是新增 
                 // 入库
                 $res = $FirmModel->allowField(true)->create($data);
                 //halt($res);
                 if (!$res) {
-                    return $this->error('新增失败');
+                    return $this->error('录入失败');
                 }
-                return $this->success('新增成功','',['firm_id'=>$res['firm_id']]);
+                return $this->success('录入成功','',['firm_id'=>$res['firm_id']]);
             }    
         }
         return $this->fetch();

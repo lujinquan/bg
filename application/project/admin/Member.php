@@ -86,7 +86,7 @@ class Member extends Admin
             //入驻办理页面中的批量新增员工
             $result = [];
             $sum = count($data['member_name']);
-            //dump($sum);halt($data);
+
             for ($i=0; $i < $sum; $i++) { 
                 if($i == 0){
                     $result[$i] = [
@@ -115,9 +115,9 @@ class Member extends Admin
                 }
             }
             if (!$MemberModel->allowField(true)->saveAll($result)) {
-                return $this->error('新增失败');
+                return $this->error('入驻失败');
             }
-            return $this->success('新增成功');
+            return $this->success('入驻成功');
         }
         // 获取门禁组权限
         $GuardModel = new GuardModel;

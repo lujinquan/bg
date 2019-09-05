@@ -48,7 +48,7 @@ class Firm extends Validate
      // 自定义更新场景
     public function sceneEdit()
     {
-        return $this->only(['firm_manager','firm_tel','firm_registered_address','firm_scope']);
+        return $this->only(['firm_manager','firm_tel']);
     }
 
     
