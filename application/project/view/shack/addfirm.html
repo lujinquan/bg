@@ -20,11 +20,12 @@
 		  /*上传参数设定*/
 		  var upurl = "{:url('system/Api/upload')}?input=Licence&group=ban&water=no"; //上传营业执照
 		  var duotu = true; //是否为多图上传true false
-		   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
+		   layui.use(['jquery', 'laydate','table', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
 		    var laydate = layui.laydate,
 		      $ = layui.$,
 		      upload = layui.upload,
 		      form = layui.form,
+			  table = layui.table,
 			  transfer = layui.transfer,
 			  layer = layui.layer,
 			  step = layui.step,
@@ -388,6 +389,37 @@
 			$('.j-admin-con').on('click','.j-del',function(){
 			    var that = $(this);
 			    that.parent().remove();
+			});
+			
+			//二次录入选择入驻人员
+			//表格选择入驻人员
+			table.render({
+			    elem: '#dataTable'
+			    ,url: '' //数据接口
+			    ,page: true //开启分页
+				//,height: 'full-280'
+			    ,skin: 'line'
+			    //,even: false
+			    ,limit: 10
+			    ,text: {
+			        none : '暂无相关数据'
+			    }
+			    ,cols: [[ //表头
+				     {type:'checkbox'}
+			    	 ,{field: 'member_name', align:'center',minWidth:100, title: '姓名'}
+			        ,{field: 'member_tel', align:'center',minWidth:100, title: '电话'}
+			        ,{field: 'member_post', align:'center',minWidth:100, title: '职位'}
+								       ,{field: 'member_department', align:'center',minWidth:100, title: '部门'},
+			  					     ,{field: 'member_sex', align:'center',minWidth:100, title: '性别', templet: function(d) {
+			      return d.member_sex?'男':'女';
+			  }}
+			   ,{field: 'member_card', align:'center',minWidth:100, title: '身份证号'}
+			  					     ,{field: 'member_type', align:'center',minWidth:100, title: '类型', templet: function(d) {
+			      return params.member_type[d.member_type];
+			  }}
+			
+			        // ,{title: 'member_type',align:'center', minWidth:280, templet: '#buttonTpl', width: 280,fixed:'right'}
+			    ]]
 			});
 			
 		  });

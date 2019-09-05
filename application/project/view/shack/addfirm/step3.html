@@ -58,6 +58,39 @@
 						<div class="j-add-personnel"><i class="layui-icon layui-icon-add-1"></i><label>添加人员</label></div>
 					</div>
 				</div>
+				<!-- 二次录入 S -->
+				  <div class="j-admin-box j-staff clearfix">
+				  	<div class="j-admin-title clearfix">
+				  		<span class="j-name fl">选择入驻人员</span>
+				  		<span class="j-button fr"><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="import"><i class="layui-icon layui-icon-download-circle"></i>批量导入</a></span>
+				  	</div>
+					<table id="dataTable" lay-filter='dataTable'></table>
+				  	<div class="j-admin-con clearfix">
+				  		<div class="j-admin-list clearfix">
+				  			<ul>
+				  				<li class="j-required-li">
+				  					 <input type="text" name="member_name[]"  lay-verify="required"  placeholder="姓名" lay-verType="tips" autocomplete="off" class="layui-input  j-required-input">
+				  					 <i class="red">*</i>
+				  				</li>
+				  				<li  class="j-required-li">
+				  					 <input type="text" name="member_tel[]"  lay-verify="required|phone"  placeholder="电话" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+				  					 <i class="red">*</i>
+				  				</li>
+				  				<li>
+				  					 <input type="text" name="member_post[]"  placeholder="职位" lay-verType="tips" autocomplete="off" class="layui-input">
+				  				</li>
+				  				<li>
+				  					 <input type="text" name="member_department[]"  placeholder="部门" lay-verType="tips" autocomplete="off" class="layui-input">
+				  				</li>
+				  				<li>
+				  					 <input type="text" name="member_card[]"  placeholder="身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+				  				</li>
+				  			</ul>
+				  		</div>
+				  		<div class="j-add-personnel"><i class="layui-icon layui-icon-add-1"></i><label>添加人员</label></div>
+				  	</div>
+				  </div>
+				<!-- 二次录入 E -->
 				<input type="hidden" name="firm_id" value="1">
 				<div class="layui-form-item j-right-button">
 					<div class="layui-input-block">
