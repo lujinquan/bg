@@ -16,6 +16,8 @@ namespace app\project\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
+use app\project\model\Firm as FirmModel;
+use app\system\model\SystemGuard as GuardModel;
 use app\project\model\Member as MemberModel;
 use app\common\model\SystemAnnex as AnnexModel;
 
@@ -64,16 +66,24 @@ class Member extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             
-            // $result = $this->validate($data, 'Member.add');
-            // if($result !== true) {
-            //     return $this->error($result);
-            // }
-            // if(isset($data['file'])){ 
-            //     $data['imgs'] = implode(',',$data['file']);
-            //     $AnnexModel = new AnnexModel;
-            //     $AnnexModel->updateAnnexEtime($data['file']);
-            // }
             $MemberModel = new MemberModel;
+
+            //人员管理页面中的新增员工
+            if(isset($data['flag'])){
+                if(isset($data['guard'])){
+                    $data['guard'] = [
+                        'ban' => $data['ban'],
+                        'floor' => $data['floor'],
+                        'guard' => $data['guard'],
+                    ];
+                }
+                if (!$MemberModel->allowField(true)->save($data)) {
+                    return $this->error('新增失败');
+                }
+                return $this->success('新增成功');
+            }
+
+            //入驻办理页面中的批量新增员工
             $result = [];
             $sum = count($data['member_name']);
             //dump($sum);halt($data);
@@ -104,13 +114,19 @@ class Member extends Admin
                     ];
                 }
             }
-            //halt($result);
-            
             if (!$MemberModel->allowField(true)->saveAll($result)) {
                 return $this->error('新增失败');
             }
             return $this->success('新增成功');
         }
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
+        $this->assign('guardArr', $guardArr);
+
+        $firmArr = FirmModel::where([['status','eq',1]])->field('firm_id,firm_name')->select();
+        $this->assign('firmArr',$firmArr);
+
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
         return $this->fetch();
@@ -121,32 +137,49 @@ class Member extends Admin
         $AnnexModel = new AnnexModel;
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            // Êý¾ÝÑéÖ¤
-            $result = $this->validate($data, 'Rest.add');
-            if($result !== true) {
-                return $this->error($result);
+            if(isset($data['guard'])){
+                $data['guard'] = [
+                    'ban' => $data['ban'],
+                    'floor' => $data['floor'],
+                    'guard' => $data['guard'],
+                ];
             }
-            $RestModel = new RestModel();
-            // Èë¿â
-            if (!$RestModel->allowField(true)->update($data)) {
+            $MemberModel = new MemberModel;
+            if (!$MemberModel->allowField(true)->update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
         }
         $id = input('param.id/d');
         $row = MemberModel::get($id);
-        //$row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
-        $this->assign('banArr',$banArr);
-        //halt($row);
+
+        // 获取门禁组权限
+        $GuardModel = new GuardModel;
+        $guardArr = GuardModel::getAllChild();
+        $this->assign('guardArr', $guardArr);
+
+        $firmArr = FirmModel::where([['status','eq',1]])->field('firm_id,firm_name')->select();
+        $this->assign('firmArr',$firmArr);
+
         $this->assign('data_info',$row);
         return $this->fetch();
     }
 
+    public function stop()
+    {
+        $id = $this->request->param('id');        
+        $res = MemberModel::where([['member_id','eq',$id]])->update(['status'=>0]);
+        if($res){
+            $this->success('停用成功');
+        }else{
+            $this->error('停用失败');
+        }
+    }
+
     public function del()
     {
-        $ids = $this->request->param('id/a');        
-        $res = RestModel::where([['rest_id','in',$ids]])->update(['status'=>0]);
+        $id = $this->request->param('id');        
+        $res = MemberModel::where([['member_id','eq',$id]])->delete();
         if($res){
             $this->success('删除成功');
         }else{

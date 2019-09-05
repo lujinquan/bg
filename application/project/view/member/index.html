@@ -1,7 +1,9 @@
 <div class="j-indent-boxs">
+	{if condition="$group == 'y'"}
 	<div class="layui-btn-group j-add-group clearfix">
 		<a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon"><i class="layui-icon layui-icon-add-1"></i>新增员工</a>
 	</div>
+	{/if}
 	<div class="page-toolbar j-page-toolbar clearfix">
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
@@ -35,21 +37,26 @@
 	{include file="system@block/layui" /}
 
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		
 		<div class="j-operation-box">
 			<a href="{:url('edit')}?id={{ d.member_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
 			{{# if (d.is_activate == 1) { }}
-			<a href="{:url('stop')}?id={{ d.member_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>
+			<a href="{:url('stop')}?id={{ d.member_id }}" data-msg="停用后将从本列表移除" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">停用</a>
 			{{# } else { }}
 			<a href="{:url('del')}?id={{ d.member_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
 			{{# } }}
 		</div>
+
 	</script>
+
 	<script type="text/html" id="toolbar"></script>
 </div>
 <script type="text/javascript">
     layui.use(['table','jquery'], function() {
         var $ = layui.$
 		    ,table = layui.table;
+		var group = '{$group}';
+		var ishide = (group == 'y')?false:true;		
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}?group={$group}' //数据接口
@@ -75,8 +82,8 @@
 						return '<button class="j-table-button j-notactive">未激活</button>';
                     }
                 }}
-                ,{title: '操作', with:280, templet: '#buttonTpl',fixed:'right'}
+                ,{title: '操作', with:280, hide: ishide, templet: '#buttonTpl',fixed:'right'}
             ]]
-        });
+        },ishide);
     });
 </script>

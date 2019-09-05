@@ -3,7 +3,7 @@
   <ul class="layui-tab-title">
     <li class="layui-this">新增员工</li></ul>
 </div>
-<form class="layui-form j-top-margin j-long-words" action="{:url('firm/add')}" method="post" id="addForm">
+<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post" id="addForm">
   <fieldset class="layui-elem-field layui-field-title j-size-color">
   	<legend>基础信息</legend>
   </fieldset>
@@ -11,7 +11,7 @@
     <div class="layui-inline">
   	<label class="layui-form-label"><i class="red">*</i>姓名：</label>
   	<div class="layui-input-inline j-name">
-  	  <input type="text" name="enterprise_name" lay-verify="required" placeholder="请输入姓名" lay-verType="tips" autocomplete="off" class="layui-input">
+  	  <input type="text" name="member_name" lay-verify="required" placeholder="请输入姓名" lay-verType="tips" autocomplete="off" class="layui-input">
   	</div>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <div class="layui-inline">
   	<label class="layui-form-label"><i class="red">*</i>电话：</label>
   	<div class="layui-input-inline">
-  	  <input type="tel" name="enterprise_telephone" lay-verify="required|phone" placeholder="请输入电话" lay-verType="tips" autocomplete="off" class="layui-input">
+  	  <input type="tel" name="member_tel" lay-verify="required|phone" placeholder="请输入电话" lay-verType="tips" autocomplete="off" class="layui-input">
   	</div>
     </div>
   </div>
@@ -31,14 +31,15 @@
   </div>
   <div class="layui-form-item">
   	<label class="layui-form-label"><i class="red">*</i>性别：</label>
-  	 <div class="layui-input-block">
-  		<div class="j-words-border">女</div>
-  	</div>
+  	 <div class="layui-input-block" id="member_sex1">
+           <input type="radio" name="member_sex" value="1" title="男" checked="">
+           <input type="radio" name="member_sex" value="0" title="女">
+         </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">职位：</label>
     <div class="layui-input-inline">
-  	  <input type="text" name="member_position"  placeholder="请输入职位" lay-verType="tips" autocomplete="off" class="layui-input">
+  	  <input type="text" name="member_post"  placeholder="请输入职位" lay-verType="tips" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
@@ -51,9 +52,11 @@
   	   <div class="layui-col-md8">
   		 <label class="layui-form-label">所属企业：</label>
   		 <div class="layui-input-inline">
-			  <select name="" class="field-role_id" lay-verType="tips" lay-filter="filter" type="select">
+			  <select name="firm_id" class="field-role_id" lay-verType="tips" type="select">
 				<option value="">请选择</option>
-				<option value="1">企业1</option>
+				{volist name="firmArr" id="v"}
+       <option value="{$v['firm_id']}">{$v['firm_name']}</option>
+       {/volist}
 			  </select>
   		 </div>
   	   </div>
@@ -67,7 +70,11 @@
     <div class="layui-input-inline">
       <select name="" class="field-role_id" lay-verType="tips" lay-filter="filter" type="select">
         <option value="">请选择</option>
-        <option value="1">门禁1</option>
+        {volist name="guardArr" id="v"} {if condition="$v['pid'] == 0"}
+        <option value="{$v['id']}">
+          {$v['title']}
+        </option>
+        {/if} {/volist}
 	  </select>
     </div>
   </div>
@@ -77,10 +84,11 @@
       <div id="firstpane" class="menu_list"></div>
     </div>
   </div>
+  <input type="hidden" name="flag" value="1">
   <div class="layui-form-item j-item-top">
     <div class="layui-input-block">
       <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button></div>
+      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button></div>
   </div>
 </form>
 <!-- 内容区 -->
@@ -99,6 +107,58 @@
 			  selectM = layui.selectM,
 			  util = layui.util,
 			  yutons_sug = layui.yutons_sug;
+
+              //门禁
+      form.on('select(filter)', function(data){
+       $(".j-hides").show();
+        var guards = {:json_encode($guardArr)};
+        //console.log(guards);
+        for (var i = 0 ; i < guards.length; i++) {
+          if(guards[i].id == data.value){
+            var bans = guards[i].childs;
+            var str = '';
+      
+            if(bans.length > 0){
+              for (var j = 0 ; j < bans.length; j++) {
+                if(j==0){
+                  var current = 'current';
+              var hide = '';
+                }else{
+                  var current = '';
+              var hide = 'hide';
+                }
+                str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+                var floors = bans[j].childs;
+      
+                if(floors.length > 0){
+                  for (var k = 0 ; k < floors.length; k++) {
+                    str += '<dl class="clearfix">\
+                              <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+                                  <ul>';
+                    var guards = floors[k].childs;
+                    if(guards.length > 0){
+                      for (var h = 0 ; h < guards.length; h++) {
+                        str += '<li>\
+                                   <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+                                </li>';
+                      }
+                    }
+                    str += '</ul>\
+                              </dd></dl>';
+                  }  
+                }
+                str += '</div>';
+      
+              }   
+              str += '</div>';     
+              //console.log(str);
+              $('#firstpane').html(str);
+              form.render();
+            }
+            
+          }
+        }
+      });
 
 		  }); 
 		</script>

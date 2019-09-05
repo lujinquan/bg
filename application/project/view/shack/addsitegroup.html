@@ -1,209 +1,341 @@
 <!-- 内容区 -->
 <div class="layui-tab layui-tab-brief j-no-color">
-  <ul class="layui-tab-title">
-    <li class="layui-this">自由工位区入驻</li></ul>
+	<ul class="layui-tab-title">
+	   <li class="layui-this">自由工位区入驻</li>
+	</ul>
 </div>
-<form class="layui-form j-top-margin j-long-words" action="{:url('firm/add')}" method="post" id="addForm">
-  <div class="layui-form-item">
-    <div class="layui-col-md8">
-      <label class="layui-form-label">
-        <i class="red">*</i>姓名：</label>
-      <div class="layui-input-block j-name j-position">
-        <input type="text" id="deptName" name="firm_name" lay-verType="tips" autocomplete="off" placeholder="请输入部门" class="layui-input" />
-        <button class="layui-btn layui-btn-normal j-jiaoyan">
-          <i class="layui-icon"></i>校验</button></div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">
-        <i class="red">*</i>电话：</label>
-      <div class="layui-input-inline">
-        <input type="tel" name="firm_tel" lay-verify="required|phone" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input"></div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">性别：</label>
-    <div class="layui-input-block">
-      <input type="radio" name="sex" value="男" title="男" checked="">
-      <input type="radio" name="sex" value="女" title="女"></div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">身份证号：</label>
-      <div class="layui-input-inline">
-        <input type="text" name="firm_tel" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input"></div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">
-        <i class="red">*</i>入驻时间：</label>
-      <div class="layui-input-inline" style="width: 190px;">
-        <input type="text" name="firm_start_time" class="layui-input" lay-verify="required" lay-vertype="tips" id="test3" placeholder="请选择时间"></div>
-      <div class="layui-form-mid">-</div>
-      <div class="layui-input-inline" style="width: 190px;">
-        <input type="text" name="firm_end_time" class="layui-input" lay-verify="required" lay-vertype="tips" id="test4" placeholder="请选择时间"></div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">
-        <i class="red">*</i>场地选择：</label>
-      <div class="layui-input-inline">
-        <select name="ban_id" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
-          <option value="">请选择</option>
-          <option value="1">自由工位区</option></select>
-      </div>
-    </div>
-  </div>
-  <div class="layui-form-item" pane="">
-    <label class="layui-form-label">
-      <i class="red">*</i>门禁：</label>
-    <div class="layui-input-inline">
-      <select name="" class="field-role_id" lay-verify="required" lay-verType="tips" lay-filter="filter" type="select">
-        <option value="">请选择</option>{volist name="guardArr" id="v"} {if condition="$v['pid'] == 0"}
-        <option value="{$v['id']}">{$v['title']}</option>{/if} {/volist}</select></div>
-  </div>
-  <div class="layui-form-item j-hides hide">
-    <label class="layui-form-label"></label>
-    <div class="layui-input-block">
-      <div id="firstpane" class="menu_list"></div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-col-md8">
-      <label class="layui-form-label">备注：</label>
-      <div class="layui-input-block">
-        <input type="text" name="firm_remark" placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input"></div>
-    </div>
-  </div>
-  <input type="hidden" name="firm_id" value="">
-  <div class="layui-form-item j-item-top">
-    <div class="layui-input-block">
-      <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button></div>
-  </div>
-</form>
+<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post" id="addForm">
+	<div class="layui-form-item">
+		   <div class="layui-col-md8">
+			 <label class="layui-form-label"><i class="red">*</i>姓名：</label>
+			 <div class="layui-input-block j-name j-position">
+				<input type="text" id="member_name" name="member_name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input" />
+			   <button class="layui-btn layui-btn-normal j-jiaoyan">
+				  <i class="layui-icon"></i>校验
+				 </button>
+			 </div>
+		   </div>
+	 </div>
+	  <div class="layui-form-item">
+		  <div class="layui-inline">
+			<label class="layui-form-label"><i class="red">*</i>电话：</label>
+			<div class="layui-input-inline">
+			  <input type="tel" name="member_tel"  lay-verify="required|phone"  placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+			</div>
+		  </div>
+	   </div>
+	   <div class="layui-form-item">
+	       <label class="layui-form-label">性别：</label>
+	       <div class="layui-input-block" id="member_sex1">
+	         <input type="radio" name="member_sex" value="1" title="男" checked="">
+	         <input type="radio" name="member_sex" value="0" title="女">
+	       </div>
+			<div class="layui-input-block layui-hide" id="member_sex2">
+	         <input type="radio" name="member_sex" value="1" title="男">
+	         <input type="radio" name="member_sex" value="0" title="女" checked="">
+	       </div>
+	    </div>
+	   <div class="layui-form-item">
+	   		  <div class="layui-inline">
+	   			<label class="layui-form-label">身份证号：</label>
+	   			<div class="layui-input-inline">
+	   			  <input type="text" name="member_card"   placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">
+	   			</div>
+	   		  </div>
+	    </div>
+		<div class="layui-form-item">
+			   <div class="layui-col-md8">
+				 <label class="layui-form-label">人员备注：</label>
+				 <div class="layui-input-block">
+				   <input type="text" name="member_remark"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
+				 </div>
+			   </div>
+		 </div>
+		 <div class="layui-form-item">
+		 	<div class="layui-inline">
+		 	  <label class="layui-form-label"><i class="red">*</i> 入驻时间：</label>
+		 	  <div class="layui-input-inline" style="width: 190px;">
+		   <input type="text" name="shack_start_time" class="layui-input"  lay-vertype="tips" id="test3" placeholder="请选择时间">
+		   </div>
+		   <div class="layui-form-mid">-</div>
+		   <div class="layui-input-inline" style="width: 190px;">
+		   <input type="text" name="shack_end_time" class="layui-input"  lay-vertype="tips" id="test4" placeholder="请选择时间">
+		   </div>
+		 	</div>
+		  </div>
+		  <div class="layui-form-item">
+	   		  <div class="layui-inline">
+	   			<label class="layui-form-label">自由工位区选择：</label>
+	   			<div class="layui-input-inline">
+	   			  <select name="site_id" class="field-role_id"  lay-verType="tips" lay-filter="filter" type="select">
+		              <option value="">请选择</option>
+		              {volist name="siteGroupArr" id="v"}	           
+		              <option value="{$v['site_group_id']}">{$v['site_group_name']}</option>
+		              {/volist}
+		          </select>
+	   			</div>
+	   		  </div>
+	    </div>
+		  
+		  <div class="layui-form-item" pane="">
+		      <label class="layui-form-label"><i class="red">*</i>门禁：</label>
+		      <div class="layui-input-inline">
+		        <select name="" class="field-role_id" lay-verType="tips" lay-filter="filter" type="select">
+		              <option value="">请选择</option>
+		              {volist name="guardArr" id="v"}
+		              {if condition="$v['pid'] == 0"}
+		              <option value="{$v['id']}">{$v['title']}</option>
+		              {/if}
+		              {/volist}
+		          </select>
+		      </div>
+		  </div>
+		  <div class="layui-form-item j-hides hide">
+		        <label class="layui-form-label"></label>
+		        <div class="layui-input-block">
+		           <div id="firstpane" class="menu_list"></div>
+		        </div>
+		  </div>
+		  <div class="layui-form-item">
+			   <div class="layui-col-md8">
+				 <label class="layui-form-label">入驻备注：</label>
+				 <div class="layui-input-block">
+				   <input type="text" name="shack_remark"  placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
+				 </div>
+			   </div>
+		 </div>
+		<input type="hidden" name="member_id" value="">
+		<div class="layui-form-item j-item-top">
+		   <div class="layui-input-block">
+			 <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+			 <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确定</button>
+		   </div>
+		</div>
+	</form>
 <!-- 内容区 -->
 {include file="system@block/layui" /}
 <script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
 <script type="text/javascript">   
-   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
-	var laydate = layui.laydate,
-	  $ = layui.$,
-	  upload = layui.upload,
-	  form = layui.form,
-	  transfer = layui.transfer,
-	  layer = layui.layer,
-	  step = layui.step,
-	  selectN = layui.selectN,
-	  selectM = layui.selectM,
-	  util = layui.util,
-	  yutons_sug = layui.yutons_sug;
+           
+		   layui.use(['jquery', 'laydate', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
+		    var laydate = layui.laydate,
+		      $ = layui.$,
+		      upload = layui.upload,
+		      form = layui.form,
+			  transfer = layui.transfer,
+			  layer = layui.layer,
+			  step = layui.step,
+			  selectN = layui.selectN,
+			  selectM = layui.selectM,
+			  util = layui.util,
+			  yutons_sug = layui.yutons_sug;
 
-	  //搜索
-	  //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
-	  //初始化部门输入提示框
-	   yutons_sug.render({
-		id: "deptName", //设置容器唯一id
-		height: "167",
-		cols: [
-			[{
-				field: 'userName',
-				title: '姓名'
-			}, {
-				field: 'userCode',
-				title: '公司'
-			}, {
-				field: 'deptName',
-				title: '联系电话'
-			}]
-		], //设置表头
-		params: [
-		{
-			name: 'userName',
-			field: 'userName'
-		}, {
-			name: 'userCode',
-			field: 'userCode'
-		}, {
-			name: 'deptName',
-			field: 'deptName'
-		}],
-		type: 'sugTable', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
-		url: "/admin.php/project/shack/getFirms?keywords=" //设置异步数据接口,url为必填项
-	  });
-	 
-	//门禁
-	form.on('select(filter)', function(data){
-	 $(".j-hides").show();
-	  var guards = {:json_encode($guardArr)};
-	  //console.log(guards);
-	  for (var i = 0 ; i < guards.length; i++) {
-		if(guards[i].id == data.value){
-		  var bans = guards[i].childs;
-		  var str = '';
-	
-		  if(bans.length > 0){
-			for (var j = 0 ; j < bans.length; j++) {
-			  if(j==0){
-				var current = 'current';
-				  var hide = '';
-			  }else{
-				var current = '';
-				  var hide = 'hide';
-			  }
-			  str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
-			  var floors = bans[j].childs;
-	
-			  if(floors.length > 0){
-				for (var k = 0 ; k < floors.length; k++) {
-				  str += '<dl class="clearfix">\
-							<dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
-								<ul>';
-				  var guards = floors[k].childs;
-				  if(guards.length > 0){
-					for (var h = 0 ; h < guards.length; h++) {
-					  str += '<li>\
-								 <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
-							  </li>';
+
+			  $('.j-jiaoyan').click(function(){
+			  	var member_name = $('#member_name').val();
+			  	$.ajax({
+					type: 'post',
+					url: '{:url("project/shack/getMemberDetail")}',
+					data: "member_name=" + member_name,
+					success: function(datas) {
+						//console.log(datas);
+						if(datas.code){
+							var forData = datas.data;
+							if(forData.member_sex){
+								$('#member_sex1').addClass('layui-show').removeClass('layui-hide');
+								$('#member_sex2').addClass('layui-hide').removeClass('layui-show');
+							}else{
+								$('#member_sex2').addClass('layui-show').removeClass('layui-hide');
+								$('#member_sex1').addClass('layui-hide').removeClass('layui-show');
+							}
+							// 电话
+							//$('input[name=member_sex]').eq(forData.member_sex).removeAttr('checked');
+							$('input[name=member_tel]').val(forData.member_tel); // 电话
+							$('input[name=member_card]').val(forData.member_card); // 身份证号
+							$('input[name=member_remark]').val(forData.member_remark); // 备注
+							$('input[name=member_id]').val(forData.member_id); // 备注
+						}else{
+							$('#member_sex1').addClass('layui-show').removeClass('layui-hide');
+							$('#member_sex2').addClass('layui-hide').removeClass('layui-show');
+							$('input[name=member_tel]').val(''); // 电话
+							$('input[name=member_card]').val(''); // 身份证号
+							$('input[name=member_remark]').val(''); // 备注
+						}
+						
 					}
-				  }
-				  str += '</ul>\
-							</dd></dl>';
-				}  
+				});
+			  	return false;
+			  });
+			  //搜索
+			  //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
+			  //初始化部门输入提示框
+			   yutons_sug.render({
+				id: "member_name", //设置容器唯一id
+				height: "200",
+				cols: [
+					[{
+						field: 'member_name',
+						title: '姓名'
+					}, {
+						field: 'firm_name',
+						title: '公司'
+					}, {
+						field: 'member_tel',
+						title: '联系电话'
+					}]
+				], //设置表头
+				params: [
+				{
+					name: 'member_name',
+					field: 'member_name'
+				}, {
+					name: 'firm_name',
+					field: 'firm_name'
+				}, {
+					name: 'member_tel',
+					field: 'member_tel'
+				}],
+				type: 'sugTable', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
+				url: "/admin.php/project/shack/getMembers?keywords=" //设置异步数据接口,url为必填项
+			  });
+			  
+			 
+			  /* 穿梭框显示搜索框 */
+			  //var data1 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据
+			  var data1 = {:json_encode($siteArr[1])};
+			  var data2 = {:json_encode($siteArr[2])};
+			  //联合办公区
+			  transfer.render({
+				elem: '#transfer1'
+				,id:'demo1'
+				,data: data1
+				,title: ['未选', '已选']
+				,showSearch: true
+			  });
+			  //独立办公区
+			   transfer.render({
+				elem: '#transfer2'
+				,id:'demo2'
+				,data: data2
+				,title: ['未选', '已选']
+				,showSearch: true
+			  });
+			   
+			//门禁
+			form.on('select(filter)', function(data){
+			 $(".j-hides").show();
+			  var guards = {:json_encode($guardArr)};
+			  //console.log(guards);
+			  for (var i = 0 ; i < guards.length; i++) {
+			    if(guards[i].id == data.value){
+			      var bans = guards[i].childs;
+			      var str = '';
+			
+			      if(bans.length > 0){
+			        for (var j = 0 ; j < bans.length; j++) {
+			          if(j==0){
+			            var current = 'current';
+						  var hide = '';
+			          }else{
+			            var current = '';
+						  var hide = 'hide';
+			          }
+			          str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+			          var floors = bans[j].childs;
+			
+			          if(floors.length > 0){
+			            for (var k = 0 ; k < floors.length; k++) {
+			              str += '<dl class="clearfix">\
+			                        <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+			                            <ul>';
+			              var guards = floors[k].childs;
+			              if(guards.length > 0){
+			                for (var h = 0 ; h < guards.length; h++) {
+			                  str += '<li>\
+			                             <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+			                          </li>';
+			                }
+			              }
+			              str += '</ul>\
+			                        </dd></dl>';
+			            }  
+			          }
+			          str += '</div>';
+			
+			        }   
+			        str += '</div>';     
+			        //console.log(str);
+			        $('#firstpane').html(str);
+			        form.render();
+			      }
+			      
+			    }
 			  }
-			  str += '</div>';
-	
-			}   
-			str += '</div>';     
-			//console.log(str);
-			$('#firstpane').html(str);
-			form.render();
-		  }
-		  
-		}
-	  }
-	});
-	//多选标签-基本配置
-	var tagIns1 = selectM({
-	  //元素容器【必填】
-	  elem: '#floor_number'
-	  //候选数据【必填】
-	  ,data: tagData
-	  //,max:10
-	  ,width:400
-	  //添加验证
-	  //,verify:'required'      
-	});
-	//入驻开始时间
-	laydate.render({
-		elem: '#test3'
-	});
-	//入驻结束时间
-	laydate.render({
-		elem: '#test4'
-	});	
-  }); 
-</script>
+			});
+
+			// 第一步的提交
+			form.on('submit(formStep)', function (data) {
+				//获得右侧数据
+				var getData1 = transfer.getData('demo1');
+				//console.log(getData1);
+				var arr = new Array(); 
+				for (var i in getData1) {
+					arr.push(getData1[i].value);
+				}
+				var getData2 = transfer.getData('demo2');
+				//console.log(getData2);
+				//var arr2 = new Array(); 
+				for (var i in getData2) {
+					arr.push(getData2[i].value);
+				}
+				//return false;
+		 	    var _form = '', 
+	            that = $(this), 
+	            text = that.text(),
+	            options = {pop: false, refresh: true, jump: false, callback: null};
+		        if ($(this).attr('data-form')) {
+		            _form = $(that.attr('data-form'));
+		        } else {
+		            _form = that.parents('form');
+		        }
+		        if (that.attr('hisi-data')) {
+		            options = new Function('return '+ that.attr('hisi-data'))();
+		        } else if (that.attr('lay-data')) {
+		            options = new Function('return '+ that.attr('lay-data'))();
+		        }
+		        formData = $.param({'site_group':arr})+'&'+_form.serialize();
+		        //formData = $.param({'sites1':arr1,'sites2':arr2})+'&'+_form.serialize();
+		        console.log(formData);
+		        that.prop('disabled', true).text('提交中...');
+		        $.ajax({
+		            type: "POST",
+		            url: _form.attr('action'),
+		            data: formData,
+		            success: function(res) {
+		                that.text(res.msg);
+		                if (res.code == 0) {
+		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+		                    setTimeout(function(){
+		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+		                    }, 3000);
+		                } else {
+		                    setTimeout(function() {
+		                        //that.text(text).prop('disabled', false);
+		                        that.prop('disabled', false);
+		                    }, 3000);
+		                }
+		            }
+		        });
+			    return false;
+			});
+			
+			//入驻开始时间
+			laydate.render({
+				elem: '#test3'
+			});
+			//入驻结束时间
+			laydate.render({
+				elem: '#test4'
+			});	
+		  }); 
+		</script>

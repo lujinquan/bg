@@ -371,8 +371,9 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
     $(document).on('click', '.j-tr-del,.hisi-tr-del', function() {
 		$(".layui-layer-btn").after($(".layui-layer-btn1"));
         var that = $(this),
-            href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href');
-        layer.confirm('删除之后无法恢复，您确定要删除吗？', {icon: 7,title:false, closeBtn:0,offset: 'auto', btn: ['确定','取消']}, function(index){
+            href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href'),
+            data_msg = that.attr('data-msg') ? that.attr('data-msg') : '删除之后无法恢复，您确定要删除吗？';
+        layer.confirm(data_msg, {icon: 7,title:false, closeBtn:0,offset: 'auto', btn: ['确定','取消']}, function(index){
             if (!href) {
                 layer.msg('请设置data-href参数');
                 return false;

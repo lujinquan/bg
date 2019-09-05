@@ -18,6 +18,7 @@ use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
 use app\project\model\Firm as FirmModel;
 use app\project\model\Shack as ShackModel;
+use app\space\model\Rest as RestModel;
 use app\project\model\Member as MemberModel;
 use app\system\model\SystemGuard as GuardModel;
 use app\common\model\SystemAnnex as AnnexModel;
@@ -312,9 +313,16 @@ class Shack extends Admin
                 $html = 'addpersion';
                 break;
             case 3: // 自由工位区入驻
+                $siteGroupModel = new SiteGroupModel;
+                $siteGroupArr = $siteGroupModel->where([['status','eq',1],['site_group_type','eq',3]])->field('site_group_id,site_group_name')->select();
+                $this->assign('siteGroupArr', $siteGroupArr);
                 $html = 'addsitegroup';
                 break;
             case 4: //其他场地入驻
+                
+                $RestModel = new RestModel;
+                $restArr = $RestModel->where([['status','eq',1]])->field('rest_id,rest_name')->select();
+                $this->assign('restArr', $restArr);
                 $html = 'addrest';
                 break;
 

@@ -198,6 +198,10 @@ class Firm extends Admin
         $id = input('param.id/d');
         $row = ShackModel::with(['firm','member'])->find($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
+        if($row['firm_id']){
+            $row['firm_imgs'] = AnnexModel::changeFormat($row['firm_imgs']);
+        }
+        //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
     }

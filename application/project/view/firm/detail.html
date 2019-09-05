@@ -4,66 +4,71 @@
     <li class="layui-this">详情</li></ul>
 </div>
 <div class="j-details-from">
-  <form class="layui-form j-top-margin" method="post" id="addForm">
+  
+  <form class="layui-form j-top-margin" action="{:url('edit')}" method="post" id="addForm">
+    {if condition="$data_info['firm_id']"}
     <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
       <legend>企业信息</legend></fieldset>
     <div class="layui-form-item">
       <label class="layui-form-label">企业名称：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">北京时标文化传播有限公司</div></div>
+        <div class="j-words-border">{$data_info['firm_name']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">联系人姓名：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">李某某</div></div>
+        <div class="j-words-border">{$data_info['firm_manager']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">联系人电话：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">15677777777</div></div>
+        <div class="j-words-border">{$data_info['firm_tel']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">社会信用代码：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">1031021021000</div></div>
+        <div class="j-words-border">{$data_info['firm_credit_code']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">所属行业：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">互联网</div></div>
+        <div class="j-words-border">{$params.firm_industry_type[$data_info['firm_industry_type']]}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">注册资金：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">1000000</div></div>
+        <div class="j-words-border">{$data_info['firm_registered_capital']}万元</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">法人姓名：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">周某某</div></div>
+        <div class="j-words-border">{$data_info['firm_legaler']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">成立日期：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">2014/06/03</div></div>
+        <div class="j-words-border">{$data_info['firm_established_time']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">注册地址：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">湖北省武汉市</div></div>
+        <div class="j-words-border">{$data_info['firm_registered_address']}</div></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">经营范围：</label>
       <div class="layui-input-block">
-        <div class="j-words-border">我是内容描述</div></div>
+        <div class="j-words-border">{$data_info['firm_scope']}</div></div>
     </div>
     <div class="layui-form-item j-positions-size">
       <div class="layui-inline">
         <label class="layui-form-label">营业执照：</label>
         <div class="layui-input-block j-uplode-block">
           <div class="upload_img_list j-viewer-img">
+            {volist name="data_info['firm_imgs']" id="v"}
             <dd class="item_img">
-              <img src="/upload/ban/image/20190822/0b3e8ba58e28639abd9d080b07decd5e.png" class="img"></dd>
+              <img src="/upload/ban/image/20190822/0b3e8ba58e28639abd9d080b07decd5e.png" class="img">
+            </dd>
+            {/volist}
           </div>
         </div>
       </div>
@@ -72,9 +77,43 @@
       <div class="layui-col-md8">
         <label class="layui-form-label">备注：</label>
         <div class="layui-input-block">
-          <input type="text" name="meet_remark" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+          <input type="text" name="firm_remark" value="{$data_info['firm_remark']}" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
       </div>
     </div>
+    <input type="hidden" name="firm_id" value="{$data_info['firm_id']}">
+    {else /}
+    <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+      <legend>个人信息</legend></fieldset>
+    <div class="layui-form-item">
+      <label class="layui-form-label">姓名：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">{$data_info['member_name']}</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">电话：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">{$data_info['member_tel']}</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">性别：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">{if condition="$data_info['member_sex']"}男{else /}女{/if}</div></div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">身份证号：</label>
+      <div class="layui-input-block">
+        <div class="j-words-border">{$data_info['member_card']}</div></div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-col-md8">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+          <input type="text" name="member_remark" value="{$data_info['member_remark']}" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+      </div>
+    </div>
+    {/if}
+
+    <input type="hidden" name="id" value="{$data_info['id']}">
     <!-- 工位信息 S-->
     <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
       <legend>工位信息</legend></fieldset>
@@ -83,16 +122,7 @@
       <div class="layui-input-block">
         <div class="j-words-border">2019/01/02 —— 2020/01/01</div></div>
     </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">楼宇：</label>
-      <div class="layui-input-block">
-        <div class="j-words-border">楼宇三</div></div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">楼层：</label>
-      <div class="layui-input-block">
-        <div class="j-words-border">12</div></div>
-    </div>
+    
     <div class="layui-form-item j-no-disabled">
       <label class="layui-form-label">联合工位区：</label>
       <div class="layui-input-block j-input-route">
@@ -109,7 +139,7 @@
       <div class="layui-col-md8">
         <label class="layui-form-label">备注：</label>
         <div class="layui-input-block">
-          <input type="text" name="meet_remarks" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
+          <input type="text" name="meet_remarks" value="{$data_info['shack_remark']}" placeholder="备注描述..." lay-vertype="tips" autocomplete="off" class="layui-input"></div>
       </div>
     </div>
     <!-- 工位信息E -->
@@ -120,8 +150,11 @@
         <label class="layui-form-label">合同：</label>
         <div class="layui-input-block j-uplode-block">
           <div class="upload_img_list j-viewer-img">
+            {volist name="$data_info['imgs']" id="v" empty="未上传附件"}
             <dd class="item_img">
-              <img src="/upload/ban/image/20190822/0b3e8ba58e28639abd9d080b07decd5e.png" class="img"></dd>
+              <img src="{$v['file']}" class="img">
+            </dd>
+            {/volist}
           </div>
         </div>
       </div>
@@ -132,5 +165,7 @@
         <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button></div>
     </div>
     </from>
+  
 </div>
-<!-- 内容区 -->{include file="system@block/layui" /}
+<!-- 内容区 -->
+{include file="system@block/layui" /}
