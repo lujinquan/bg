@@ -6,15 +6,14 @@
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="ban_floor" class="field-cid" type="select">
-						<option value="">所属楼层</option>
-						<option value="1">楼层1</option>
-					</select>
+				  	<input type="text" name="ban_floor" placeholder="楼层" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="ban_building" class="field-cid" type="select">
+				  	<select name="ban_id" class="field-cid" type="select">
 						<option value="">所属楼宇</option>
-						<option value="1">楼宇1</option>
+						{volist name="banArr" id="v"}
+	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
+	      			    {/volist}
 					</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -34,7 +33,7 @@
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
 			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-			<a href="{:url('del')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+			<a href="{:url('del')}?id={{ d.floor_id }}" hisi-data="{width: '400px', height: '230px'}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">删除</a>
 	
 		</div>
 	</script>
@@ -59,10 +58,10 @@
             	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
                     return d.LAY_INDEX;
                 }}
-				,{field: 'floor_number', align:'left',minWidth:100, title: '所属楼层'}
                 ,{field: 'ban_name', align:'left',minWidth:80, title: '所属楼宇'}
-                /* ,{field: 'ban_address', align:'left',minWidth:100, title: '地址'} */
-                ,{field: 'floor_area', align:'left',minWidth:100, title: '面积'}
+                // ,{field: 'ban_address', align:'left',minWidth:100, title: '地址'} 
+				,{field: 'floor_number', align:'left',minWidth:100, title: '楼层'}         
+                ,{field: 'floor_area', align:'left',minWidth:100, title: '楼层面积'}
                 ,{title: '操作', minWidth:280, Width:280,align:'left', templet: '#buttonTpl', fixed:'right'}
             ]]
         });

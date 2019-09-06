@@ -17,7 +17,9 @@ use think\Db;
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
+use app\system\model\SystemUser as UserModel;
 use app\common\model\SystemAnnex as AnnexModel;
+use app\space\model\SiteGroup as SiteGroupModel;
 
 class Floor extends Admin
 {
@@ -113,13 +115,29 @@ class Floor extends Admin
 
     public function del()
     {
-        $ids = $this->request->param('id/a');        
-        $res = FloorModel::where([['floor_id','in',$ids]])->update(['status'=>0]);
-        if($res){
-            $this->success('删除成功');
-        }else{
-            $this->error('删除失败');
+
+        if ($this->request->isPost()) {
+            $id = $this->request->param('id');
+            $password = $this->request->param('password');
+            $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
+            if(!password_verify(md5($password), $realPassword)){
+                $this->error('密码效验失败');
+            }
+            $floorNumber = FloorModel::where([['floor_id','eq',$id]])->value('floor_number');   
+            $sites = SiteGroupModel::where([['floor_number','like','|%'.$floorNumber.'%|']])->find(); 
+            if($sites){
+                $this->error('请先删除该楼宇下所有工位区');  
+            }
+            $res = FloorModel::where([['floor_id','eq',$id]])->update(['status'=>0]);
+            if($res){
+                $this->success('删除成功');
+            }else{
+                $this->error('删除失败');
+            }
         }
+        $floor_id = $this->request->param('id'); 
+        $this->assign('floor_id',$floor_id);
+        return $this->fetch();
     }
 
 }

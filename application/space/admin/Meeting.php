@@ -40,6 +40,7 @@ class Meeting extends Admin
             $getData = $this->request->get();
             $MeetingModel = new MeetingModel;
             $where = $MeetingModel->checkWhere($getData);
+            //halt($where);
             $fields = 'a.meet_id,a.meet_name,a.floor_number,a.meet_volume,a.meet_unit_price,b.ban_id,b.ban_name';
             $data = [];
             $data['data'] = Db::name('space_meeting')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();

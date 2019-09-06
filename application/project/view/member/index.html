@@ -76,6 +76,7 @@
                 ,{field: 'member_department', align:'center',with:100, title: '部门'}
                 ,{field: 'ctime', align:'center',with:100, title: '入驻时间'}
                 ,{field: 'is_activate', align:'center',with:100, title: '状态', templet:function(d){
+                	
                     if(d.is_activate){
                     	return '<button class="j-table-button j-activated">已激活</button>';
                     }else{

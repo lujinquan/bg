@@ -185,8 +185,7 @@ class SystemUser extends Model
         if (!$user) {
             $this->error = '用户不存在或被禁用！';
             return false;
-        }
-        
+        } 
         // 密码校验
         if (!password_verify($password, $user->password)) {
             $this->error = '登录密码错误！';

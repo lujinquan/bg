@@ -21,6 +21,7 @@ use app\project\model\Member as MemberModel;
 use app\project\model\Shack as ShackModel;
 use app\space\model\SiteGroup as SiteGroupModel;
 use app\system\model\SystemGuard as GuardModel;
+use app\system\model\SystemUser as UserModel;
 
 class Firm extends Admin
 {
@@ -33,15 +34,29 @@ class Firm extends Admin
             $getData = $this->request->get();
             $ShackModel = new ShackModel;
             $where = $ShackModel->checkWhere($getData);
-            $fields = 'b.firm_name,b.firm_coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.id';
+            $fields = 'a.firm_id,a.member_id,b.firm_name,b.firm_coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.id';
             $data = [];
             $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->field($fields)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            //halt($temps);
+            $curTime = strtotime(date('Y-m-d'));
             foreach ($temps as $k => &$v) {
                 if($v['member_name']){
                     $v['group_name'] = $v['member_name'];
                 }
                 if($v['firm_name']){
                     $v['group_name'] = $v['firm_name'];
+                }
+                $diffTime = strtotime($v['shack_end_time']) - $curTime;
+
+                //入驻人数
+                
+                //状态
+                if($diffTime > 3600*24){
+                    $v['firm_type'] = 1; //已入驻
+                }elseif($diffTime > 0){
+                    $v['firm_type'] = 2; //即将到期
+                }else{
+                    $v['firm_type'] = 3; //已到期
                 }
             }
             $data['data']  = array_slice($temps, ($page- 1) * $limit, $limit);
@@ -298,13 +313,40 @@ class Firm extends Admin
      */
     public function stop()
     {
-        $ids = $this->request->param('id/a');        
-        $res = FirmModel::where([['firm_id','in',$ids]])->update(['status'=>0]);
-        if($res){
-            $this->success('停用成功');
-        }else{
-            $this->error('删除失败');
+        // $ids = $this->request->param('id/a');        
+        // $res = FirmModel::where([['firm_id','in',$ids]])->update(['status'=>0]);
+        // if($res){
+        //     $this->success('停用成功');
+        // }else{
+        //     $this->error('删除失败');
+        // }
+        if ($this->request->isPost()) {
+            $id = $this->request->param('id');
+            $password = $this->request->param('password');
+            $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
+            //halt(ADMIN_ID);
+            //dump($password);halt($realPassword);
+            if(!password_verify(md5($password), $realPassword)){
+                $this->error('密码效验失败');
+            }
+            $row = ShackModel::get($id);  
+            if($row['member_id']){
+                $res = MemberModel::where([['firm_id','eq',$row['member_id']]])->update(['status'=>0]);
+            }
+            if($row['firm_id']){
+                $res = FirmModel::where([['firm_id','eq',$row['firm_id']]])->update(['status'=>0]);
+                MemberModel::where([['firm_id','eq',$row['firm_id']]])->update(['status'=>0]);
+            }
+            
+            if($res){
+                $this->success('停用成功');
+            }else{
+                $this->error('停用失败');
+            }
         }
+        $id = $this->request->param('id'); 
+        $this->assign('id',$id);
+        return $this->fetch();
     }
 
 

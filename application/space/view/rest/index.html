@@ -17,15 +17,14 @@
 	      			</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-						<select name="floor_number" class="field-cid" type="select">
-							<option value="">请选择楼层</option>
-							<option value="1">楼层1</option>
-						</select>
+						<input type="text" name="floor_number" placeholder="楼层" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-						<select name="floor_number" class="field-cid" type="select">
+						<select name="rest_type" class="field-cid" type="select">
 							<option value="">请选择类型</option>
-							<option value="1">类型1</option>
+							{volist name="params['rest_type']" id="v"}
+		      			    <option value="{$key}">{$v}</option>
+		      			    {/volist}
 						</select>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>

@@ -20,7 +20,7 @@ class Ban extends Model
 
     public function floor()
     {
-        return $this->hasMany('floor', 'ban_id', 'ban_id')->bind('floor_number');
+        return $this->hasMany('floor', 'ban_id', 'ban_id')->field('floor_number');
     }
 
     public function checkWhere($data)

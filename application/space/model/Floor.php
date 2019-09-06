@@ -26,17 +26,16 @@ class Floor extends Model
     
     public function checkWhere($data)
     {
-
         if(!$data){
             $data = request()->param();
         }  
         // 检索楼宇名称
-        if(isset($data['ban_name']) && $data['ban_name']){
-            $where[] = ['b.ban_name','like','%'.$data['ban_name'].'%'];
+        if(isset($data['ban_id']) && $data['ban_id']){
+            $where[] = ['b.ban_id','eq',$data['ban_id']];
         }
         // 检索地址
-        if(isset($data['ban_address']) && $data['ban_address']){
-            $where[] = ['b.ban_address','like','%'.$data['ban_address'].'%'];
+        if(isset($data['floor_number']) && $data['floor_number']){
+            $where[] = ['b.floor_number','eq',$data['floor_number']];
         }
         $where[] = ['a.status','eq',1];
         $where[] = ['b.project_id','eq',PROJECT_ID];

@@ -87,6 +87,8 @@ class Ban extends Admin
         }
         $id = input('param.id/d');
         $row = BanModel::get($id);
+        $row['floors'] = FloorModel::where([['ban_id','eq',$id]])->value('group_concat(floor_number)');
+        //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
     }
@@ -105,7 +107,7 @@ class Ban extends Admin
             $id = $this->request->param('id');
             $password = $this->request->param('password');
             $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
-            if(!password_verify($password, $realPassword)){
+            if(!password_verify(md5($password), $realPassword)){
                 $this->error('密码效验失败');
             }   
             $floors = FloorModel::where([['ban_id','eq',$id]])->count('floor_id'); 

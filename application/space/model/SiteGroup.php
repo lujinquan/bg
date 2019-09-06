@@ -35,14 +35,22 @@ class SiteGroup extends Model
 
         if(!$data){
             $data = request()->param();
+        }
+        // 检索工位区名称
+        if(isset($data['site_group_name']) && $data['site_group_name']){
+            $where[] = ['site_group_name','like','%'.$data['site_group_name'].'%'];
         }  
         // 检索楼宇名称
-        if(isset($data['ban_name']) && $data['ban_name']){
-            $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];
+        if(isset($data['ban_id']) && $data['ban_id']){
+            $where[] = ['a.ban_id','eq',$data['ban_id']];
         }
-        // 检索地址
-        if(isset($data['ban_address']) && $data['ban_address']){
-            $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
+        // 检索类型
+        if(isset($data['site_group_type']) && $data['site_group_type']){
+            $where[] = ['site_group_type','eq',$data['site_group_type']];
+        }
+        // 检索楼层
+        if(isset($data['floor_number']) && $data['floor_number']){
+            $where[] = ['floor_number','like','%|'.$data['floor_number'].'|%'];
         }
         $where[] = ['a.status','eq',1];
         $where[] = ['b.project_id','eq',PROJECT_ID];

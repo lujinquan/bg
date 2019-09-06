@@ -23,7 +23,7 @@ class Rest extends Validate
     protected $rule = [
         'rest_name|场地名称'    	=> 'require',
         'rest_type|场地类型'    	=> 'require',
-        'rest_area|面积'    	=> 'require|float',
+        //'rest_area|面积'    	=> 'require|float',
         'ban_id|楼宇'    	=> 'require|number',
         'floor_number|所属楼层'     => 'require',
         'order_start_time|可预约起始时间'    	=> 'require',
@@ -39,7 +39,7 @@ class Rest extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['rest_name','rest_type','ban_id','floor_number','order_start_time','order_end_time','rest_area','__token__']);
+        return $this->only(['rest_name','rest_type','ban_id','floor_number','order_start_time','order_end_time','__token__']);
     }
 
     

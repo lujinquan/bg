@@ -6,7 +6,7 @@
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
 				<div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <input type="text" name="site_name" placeholder="工位区名称" class="layui-input">
+					  <input type="text" name="site_group_name" placeholder="工位区名称" class="layui-input">
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 				  	<select name="ban_id" class="field-cid" type="select">
@@ -17,18 +17,15 @@
 	      			</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="ban_class" class="field-cid" type="select">
+				  	<select name="site_group_type" class="field-cid" type="select">
 						<option value="">请选择类型</option>
-						<option value="1">独立工位区</option>
-						<option value="2">自由工位区</option>
-						<option value="3">联合工位区</option>
+						{volist name="params['site_group_type']" id="v"}
+						<option value="{$key}">{$v}</option>
+						{/volist}
 					</select>
 				  </div>
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<select name="ban_floor" class="field-cid" type="select">
-						<option value="">请选择楼层</option>
-						<option value="1">楼层1</option>
-					</select>
+				 	<input type="text" name="floor_number" placeholder="所属楼层" class="layui-input">
 				 </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
@@ -46,8 +43,8 @@
 
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
-			<a href="{:url('edit')}?id={{ d.site_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-			<a href="{:url('del')}?id={{ d.site_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+			<a href="{:url('edit')}?id={{ d.site_group_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('del')}?id={{ d.site_group_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
 	
 		</div>
 	</script>
@@ -79,7 +76,7 @@
                 ,{field: 'ban_name', align:'left',minWidth:100, title: '所属楼宇'}
                 ,{field: 'floor_number', align:'left',minWidth:100, title: '所属楼层'}
                 ,{field: 'site_num', align:'left',minWidth:100, title: '工位数'}
-				,{field: 'site_sum', align:'left',minWidth:100, title: '入驻人数'}
+				,{field: 'shack_num', align:'left',minWidth:100, title: '入驻人数'}
                 ,{title: '操作', minWidth:280,Width:280, templet: '#buttonTpl',align:'left', width: 150,fixed:'right'}
             ]]
         });

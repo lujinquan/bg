@@ -50,9 +50,13 @@ class Rest extends Model
         if(isset($data['rest_name']) && $data['rest_name']){
             $where[] = ['a.rest_name','like','%'.$data['rest_name'].'%'];
         }
+        // 检索楼宇名称
+        if(isset($data['rest_type']) && $data['rest_type']){
+            $where[] = ['a.rest_type','eq',$data['rest_type']];
+        }
         // 检索楼层
         if(isset($data['floor_number']) && $data['floor_number']){
-            $where[] = ['a.floor_name','like','%|'.$data['floor_number'].'|%'];
+            $where[] = ['a.floor_number','like','%|'.$data['floor_number'].'|%'];
         }
         $where[] = ['a.status','eq',1];
         $where[] = ['b.project_id','eq',PROJECT_ID];

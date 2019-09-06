@@ -44,7 +44,11 @@ class Firm extends Model
         if(isset($data['ban_address']) && $data['ban_address']){
             $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         }
-        $where[] = ['status','eq',1];
+        if($data['group'] == 'y'){
+            $where[] = ['status','eq',1];
+        }else{
+            $where[] = ['status','eq',0];
+        }
 
         return $where;
     }

@@ -68,7 +68,7 @@ class Shack extends Admin
     {
         $keywords = input('param.keywords/s');
         $where = [];
-        $where[] = ['status','eq',1];
+        $where[] = ['status','eq',0];
         // 查询公司名称
         if($keywords){
             $where[] = ['firm_name','like','%'.$keywords.'%'];

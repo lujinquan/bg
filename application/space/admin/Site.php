@@ -19,6 +19,7 @@ use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
 use app\space\model\SiteGroup as SiteGroupModel;
+use app\project\model\Shack as ShackModel;
 
 class Site extends Admin
 {
@@ -43,8 +44,14 @@ class Site extends Admin
             $where = $SiteGroupModel->checkWhere($getData);
             $fields = 'a.site_group_id,a.site_group_name,a.site_group_type,a.site_num,a.floor_number,b.ban_name,b.ban_address';
             $data = [];
-            $data['data'] = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
-            //halt($data['data']);
+            $temps = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            foreach ($temps as $k => &$v) {
+                // 统计方式【待优化】
+                $v['shack_num'] = ShackModel::where([['site_group','like','%|'.$v['site_group_id'].'|%'],['shack_status','eq',1]])->count();
+                
+            }
+            //halt($temps);
+            $data['data'] = $temps;
             $data['count'] = $SiteGroupModel->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('site_group_id');
             $data['code'] = 0;
             $data['msg'] = '';
@@ -107,7 +114,28 @@ class Site extends Admin
         $row['sites'] = explode('|',$row['sites']);
         array_shift($row['sites']);
         array_pop($row['sites']);
-        //halt($row);
+
+        //获取入驻公司&个体户
+        $shackArr = ShackModel::with(['member','firm'])->where([['site_group','like','%|'.$row['site_group_id'].'|%'],['shack_status','eq',1]])->field('firm_id,member_id')->select();
+        $firmArr = [];
+        foreach ($shackArr as $k => $v) {
+            if($v['member_id']){
+                $firmArr[] = [
+                    'group_id' => $v['member_id'],
+                    'type' => 1,
+                    'group_name' => $v['member_name'],
+                ];
+            }
+            if($v['firm_id']){
+                $firmArr[] = [
+                    'group_id' => $v['firm_id'],
+                    'type' => 1,
+                    'group_name' => $v['firm_name'],
+                ];
+            }
+        }
+        //halt($firmArr);
+        $this->assign('firmArr',$firmArr);
         $this->assign('data_info',$row);
         return $this->fetch();
     }

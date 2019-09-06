@@ -21,7 +21,7 @@ class Firm extends Validate
 {
     //定义验证规则
     protected $rule = [
-        'firm_name|企业名称'    	=> 'require',
+        'firm_name|企业名称'    	=> 'require|unique:member_firm',
         'firm_manager|联系人姓名'    	=> 'require',
         'firm_tel|联系人电话'    	=> 'require|mobile',
         'firm_credit_code|社会信用代码'     => 'require',

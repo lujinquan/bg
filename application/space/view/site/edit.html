@@ -32,17 +32,12 @@
 			<label class="j-form-label"><i class="red">*</i>工位区类型：</label>
 			<div class="j-input-inline">
 				<div class="j-words-border">
-					独立办公区
+					{$params.site_group_type[$data_info['site_group_type']]}
 				</div>
-				<!-- <select name="site_type" class="field-cid" lay-verify="required" lay-filter="site_type"  lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					{volist name="params['site_type']" id="v"}
-					<option value="{$key}" {if condition="$data_info['site_type'] == $key"}selected{/if}>{$v}</option>
-					{/volist}
-				</select> -->
+				
 			</div>
 		</div>
-		<div class="layui-col-md4 j-site_num {if condition="$data_info['site_type'] == 1"}hide{/if}">
+		<div class="layui-col-md4 j-site_num {if condition="$data_info['site_group_type'] == 1"}hide{/if}">
 			<label class="j-form-label"><i class="red">*</i>工位数：</label>
 			<div class="j-input-inline">
 				<input type="text" name="site_num" value="{$data_info['site_num']}" placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
@@ -77,12 +72,16 @@
 			<label class="j-form-label">入驻公司：</label>
 			<div class="j-input-inline">
 				<ul class="j-link-box">
+					{volist name="firmArr" id="v"}
 					<li>
-						<a href="#">a公司</a>,
+						
+						<a href="javascript:;" data-href="{if condition="$v['type'] == 1"}{:url('project/member/detail')}?id={$v['group_id']}{else /}{:url('project/firm/detail')}?id={$v['group_id']}{/if}">{$v['group_name']}</a>,
+						
 					</li>
-					<li>
+					{/volist}
+					<!-- <li>
 						<a href="#">b公司</a>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 		</div>
@@ -100,7 +99,7 @@
 						<i class="icon-cancel j-del"></i>
 						<div  class="j-hostile hide">
 							<span  class="j-type">企业</span>
-							<span  class="j-name">楚天新媒科技（武汉） 有限公司</span>
+							<span  class="j-name">楚天新媒科技（武汉）有限公司</span>
 						</div>
 					</li>
 					{/if}
@@ -135,7 +134,7 @@
 		</div>
 	</div>
      {:token()}
-     <input type="hidden" name="site_id" value="{$data_info['site_id']}">
+     <input type="hidden" name="site_group_id" value="{$data_info['site_group_id']}">
     <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
           <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
