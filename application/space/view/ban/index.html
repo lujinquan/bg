@@ -21,16 +21,11 @@
 		  </form>
 	  </div>
 	<table id="dataTable" lay-filter='dataTable'></table>
-
 	{include file="system@block/layui" /}
-
-	
-
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
 			<a href="{:url('edit')}?id={{ d.ban_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
-			<a href="{:url('del')}?id={{ d.ban_id }}" hisi-data="{width: '400px', height: '230px'}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">删除</a>
-	
+			<a href="{:url('del')}?id={{ d.ban_id }}" hisi-data="{width: '400px', height: '240px'}" title="密码校验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">删除</a>
 		</div>
 	</script>
 	<script type="text/html" id="toolbar"></script>
