@@ -8,6 +8,8 @@ input:-webkit-autofill {
 .clearfix:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
 .fl{ float: left;}
 .fr{float: right;}
+.j-text-right{ text-align: right; margin-top: 30px;}
+.j-frame-margin{padding: 25px 30px 0 0px;box-sizing: border-box;}
 .layui-elem-field.j-size-color legend{ font-size: 16px;  font-weight: bold; color: #20A0FF;}
 .j-top-formmargin{ margin-top: 30px;}
 .layui-side .layui-this a, .layui-side .layui-this i.aicon{ font-weight: bold;}
@@ -24,6 +26,18 @@ input:-webkit-autofill {
     padding: 5px 8px;
     margin: 8px;	
 }
+/* 弹框样式 S */
+ .layui-layer-title {
+	 text-align: center!important;
+	 font-size: 16px!important;
+	 font-weight: bold;
+	 padding: 0!important;
+ }
+ .layui-layer-iframe{
+	 border-radius: 10px!important;
+	 overflow: hidden;
+ }
+/* 弹框样式 E */
 /*---------------------公用样式 E--------------------*/
 .j-aicon-qiehuan i{ font-size: 22px;}
 /* 首页样式 S */
