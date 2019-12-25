@@ -46,11 +46,44 @@
 	</script>
 	<script type="text/html" id="toolbar"></script>
 </div>
+<div class="j-unread-news">
+	<div class="j-popup-box hide">
+		<div class="j-title clearfix">
+			<span class="fl"><i class="layui-icon iconfont j-icon-laba"></i> 未读消息（20）</span>
+			<span class="fr">X</span>
+		</div>
+		<div class="j-popup-con">
+			<ol>
+				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li>
+			</ol>
+		</div>
+	</div>
+	 <div class="j-popup-tips"><i class="layui-icon iconfont j-icon-laba"></i>（20）您有新的报事报修待处理</div>
+</div>
+<!-- 完结报修 -->
+<div class="j-powerquery hide" id="j-powerquery">
+	<form class="layui-form j-long-words  j-top-margin" action="" method="post" >
+	   <div class="layui-form-item">
+	    <div class="layui-col-md12">
+	      <label class="layui-form-label"><i class="red">*</i>处理结果：</label>
+	      <div class="layui-input-block">
+	        <textarea placeholder="请输入内容" lay-verify="required" lay-verType="tips" class="layui-textarea"></textarea>
+	      </div>
+	    </div>
+	  </div>
+	</form>
+</div>
 <script type="text/javascript">
-    layui.use(['table','jquery','laydate'], function() {
+    layui.use(['table','jquery','laydate','form'], function() {
         var $ = layui.$
 		    ,table = layui.table
-			,laydate = layui.laydate;
+			,laydate = layui.laydate
+			,form = layui.form;
 	  //日期
 	   laydate.render({
 		 elem: '#time1'
@@ -85,5 +118,50 @@
         $('#refresh').click(function(){
         	location.reload();
         });
+		//电量查询
+		$(".j-indent-boxs").click(function(){
+		  layer.open({
+		    title: '完结报修'
+		    ,offset: 'auto'
+			,type: 1
+		    ,area: ['30%', '30%']
+		     ,btn: ['确认', '取消'] 
+		    ,content: $('#j-powerquery')
+			,success : function(layero, index) { // 成功弹出后回调
+						// 解决按enter键重复弹窗问题
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter' : 'addRole',
+							'lay-submit' : ''
+						});
+					},
+					yes : function(index, layero) { // 确认按钮回调函数
+						// 监听提交按钮
+						form.on('submit(addRole)', function(data) {
+							layer.close(index); // 关闭弹出层
+						});
+					},
+					btn2 : function(index, layero) { // 取消按钮回调函数
+						layer.close(index); // 关闭弹出层
+					}
+		  });
+		 })
+		//报事报修弹框
+		$(".j-popup-tips").click(function(e){
+			$(".j-popup-box").toggle('fas');
+			e.stopPropagation();
+		})
+		$(".j-popup-box").click(function(e){
+			e.stopPropagation();
+		})
+		$(document.body).click(function(){
+			$(".j-popup-box").hide('fas');
+		});
+		$(".j-popup-box .fr").click(function(){
+			$(".j-popup-box").hide('fas');
+		})
     });
 </script>
