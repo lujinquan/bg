@@ -117,6 +117,7 @@ class User extends Admin
             $status    = $this->request->param('status/d');
             $where[]    = ['id', 'neq', 1];
             $where[] = ['status', 'eq', 1];
+            $where[] = ['role_id', 'neq', 1];
             if ($username) {
                 $where[] = ['username', 'like', "%{$username}%"];
             }
@@ -136,6 +137,7 @@ class User extends Admin
             }
             
             $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->select();
+            //halt($temp);
             foreach ($temp as $key => $value) {
                 $value['pro_names'] = '';
                 //dump($value['pro_ids']);
@@ -341,9 +343,13 @@ class User extends Admin
             }
             
             
-            $data['pro_ids'] = PROJECT_ID;
+            $data['pro_ids'] = [PROJECT_ID];
             $data['last_login_ip'] = '';
             $data['auth'] = '';
+
+            if(!isset($data['guard'])){
+                return $this->error('请分配门禁！');
+            }
 
             $data['guard'] = [
                 'ban' => $data['ban'],
@@ -388,6 +394,10 @@ class User extends Admin
             $result = $this->validate($data, 'SystemUser.edit');
             if($result !== true) {
                 return $this->error($result);
+            }
+
+            if(!isset($data['guard'])){
+                return $this->error('请分配门禁！');
             }
 
             $data['guard'] = [
