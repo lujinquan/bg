@@ -1,0 +1,76 @@
+<!-- 在线服务/运营管理/访客信息管理/访客登记 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">访客类型</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin" action="{:url()}" method="post" id="addForm">
+	<div class="layui-form-item">
+	  <label class="layui-form-label">访客类型：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">临时访客</div>
+	  </div>
+	</div>
+	<div class="layui-form-item">
+	    <div class="layui-inline">
+	      <label class="layui-form-label"><i class="red">*</i>访客姓名：</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="visitor_name" lay-verify="required" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	 </div>
+	 <div class="layui-form-item">
+	     <div class="layui-inline">
+	       <label class="layui-form-label"><i class="red">*</i>访客电话：</label>
+	       <div class="layui-input-inline">
+	         <input type="tel" name="visitor_tel" lay-verify="required|number" placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+	       </div>
+	     </div>
+	  </div>
+	  <div class="layui-form-item">
+	     <div class="layui-inline">
+	  	 <label class="layui-form-label"><i class="red">*</i>访问时间：</label>
+	  	 <div class="layui-input-inline">
+	  	   <input type="text" name="coupon_issue_time"  placeholder="请选择时间" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input" id="test2">
+	  	   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+	  	 </div>
+	     </div>
+	  </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label"><i class="red">*</i>访问对象：</label>
+          <div class="layui-input-inline">
+            <select name="ban_id" class="field-cid" lay-verify="required" lay-verType="tips" lay-search="" type="select">
+				<option value="0">请选择</option>
+				<option value="1">对象1</option>
+			</select>
+          </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-col-md6">
+          <label class="layui-form-label">访问目的：</label>
+          <div class="layui-input-block">
+            <input type="text" name="visitor_objective"  placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          </div>
+     </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+          <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}
+<script>
+	layui.use(['jquery', 'laydate', 'upload', 'form'], function() {
+		var laydate = layui.laydate,
+			$ = layui.$,
+			upload = layui.upload,
+			form = layui.form;
+            //发放起始时间
+            laydate.render({
+            	elem: '#test2',
+				type:'datetime'
+            });
+	});
+</script>

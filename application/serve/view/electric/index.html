@@ -1,2 +1,179 @@
+<!-- 在线服务/信息统计/水电气使用统计 -->
+<div class="layui-btn-group j-add-group clearfix">
+  <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>电量查询</a>
+</div>
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="notice_title" placeholder="公司名称" class="layui-input">
+            </div>
+			<div class="layui-input-inline j-input-margin">
+			    <input type="text" name="read" placeholder="电表" class="layui-input">
+			</div>
+			<div class="layui-input-inline j-input-margin">
+			    <input type="tel" name="task" lay-verify="phone" placeholder="工位区" class="layui-input">
+			</div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="notice_time" id="notice_time" placeholder="月份" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('statusRole')}?id={{ d.id }}">
+</script>
+<script type="text/html" id="toolbar"></script>
+<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
+<!-- 电量查询 -->
+<div class="j-powerquery hide" id="j-powerquery">
+	<form class="layui-form j-long-words  j-top-margin" action="" method="post" >
+	  <div class="layui-form-item">
+	        <label class="layui-form-label">公司：</label>
+	        <div class="layui-input-block">
+	          <select name="meet_name" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
+	              <option value="0">请选择</option>
+	              <option value="1">公司1</option>
+				  <option value="2">公司2</option>
+	          </select>
+	      </div>
+	  </div>
+	  <div class="layui-form-item">
+		<label class="layui-form-label">时间：</label>
+		<div class="layui-inline">
+			  <div class="layui-input-inline j-input-margin" style="width: 190px;">
+				  <input type="text" name="order_start_time" class="layui-input" lay-verify="required" lay-verType="tips" id="qBeginTime" placeholder="请选择">
+				  <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+			  </div>
+			  <div class="layui-form-mid">-</div>
+			  <div class="layui-input-inline" style="width: 190px;">
+			   <input type="text" name="order_end_time" class="layui-input" lay-verify="required" lay-verType="tips" id="qEndTime" placeholder="请选择">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+			  </div>
+			  <div class="layui-form-mid layui-word-aux">
+			  	<div class="j-selecteds j-search" lay-submit lay-filter="formDemo1">查询</div>
+			  </div>
+		</div>
+	   </div>
+	   <div class="layui-form-item">
+	   	  <label class="layui-form-label">示数：</label>
+	   	  <div class="layui-input-block">
+	   		<div class="j-words-border">
+	   			<ul>
+	   				<li class="j-lsit1 hide">
+	   					<span class="j-time"><span class="data">2019/06/02</span> 00:00</span>  <span class="j-degrees">1457.23</span>
+	   				</li>
+	   				<li class="j-lsit2 hide">
+	   					<span class="j-time"><span class="data">2019/06/06</span> 00:00</span>  <span class="j-degrees">1658.21</span>
+	   				</li>
+	   			</ul>
+	   		</div>
+	   	  </div>
+	    </div>
+	   <div class="layui-form-item">
+	    <div class="layui-col-md8">
+	      <label class="layui-form-label">使用量：</label>
+	      <div class="layui-input-block">
+	        <div class="j-words-border j-sum">200</div>
+	      </div>
+	    </div>
+	  </div>
+	</form>
+</div>
 {include file="system@block/layui" /}
-水电气使用统计主页
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+			,type: 'month'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                {field: 'username', minWidth:180,align:'left', title: '公司名称'}
+			   ,{field: 'read',minWidth: 120,align:'left', title: '电表'}
+			   ,{field: 'task',minWidth: 120,align:'left', title: '工位区'}
+			   ,{field: 'ctime',minWidth: 120,align:'left', title: '月份'}
+			   ,{field: 'amount',minWidth: 120,align:'left', title: '当月使用量'}
+            ]]
+        });
+		//电量查询
+		$(".j-add-group a").click(function(){
+		  layer.open({
+		    title: '电量查询'
+		    ,offset: 'auto'
+			,type: 1
+		    ,area: ['40%', '50%']
+		    , btn:false
+		    ,content: $('#j-powerquery')
+		  });
+		 })
+		//时间选择器
+		 laydate.render({
+		  elem: '#qBeginTime'
+		  ,ready: function(date){
+		      $('.layui-laydate li').click(function () {
+		         $('.laydate-btns-confirm').trigger('click');
+		      });
+		  },done: function(value, date, endDate){
+			  var startDate = new Date(value).getTime();
+			  		var endTime = new Date($('#qEndTime').val()).getTime();
+			  		if (endTime < startDate) {
+			  			layer.msg('结束时间不能小于开始时间');
+			  			$('#qBeginTime').val($('#qEndTime').val());
+			  		}
+		  }
+		 });
+		 laydate.render({
+			elem: '#qEndTime'
+			,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			},done: function(value, date, endDate){
+			  var startDate = new Date($('#qBeginTime').val()).getTime();
+			  		var endTime = new Date(value).getTime();
+			  		if (endTime < startDate) {
+			  			layer.msg('结束时间不能小于开始时间');
+			  			$('#qEndTime').val($('#qBeginTime').val());
+			  		}
+		  }
+		 });
+		//获取示数
+		$(".j-search").click(function(){
+			var list1time=parseFloat($(".j-words-border .j-lsit2 .j-degrees").text()).toFixed(2)*100,
+			    list2time=parseFloat($(".j-words-border .j-lsit1 .j-degrees").text()).toFixed(2)*100;
+			//获取示数
+			$(".j-words-border li").show();
+			$(".j-words-border .j-lsit1 .data").text($("#qBeginTime").val());
+			$(".j-words-border .j-lsit2 .data").text($("#qEndTime").val());
+			//使用量
+			$(".j-sum").text((list1time-list2time).toFixed(2) / 100);
+		})
+    });
+</script>

@@ -1,2 +1,190 @@
-{include file="system@block/layui" /}
-其他场地状态主页
+<!-- 在线服务/空间状态/整租类状态 -->
+<div class="j-indent-boxs">
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl layui-col-md9">
+				 <div class="layui-input-inline j-input-margin" style="width:150px;">
+				 	<select name="ban_id" class="field-cid" type="select">
+						<option value="">请选择楼宇</option>
+						{volist name="banArr" id="v"}
+						<option value="{$v['ban_id']}">{$v['ban_name']}</option>
+						{/volist}
+					</select>
+				 </div>
+				 <div class="layui-input-inline j-input-margin" style="width:150px;">
+				 	<select name="service_field" class="field-cid" type="select">
+						<option value="">请选择楼层</option>
+						<option value="1">楼层1</option>
+					</select>
+				 </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_field" class="field-cid" type="select">
+						<option value="">请选择会议室</option>
+						<option value="1">会议室1</option>
+						<option value="2">会议室2</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="请选择时间">
+					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+			<div class="layui-col-md3 fr">
+				<div class="layui-input-inline j-input-margin  fr">
+				  <a href="" type="reset" class="layui-btn layui-btn-primary">查看详细记录</a>
+				</div>
+			</div>
+		  </form>
+	  </div>
+	  <div class="j-conference-box clearfix">
+		  <div class="j-conference-title clearfix">
+			  <ul>
+				  <li>楼宇：<strong>楼宇一</strong></li>
+				  <li>楼层：<strong>25</strong></li>
+			  </ul>
+		  </div>
+		  <div class="j-conference-content clearfix">
+			  <ul class="j-first-floor clearfix">
+				  <li class="j-first clearfix">
+					  <div class="j-title clearfix">路演大厅1</div>
+					  <div class="j-titme clearfix">
+						  <ul>
+							  <li>
+								  最近7日使用时长：<label>47.75小时</label>
+							  </li>
+							  <li>
+							  	  最近30日使用时长：<label>179.75小时</label>
+							  </li>
+							  <li>
+							  	  预约人员类型：<label>管理员</label>
+							  </li>
+						  </ul>
+					  </div>
+				  </li>
+				  <li class="j-list clearfix">
+					 <dl>
+						 <dt>08:00</dt>
+						 <dd>
+							 <ol>
+							   <li></li>
+							   <li></li>
+							 </ol>
+						 </dd>
+					 </dl> 
+					 <dl>
+						 <dt>08:30</dt>
+						 <dd>
+							 <ol>
+							   <li></li>
+							   <li></li>
+							 </ol>
+						 </dd>
+					 </dl> 
+					 <dl>
+						 <dt>09:00</dt>
+						 <dd>
+							 <ol>
+							   <li class="j-green"></li>
+							   <li class="j-red"</li>
+							 </ol>
+						 </dd>
+					 </dl>
+				  </li>
+				  <div class=" j-instructions clearfix">
+					  <ul class="clearfix">
+						  <li class="j-lsit1">
+							  <i></i>已使用
+						  </li>
+						  <li class="j-lsit2">
+							  <i></i>已预约
+						  </li>
+						  <li class="j-lsit3">
+							  <i></i>未使用
+						  </li>
+					  </ul>
+				  </div>
+			  </ul>
+			  
+			  <ul class="j-first-floor clearfix">
+				  <li class="j-first clearfix">
+					  <div class="j-title clearfix">会议室2</div>
+					  <div class="j-titme clearfix">
+						  <ul>
+							  <li>
+								  最近7日使用时长：<label>47.75小时</label>
+							  </li>
+							  <li>
+								  最近30日使用时长：<label>179.75小时</label>
+							  </li>
+						  </ul>
+					  </div>
+				  </li>
+				  <li class="j-list clearfix">
+					 <dl>
+						 <dt>08:00</dt>
+						 <dd>
+							 <ol>
+							   <li></li>
+							   <li></li>
+							 </ol>
+						 </dd>
+					 </dl> 
+					 <dl>
+						 <dt>08:30</dt>
+						 <dd>
+							 <ol>
+							   <li></li>
+							   <li></li>
+							 </ol>
+						 </dd>
+					 </dl> 
+					 <dl>
+						 <dt>09:00</dt>
+						 <dd>
+							 <ol>
+							   <li class="j-green"></li>
+							   <li class="j-red"</li>
+							 </ol>
+						 </dd>
+					 </dl>
+				  </li>
+				  <div class=" j-instructions clearfix">
+					  <ul class="clearfix">
+						  <li class="j-lsit1">
+							  <i></i>已使用
+						  </li>
+						  <li class="j-lsit2">
+							  <i></i>已预约
+						  </li>
+						  <li class="j-lsit3">
+							  <i></i>未使用
+						  </li>
+					  </ul>
+				  </div>
+			  </ul>
+		  </div>
+	  </div>
+	{include file="system@block/layui" /}
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function() {
+        var $ = layui.$
+		    ,table = layui.table
+			,laydate = layui.laydate;
+	    laydate.render({
+	      elem: '#time1'
+	    });
+	 //点击吸附提示
+	 $(".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red").hover(function (){  
+	   var that = this;
+	   layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">使用者</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
+	 },function (){  
+	 layer.closeAll('tips');
+	 }); 
+  });
+</script>

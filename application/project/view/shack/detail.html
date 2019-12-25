@@ -1,162 +1,162 @@
 <!-- 内容区 -->
-				   <div class="layui-tab layui-tab-brief j-no-color">
-				     <ul class="layui-tab-title">
-				       <li class="layui-this">详情</li>
-				     </ul>
-				   </div>
-				<div class="j-details-from">
-				 <form class="layui-form j-top-margin"  method="post" id="addForm">
-				  <div class="layui-form-item">
-					  <label class="layui-form-label">操作人：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">李某某</div>
-					  </div>
-				 </div>
-				 <div class="layui-form-item">
-					  <label class="layui-form-label">操作时间：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">2020/01/01</div>
-					  </div>
-				 </div>
-				 <div class="layui-form-item">
-					  <label class="layui-form-label">类型：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">续租、扩租、减租、工位变更、减期、退租</div>
-					  </div>
-				 </div>
-				 <div class="layui-form-item">
-					  <label class="layui-form-label">变更内容：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">
-							<ul>
-								<li>
-									续租 " 由 <label>2019/01/01 - 2020/01/01</label> 变更为 <label>2020/01/01 - 2021/01/01 </label>"
-								</li>
-								<li>
-									扩租 " 增加工位 <label>A301、A302</label>"
-								</li>
-								<li>
-									减租 " 减少工位 <label>A308</label>"
-								</li>
-								<li>
-									工位变更 " 由 <label>A307</label>变更为<label>A308</label>"
-								</li>
-								<li>
-									减期 " 由 <label>2019/01/01 - 2020/01/01</label>变更为<label>2018/01/01 - 2019/01/01</label>"
-								</li>
-								<li>
-									退租
-								</li>
-							</ul>
-						</div>
-					  </div>
-				 </div>
-				 <!-- 原始状态S -->
-				 <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
-					<legend>原始状态</legend>
-				</fieldset>
-				<div class="layui-form-item">
-					  <label class="layui-form-label">入驻时间：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">2019/01/01 —— 2020/01/01</div>
-					  </div>
-				</div>
-				<div class="layui-form-item">
-					  <label class="layui-form-label">楼宇：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">楼宇三</div>
-					  </div>
-				</div>
-				<div class="layui-form-item">
-					  <label class="layui-form-label">楼层：</label>
-					  <div class="layui-input-block">
-						<div class="j-words-border">12</div>
-					  </div>
-				</div>
-				<div class="layui-form-item j-no-disabled">
-				      <label class="layui-form-label">联合工位区：</label>
-				      <div class="layui-input-block j-input-route">
-				        <input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="A301" checked="" disabled>
-				        <input type="checkbox" name="union_ids[]" value="2"  lay-skin="primary" title="A302" checked="" disabled>
-				      </div>
-				 </div>
-				 <div class="layui-form-item j-no-disabled">
-				       <label class="layui-form-label">独立工位区：</label>
-				       <div class="layui-input-block j-input-route">
-				         <input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="A308-1" checked="" disabled>
-				         <input type="checkbox" name="Independent_ids[]" value="2"  lay-skin="primary" title="A302-2" checked="" disabled>
-				       </div>
-				  </div>
-				  <div class="layui-form-item j-no-disabled">
-				        <label class="layui-form-label">门禁：</label>
-				        <div class="layui-input-block j-input-route">
-				          <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="门禁一" checked="" disabled>
-				          <input type="checkbox" name="door_ids[]" value="2"  lay-skin="primary" title="门禁二" checked="" disabled>
-				        </div>
-				   </div>
-				   <div class="layui-form-item">
-				   	  <label class="layui-form-label">备注：</label>
-				   	  <div class="layui-input-block">
-				   		<div class="j-words-border">我是备注我是备注我是备注内容</div>
-				   	  </div>
-				   </div>
-				   <!-- 原始状态E -->
-				   <!-- 当前状态S -->
-				   <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
-				   	 <legend>当前状态</legend>
-				   </fieldset>
-				   <div class="layui-form-item">
-				   	  <label class="layui-form-label">入驻时间：</label>
-				   	  <div class="layui-input-block">
-				   		<div class="j-words-border">2019/01/01 —— 2020/01/01</div>
-				   	  </div>
-				   </div>
-				   <div class="layui-form-item">
-				   	  <label class="layui-form-label">楼宇：</label>
-				   	  <div class="layui-input-block">
-				   		<div class="j-words-border">楼宇三</div>
-				   	  </div>
-				   </div>
-				   <div class="layui-form-item">
-				   	  <label class="layui-form-label">楼层：</label>
-				   	  <div class="layui-input-block">
-				   		<div class="j-words-border">12</div>
-				   	  </div>
-				   </div>
-				   <div class="layui-form-item j-no-disabled">
-				         <label class="layui-form-label">联合工位区：</label>
-				         <div class="layui-input-block j-input-route">
-				           <input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="A301" checked="" disabled>
-				           <input type="checkbox" name="union_ids[]" value="2"  lay-skin="primary" title="A302" checked="" disabled>
-				         </div>
-				    </div>
-				    <div class="layui-form-item j-no-disabled">
-				          <label class="layui-form-label">独立工位区：</label>
-				          <div class="layui-input-block j-input-route">
-				            <input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="A308-1" checked="" disabled>
-				            <input type="checkbox" name="Independent_ids[]" value="2"  lay-skin="primary" title="A302-2" checked="" disabled>
-				          </div>
-				     </div>
-				     <div class="layui-form-item j-no-disabled">
-				           <label class="layui-form-label">门禁：</label>
-				           <div class="layui-input-block j-input-route">
-				             <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="门禁一" checked="" disabled>
-				             <input type="checkbox" name="door_ids[]" value="2"  lay-skin="primary" title="门禁二" checked="" disabled>
-				           </div>
-				      </div>
-				      <div class="layui-form-item">
-				      	  <label class="layui-form-label">备注：</label>
-				      	  <div class="layui-input-block">
-				      		<div class="j-words-border">我是备注我是备注我是备注内容</div>
-				      	  </div>
-				      </div>
-					  <div class="layui-form-item j-top-formmargin">
-					    <div class="layui-input-block">
-					      <a href="javascript:history.go(-1)" class="layui-btn layui-btn-normal">返回</a>
-						</div>
-					  </div>
-				   <!-- 当前状态E -->
-			   </from>
-			  </div>
-				<!-- 内容区 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+ <ul class="layui-tab-title">
+   <li class="layui-this">详情</li>
+ </ul>
+</div>
+<div class="j-details-from">
+ <form class="layui-form j-top-margin"  method="post" id="addForm">
+  <div class="layui-form-item">
+	  <label class="layui-form-label">操作人：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">李某某</div>
+	  </div>
+ </div>
+ <div class="layui-form-item">
+	  <label class="layui-form-label">操作时间：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">2020/01/01</div>
+	  </div>
+ </div>
+ <div class="layui-form-item">
+	  <label class="layui-form-label">类型：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">续租、扩租、减租、工位变更、减期、退租</div>
+	  </div>
+ </div>
+ <div class="layui-form-item">
+	  <label class="layui-form-label">变更内容：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">
+			<ul>
+				<li>
+					续租 " 由 <label>2019/01/01 - 2020/01/01</label> 变更为 <label>2020/01/01 - 2021/01/01 </label>"
+				</li>
+				<li>
+					扩租 " 增加工位 <label>A301、A302</label>"
+				</li>
+				<li>
+					减租 " 减少工位 <label>A308</label>"
+				</li>
+				<li>
+					工位变更 " 由 <label>A307</label>变更为<label>A308</label>"
+				</li>
+				<li>
+					减期 " 由 <label>2019/01/01 - 2020/01/01</label>变更为<label>2018/01/01 - 2019/01/01</label>"
+				</li>
+				<li>
+					退租
+				</li>
+			</ul>
+		</div>
+	  </div>
+ </div>
+ <!-- 原始状态S -->
+ <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+	<legend>原始状态</legend>
+</fieldset>
+<div class="layui-form-item">
+	  <label class="layui-form-label">入驻时间：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">2019/01/01 —— 2020/01/01</div>
+	  </div>
+</div>
+<div class="layui-form-item">
+	  <label class="layui-form-label">楼宇：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">楼宇三</div>
+	  </div>
+</div>
+<div class="layui-form-item">
+	  <label class="layui-form-label">楼层：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">12</div>
+	  </div>
+</div>
+<div class="layui-form-item j-no-disabled">
+	  <label class="layui-form-label">联合工位区：</label>
+	  <div class="layui-input-block j-input-route">
+		<input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="A301" checked="" disabled>
+		<input type="checkbox" name="union_ids[]" value="2"  lay-skin="primary" title="A302" checked="" disabled>
+	  </div>
+ </div>
+ <div class="layui-form-item j-no-disabled">
+	   <label class="layui-form-label">独立工位区：</label>
+	   <div class="layui-input-block j-input-route">
+		 <input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="A308-1" checked="" disabled>
+		 <input type="checkbox" name="Independent_ids[]" value="2"  lay-skin="primary" title="A302-2" checked="" disabled>
+	   </div>
+  </div>
+  <div class="layui-form-item j-no-disabled">
+		<label class="layui-form-label">门禁：</label>
+		<div class="layui-input-block j-input-route">
+		  <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="门禁一" checked="" disabled>
+		  <input type="checkbox" name="door_ids[]" value="2"  lay-skin="primary" title="门禁二" checked="" disabled>
+		</div>
+   </div>
+   <div class="layui-form-item">
+	  <label class="layui-form-label">备注：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">我是备注我是备注我是备注内容</div>
+	  </div>
+   </div>
+   <!-- 原始状态E -->
+   <!-- 当前状态S -->
+   <fieldset class="layui-elem-field layui-field-title j-size-color" style="margin-top: 20px;">
+	 <legend>当前状态</legend>
+   </fieldset>
+   <div class="layui-form-item">
+	  <label class="layui-form-label">入驻时间：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">2019/01/01 —— 2020/01/01</div>
+	  </div>
+   </div>
+   <div class="layui-form-item">
+	  <label class="layui-form-label">楼宇：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">楼宇三</div>
+	  </div>
+   </div>
+   <div class="layui-form-item">
+	  <label class="layui-form-label">楼层：</label>
+	  <div class="layui-input-block">
+		<div class="j-words-border">12</div>
+	  </div>
+   </div>
+   <div class="layui-form-item j-no-disabled">
+		 <label class="layui-form-label">联合工位区：</label>
+		 <div class="layui-input-block j-input-route">
+		   <input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="A301" checked="" disabled>
+		   <input type="checkbox" name="union_ids[]" value="2"  lay-skin="primary" title="A302" checked="" disabled>
+		 </div>
+	</div>
+	<div class="layui-form-item j-no-disabled">
+		  <label class="layui-form-label">独立工位区：</label>
+		  <div class="layui-input-block j-input-route">
+			<input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="A308-1" checked="" disabled>
+			<input type="checkbox" name="Independent_ids[]" value="2"  lay-skin="primary" title="A302-2" checked="" disabled>
+		  </div>
+	 </div>
+	 <div class="layui-form-item j-no-disabled">
+		   <label class="layui-form-label">门禁：</label>
+		   <div class="layui-input-block j-input-route">
+			 <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="门禁一" checked="" disabled>
+			 <input type="checkbox" name="door_ids[]" value="2"  lay-skin="primary" title="门禁二" checked="" disabled>
+		   </div>
+	  </div>
+	  <div class="layui-form-item">
+		  <label class="layui-form-label">备注：</label>
+		  <div class="layui-input-block">
+			<div class="j-words-border">我是备注我是备注我是备注内容</div>
+		  </div>
+	  </div>
+	  <div class="layui-form-item j-top-formmargin">
+		<div class="layui-input-block">
+		  <a href="javascript:history.go(-1)" class="layui-btn layui-btn-normal">返回</a>
+		</div>
+	  </div>
+   <!-- 当前状态E -->
+</from>
+</div>
+<!-- 内容区 -->
 {include file="system@block/layui" /}

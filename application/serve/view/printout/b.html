@@ -1,0 +1,76 @@
+<!-- 在线服务/信息统计/打印记录 -->
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="notice_title" placeholder="企业名称" class="layui-input">
+            </div>
+			<div class="layui-input-inline j-input-margin">
+			    <input type="text" name="print_name" placeholder="姓名" class="layui-input">
+			</div>
+			<div class="layui-input-inline j-input-margin">
+			    <input type="tel" name="print_phone" lay-verify="required|phone" placeholder="手机号" class="layui-input">
+			</div>
+			<div class="layui-input-inline j-input-margin">
+			    <select name="ban_id" class="field-cid" type="select">
+					<option value="0">请选择打印类型</option>
+					<option value="1">类型1</option>
+					<option value="2">类型2</option>
+				</select>
+			</div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="notice_time" id="notice_time" placeholder="月份" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('statusRole')}?id={{ d.id }}">
+</script>
+<script type="text/html" id="toolbar"></script>
+<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
+{include file="system@block/layui" /}
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                {field: 'username', minWidth:180,align:'left', title: '企业名称'}
+			   ,{field: 'name',minWidth: 120,align:'left', title: '姓名'}
+			   ,{field: 'phone',minWidth: 120,align:'left', title: '手机号'}
+			   ,{field: 'PrintType',minWidth: 120,align:'left', title: '打印类型'}
+			   ,{field: 'sheet',minWidth: 120,align:'left', title: '张数'}
+			   ,{field: 'totalPrice',minWidth: 100,align:'left', title: '总价'}
+			   ,{field: 'ctime',minWidth: 120,align:'left', title: '打印时间'}
+            ]]
+        });
+    });
+</script>

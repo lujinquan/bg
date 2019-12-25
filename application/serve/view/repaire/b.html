@@ -1,0 +1,153 @@
+<!-- 在线服务/运营管理/报事报修/未处理/处理 -->
+<style>
+	.page-tab-content{ background: none;padding: 0;overflow-x: hidden;}
+</style>
+<div class="layui-row layui-col-space10 j-row-box">
+	<div class="layui-col-md9 j-back-gray j-border-radius10 clearfix" style="margin-top: -10px;">
+		<form class="layui-form" action="transfer" method="post" style="background: #fff;">
+			<div class="layui-tab layui-tab-brief j-no-color">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">处理</li>
+			  </ul>
+			</div>
+			<div class="grid-demo j-back-white clearfix j-left">
+				<div class="layui-card">
+					<h1 class="j-card-header">问题描述：</h1>
+					<div class="layui-card-body">
+						问题描述
+					</div>
+					<h1 class="j-card-header">附件：</h1>
+					<div class="layui-card-body clearfix">
+						<ul class="j-enclosure-box j-viewer-img">
+						<li>
+							<img data-original="" src="" />
+							<p class="j-file-name"></p>
+						</li>
+						</ul>
+					</div>
+					<h1 class="j-card-header">回复：</h1>
+					<div class="layui-card-body clearfix">
+						<div  class="j-reply-textarea clearfix">
+							<textarea class="j-textarea" rows="10" name="remark" onKeyUp="keypress()" id="j_answer"></textarea>
+							<div class="j-size"><label id="pinglun">200</label><span>/</span><label>200</label></div>
+						</div>
+					</div>
+					<h1 class="j-card-header">上传附件：</h1>
+					<div class="layui-card-body clearfix">
+					  <div class="j-uplode-icon fl">
+							<i class="layui-icon  layui-icon-add-1"></i>
+							<button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
+						</div>
+						<div id="upload_img_list1" class="upload_img_list j-viewer-img">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+        <div class="layui-form-item">
+        	<div class="j-form-box clearfix">
+        		<div class="fl">
+        			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
+        			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">回复</button>
+        		</div>
+			</div>	
+		</div>
+	</form>
+</div>
+<div class="layui-col-md3 j-back-gray j-border-radius10 clearfix">
+	<div class="grid-demo j-back-white j-info-box clearfix j-right">
+		<dl class="clearfix">
+			<dt><i class="layui-icon iconfont j-icon-qingdanxinxishebeijichuxinxigongdanxinxi"></i>工单信息</dt>
+			<dd>
+				<h1>编号</h1>
+				<p>201909060001</p>
+			</dd>
+			<dd>
+				<h1>类型</h1>
+				<p>报修-水电</p>
+			</dd>
+			<dd>
+				<h1>处理人</h1>
+				<p>张么么</p>
+			</dd>
+			<dd>
+				<h1>提交时间</h1>
+				<p>2019/06/08</p>
+			</dd>
+			<dd>
+				<h1>状态</h1>
+				<p>正在处理</p>
+			</dd>
+		</dl>
+		<dl class="clearfix">
+			<dt><i class="layui-icon iconfont j-icon-yonghu"></i>用户信息</dt>
+			<dd>
+				<h1>提交人</h1>
+				<p>李么么</p> 
+			</dd>
+			<dd>
+				<h1>所属企业</h1>
+				<p>楚天新媒科技（武汉）有限公司</p> 
+			</dd>
+		</dl>
+	</div>
+</div>
+</div>
+    {include file="system@block/layui" /}
+    <script>
+		/*上传参数设定*/
+		var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
+		var duotu = true; //是否为多图上传true false
+    	layui.use(['form', 'func', 'upload','jquery'], function() {
+    	var $ = layui.jquery, form = layui.form,upload = layui.upload;
+		//回复上传附件
+		//工位区图片
+		upload.render({
+			elem: '#upload_img1',
+			url: upurl,
+			size: 1024,
+			multiple: duotu,
+			field: 'SiteImg',
+			before: function(obj) {
+				layer.msg('图片上传中...', {
+					icon: 16,
+					shade: 0.01,
+					time: 0
+				})
+			},
+			done: function(res) {
+				layer.close(layer.msg()); //关闭上传提示窗口
+				if (duotu == true) {
+					//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
+				} else {
+					//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file" value="' + res.data.id + '" /></dd>');
+				}
+			}
+		})
+		/*
+		删除上传图片
+		*/
+		$(document).on("click", ".upload_img_list dd i", function() {
+			$(this).parents("dd").remove();
+		})
+	});
+	//限制输入框字数
+	function keypress() {
+		var text1 = document.getElementById("j_answer").value;
+		var maxLen = document.getElementById("j_answer").cols * document.getElementById("j_answer").rows;
+		var len; //记录剩余字符串的长度
+		if (text1.length >= maxLen) {
+			document.getElementById("j_answer").value = text1.substr(0, maxLen); //只显示起始位-末尾；substr（起始位，末尾)
+			len = 0;
+		} else {
+			len = maxLen - text1.length;
+		}
+		document.getElementById("pinglun").innerText = len;
+	}
+</script>

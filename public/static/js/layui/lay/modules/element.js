@@ -114,7 +114,7 @@ function(t) {
                 var s = a(this),
                 o = s.children(".layui-tab-title"),
                 r = (s.children(".layui-tab-content").find(".layui-tab-item"), 'lay-stope="tabmore"'),
-                c = a('<span class="layui-unselect layui-tab-bar" ' + r + "><i " + r + ' class="layui-icon">&#xe61a;</i></span>');
+                c = a('<span class="layui-unselect layui-tab-bar" ' + r + "><i " + r + ' class="layui-icon"></i></span>');
                 if (n === window && 8 != i.ie && f.hideTabMore(!0), s.attr("lay-allowClose") && o.find("li").each(function() {
                     var t = a(this);
                     if (!t.find("." + l)[0]) {
@@ -159,11 +159,11 @@ function(t) {
             r = "none" === l.css("display");
             if ("string" == typeof s.attr("lay-accordion")) {
                 var c = s.children(".layui-colla-item").children("." + n);
-                c.siblings(".layui-colla-title").children(".layui-colla-icon").html("&#xe602;"),
+                c.siblings(".layui-colla-title").children(".layui-colla-icon").html(""),
                 c.removeClass(n)
             }
             l[r ? "addClass": "removeClass"](n),
-            i.html(r ? "&#xe61a;": "&#xe602;"),
+            i.html(r ? "": ""),
             layui.event.call(this, e, "collapse(" + o + ")", {
                 title: t,
                 content: l,
@@ -282,7 +282,7 @@ function(t) {
                         e = t.find(".layui-colla-content"),
                         l = "none" === e.css("display");
                         i.find(".layui-colla-icon").remove(),
-                        i.append('<i class="layui-icon layui-colla-icon">' + (l ? "&#xe602;": "&#xe61a;") + "</i>"),
+                        i.append('<i class="layui-icon layui-colla-icon">' + (l ? "": "") + "</i>"),
                         i.off("click", f.collapse).on("click", f.collapse)
                     })
                 })

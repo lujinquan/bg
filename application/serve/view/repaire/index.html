@@ -1,2 +1,89 @@
-{include file="system@block/layui" /}
-报事报修主页
+<!-- 在线服务/运营管理/报事报修/未处理 -->
+<div class="j-indent-boxs">
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				 <div class="layui-input-inline j-input-margin" style="width:150px;">
+				 	<input type="text" name="operate_number" placeholder="编号" class="layui-input">
+				 </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_field" class="field-cid" type="select">
+						<option value="">类别</option>
+						<option value="1">类别1</option>
+						<option value="2">类别2</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="提交时间">
+					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_state" class="field-cid" type="select">
+						<option value="">状态</option>
+	      			    <option value="1">状态1</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<input type="text" name="operate_keyword" placeholder="关键词" class="layui-input">
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
+			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">完结</a>
+	
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function() {
+        var $ = layui.$
+		    ,table = layui.table
+			,laydate = layui.laydate;
+	  //日期
+	   laydate.render({
+		 elem: '#time1'
+	   });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+			,height: 'full-230'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+                 {field: 'operate_number', align:'left',minWidth:100, title: '编号'}
+				,{field: 'operate_type', align:'left',minWidth:100, title: '类型'}
+				,{field: 'operate_problem', align:'left',minWidth:100, title: '问题描述'}
+                ,{field: 'operate_name', align:'left',minWidth:200, title: '提交人'}
+				,{field: 'last_login_ip', title: '状态', minWidth: 150,align:'left', templet:function(d){
+			       if(d.last_login_ip){
+			           return '<button class="j-table-button j-activated">已完结</button>';
+			       }else{
+			           return '<button class="j-table-button j-activated">已完结</button> <button class="j-table-button layui-btn-warm">待处理</button> <button class="j-table-button layui-btn-normal">处理中</button>';
+			       }
+			   }}        
+                ,{field: 'operation_time', align:'left',minWidth:100, title: '提交时间'}
+                ,{title: '操作', minWidth:280, Width:280,align:'left', templet: '#buttonTpl', fixed:'right'}
+            ]]
+        });
+        $('#refresh').click(function(){
+        	location.reload();
+        });
+    });
+</script>

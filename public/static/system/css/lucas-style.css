@@ -15,7 +15,6 @@ input:-webkit-autofill {
 .layui-side .layui-this a, .layui-side .layui-this i.aicon{ font-weight: bold;}
 .layui-nav-tree .layui-nav-item.layui-nav-itemed a.j-two-name{font-weight: bold;}
 /* 表格按钮状态 S*/
-.j-table-button{ width: 80px; height: 27px; line-height: 27px; text-align: center; border: 0; color: #fff; font-size: 14px;border-radius:2px;}
 .j-table-button.j-notactive{ background:#737F90;}
 .j-table-button.j-activated{ background:#60D09C;}
 .layui-form-label i.red{ margin-right: 5px;}
@@ -38,7 +37,13 @@ input:-webkit-autofill {
 	 overflow: hidden;
  }
 /* 弹框样式 E */
+/* 背景图片 */
+.j-back-white {
+    background: #fff;
+}
 /*---------------------公用样式 E--------------------*/
+/* 搜索宽度 */
+.j-search-fl .layui-input-inline.j-input-margin{ width: 150px;position: relative;}
 .j-aicon-qiehuan i{ font-size: 22px;}
 /* 首页样式 S */
  .project-info, .card {border-radius: 4px;}
@@ -99,7 +104,7 @@ input:-webkit-autofill {
 .layui-form-item .layui-input-inline.j-name{ width:500px;}
 .layui-form-item .layui-input-inline.j-name .layui-input{ width: 190px;}
 .layui-form-item .layui-input-inline.j-name .layui-form-select{width: 190px;}
-.layui-form-item  .layui-input.j-explain-input,.j-from-box  .layui-input.j-explain-input {padding-right: 30px;}
+.layui-form-item  .layui-input.j-explain-input,.j-from-box  .layui-input.j-explain-input,.j-search-fl .layui-input.j-explain-input{padding-right: 30px;}
 .layui-form-item  .layui-input.j-explain-inputs,.j-from-box  .layui-input.j-explain-inputs {padding-right: 50px;}
 b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;cursor: pointer;}
 .j-uplode-icon{position: relative;border: #D7D7D7 1px dashed;border-radius:4px; width: 100px; height: 100px; line-height: 100px; text-align: center;background:rgba(243,246,253,1);    margin: 0 10px 10px 0;}
@@ -108,14 +113,15 @@ b.j-explain-name {font-weight: 100;position: absolute;right: 8px;top: 10px;curso
 .j-uplode-icon button:hover{opacity: 0;}
 .layui-input-block.j-uplode-block{display: block;}
 .icon-cancel {background: url(../image/icon-cancel.png) no-repeat;width: 15px;height: 15px;position: absolute;top: -4px;right: -4px;}
-.j-from-box .j-input-inline li{position: relative; width: 20%; margin:0 30px 15px 0 ; float: left;}
-.j-from-box .j-input-inline li:hover .j-hostile{ display: block;}
+.j-from-box .j-input-inline li,.j-from-box .j-input-inlines li{position: relative; width: 20%; margin:0 30px 0 0 ; float: left;}
+.j-from-box .j-input-inline li:hover .j-hostile,.j-from-box .j-input-inlines li:hover .j-hostile{ display: block;}
 /* .j-from-box .j-input-inline li:hover .layui-input:hover{ border:#60D09C 1px solid ;} */
-.j-from-box .j-input-inline .j-link-box li{ width: auto; line-height: 36px;margin: 0;}
-.j-from-box .j-input-inline .j-link-box li a{ color: #20A0FF;}
-.j-from-box .j-input-inline li.on .j-explain-input{ border: #60D09C 1px solid;}/* 已租颜色 */
-.j-from-box .j-input-inline li.on:hover .j-explain-input{border: #60D09C 1px solid;}
-.j-from-box .j-input-inline li.on  b.j-explain-name{ color: #60D09C;}
+.j-from-box .j-input-inline .j-link-box li,.j-from-box .j-input-inlines .j-link-box li{ width: auto; line-height: 36px;margin: 0;}
+.j-from-box .viewer-toolbar>li{position: inherit;width: 24px;height: 24px;margin: initial;}
+.j-from-box .viewer-list>li{position: inherit;width: 30px;height: 50px;margin: initial;}
+.j-from-box .j-input-inline li.on .j-explain-input,.j-from-box .j-input-inlines li.on .j-explain-input{ border: #60D09C 1px solid;}/* 已租颜色 */
+.j-from-box .j-input-inline li.on:hover .j-explain-input,.j-from-box .j-input-inlines li.on:hover .j-explain-input{border: #60D09C 1px solid;}
+.j-from-box .j-input-inline li.on  b.j-explain-name,.j-from-box .j-input-inlines li.on  b.j-explain-name{ color: #60D09C;}
 /*------------------ 多图上传S ----------------*/
 .upload_img_list{ display: initial;}
 .upload_img_list dd {position: relative;margin: 0 10px 10px 0;float: left; border: #D7D7D7 1px dashed;border-radius:4px;height:100px;width: 100px; text-align: center;}
@@ -211,3 +217,108 @@ input[type="number"]{-moz-appearance: textfield;}
 .j-add-group .layui-btn .layui-icon{ font-weight: 100; margin-right: 5px;}
 /* 编辑 E */
  /*------------------ 项目管理 -------------------------E*/
+ /* ----------------- 在线服务 S ----------------------------*/
+ .j-conference-title li{float: left; margin-right:60px; font: 16px/60px '微软雅黑';}
+ .j-conference-content li.j-first{background: #F5F5F5;padding: 20px;}
+ .j-conference-content li.j-first .j-title{ font-size: 16px; font-weight: bold;padding-bottom:20px ;}
+ .j-conference-content li.j-first .j-titme li{float: left; margin-right: 60px; color: #9B9B9B;}
+ .j-statistics{background:rgba(255,255,255,1);box-shadow:0px -4px 4px 0px rgba(221,221,221,0.4);line-height: 40px; padding-left: 20px;font-size: 14px;}
+ .j-statistics .j-total{color: #20A0FF; margin-right: 10px;font-weight: bold;}
+ .j-statistics .j-workstation{margin-right:30px ;}
+ .j-conference-content li.j-first .j-titme li label{ color: #181818;}
+ .j-conference-content li.j-list{padding: 20px 20px 10px;}
+ .j-conference-content li.j-list dl{ float: left; margin-bottom: 10px;}
+ .j-conference-content li.j-list dl dt{ color:#9B9B9B ; font-size: 14px;margin-bottom: 3px;}
+ .j-conference-content li.j-list dl dd ol{background: url(../image/j-circle.png) no-repeat left center;    display: inline-block; padding-left: 11px;}
+ .j-conference-content li.j-list dl dd li{ float:left; margin-right: 3px; background:#EBEBEB;border-radius: 4px; width: 35px; height: 14px;position: relative;}
+ .j-conference-content li.j-list dl dd li.j-green{background: #60D09C;}
+ .j-conference-content li.j-list dl dd li.j-red{background: #FF0000;}
+ .j-conference-content .j-first-floor{ border:#E9E9E9 1px solid ; border-radius:6px ; margin-bottom: 15px;}
+ .j-instructions ul{ padding: 0 20px  20px;}
+ .j-instructions li{float: left; margin-right:20px ; color: #9B9B9B;} 
+ .j-instructions li i{width: 14px; height: 14px; display: inline-block; margin-right: 10px;}
+ .j-instructions .j-lsit1 i{ background: #60D09C;}
+ .j-instructions .j-lsit2 i{ background: #FF0000;}
+ .j-instructions .j-lsit3 i{ background: #EBEBEB;}
+ .j-frame-box{font-size: 14px;color: #333;}
+ .j-frame-box li{margin-bottom: 10px;}
+ .j-frame-box li .fl{width: 40%;color:#737F90;}
+ .j-frame-box li .fr{width: 60%; text-align: right;}
+ .j-conference-content .layui-colla-title{ height: auto; line-height: inherit;}
+ .j-conference-box .layui-collapse{border: 0;}
+ .j-conference-box .layui-colla-icon{left: auto;right: 15px;top:50%; margin-top: -10px;}
+ .j-conference-box .layui-colla-icon{background: url(../image/j-tab-down.png) no-repeat center; display: inline-block; width: 24px;height: 24px;}
+ .j-conference-box .layui-colla-title.on .layui-colla-icon{background: url(../image/j-tab-up.png) no-repeat center;display: inline-block; width: 24px;height: 24px;}
+ /* 穿梭框 */
+ .layui-transfer-data li{
+	 height: auto!important;
+	 min-height: 32px;
+	 padding:3px 10px;
+ }
+ /* 通知详情 */
+ .j-news-details h1{color: #141414; font:bold 20px/31px 'MicrosoftYaHei-Bold';}
+ .j-news-details h2{color: #141414; font:12px/31px '';  margin-bottom: 5px;}
+ .j-news-details a{ color: #0084FF;}
+ .j-news-details .j-content-size{ line-height: 24px;}
+ /* 电量查询 */
+ .j-powerquery{padding: 0 40px 0 0;}
+ .j-selecteds.j-search{color:#20A0FF;text-decoration:underline; font-size: 14px; cursor: pointer;}
+ /* 报事报修 */
+ /* ----------详情样式  S----------*/
+ .j-row-box{ overflow: hidden;}
+ .j-row-box .j-left,.j-row-box .j-right{ margin-bottom: -9999px;padding-bottom: 9999px;}
+ .j-card-header{font-size:14px;font-weight:bold;color:rgba(133,146,163,1);line-height:19px; padding:10px 15px 0;}
+ .j-card-header.no{padding:15px 15px 0;}
+ .j-enclosure-box li{ float: left; margin:15px 10px 0 0; width:120px;}
+ .j-enclosure-box li img{width:120px; height: 112px; border-radius: 10px;}
+ .j-info-box dl{ padding: 35px  35px 0;}
+ .j-info-box dt{font-weight: bold; color: #333;font-family: 'MicrosoftYaHei';}
+ .j-info-box dt i{ margin-right: 5px;color:#9B9B9B;}
+ .j-info-box dd{ margin-top: 20px;}
+ .j-info-box dd h1{font-size:14px;color:rgba(133,146,163,1);line-height:19px;}
+ .j-info-box dd p{color: #333; font-family: 'MicrosoftYaHei';padding-top: 3px;}
+ .j-axis-main{background:rgba(42,96,228,0.05);padding: 20px;}
+ .time-axis{margin: 0;padding: 0;position: relative;}
+ .time-axis:before{content: '';position: absolute;left:12px;top: 8px;width: 1px;height: 100%;background-color: #E4E4E4;}
+ .time-axis-item{list-style: none;padding-left:30px;position: relative;line-height: 45px;font-size: 14px;color: #141414;}
+ .time-axis-item img{width:120px; height: 112px; border-radius: 10px; margin:0 15px 15px 0;}
+ .time-axis-title{position: relative;top:-5px;}
+ .time-axis-title h1,.time-axis-title .j-remarks{ font:bold 14px/19px 'MicrosoftYaHei'; color: #666;}
+ .time-axis-title .j-remarks{ padding: 10px 0 20px;table-layout: fixed;word-break: break-all;}
+ .time-axis-title .j-remarks .layui-btn-xs{ height: 16px; line-height: 16px;}
+ .time-axis-title .j-remarks .layui-btn{ font-size:10px ;}
+ .time-axis-date{position: absolute;left: 0;top: 0;color: #666;}
+ .time-axis-date span{position: absolute;right: -18px;top: 35%;display: block;width: 10px;height: 10px;border-radius: 100%;background-color:#0084FF;}
+ .j-enclosure-box .j-file-name{ text-align: center; font:13px/35px 'MicrosoftYaHei'; color: #999;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+ /*---------- 状态条 S ----------*/
+ .j-status-bar ul{display: inline-block;margin:10px 0 30px;width: 100%;}
+ .j-status-bar li{ text-align: center;  height: 6px; background: #C6D2DF;border-radius: 4px;position: relative;}
+ .j-status-bar li.on{background: #0084FF;}
+ .j-status-bar li i{ width: 20px; height: 20px;line-height: 20px;position: absolute; left: 50%; margin-left: -10px;top:-6px; color:#fff;background: rgba(198,210,223,1);
+     border-radius: 50%;}
+ .j-status-bar li.on i{ width: 20px; height: 20px;line-height: 20px;position: absolute; left: 50%; margin-left: -10px;top:-6px; color:#fff;background: rgba(0,132,255,1);
+     border-radius: 50%;}
+ .j-status-bar li p{ padding-top: 15px;color:#333333; font:bold 14px 'MicrosoftYaHei';}
+ .j-status-bar li.on p{ padding-top: 15px;color:rgba(0,132,255,1); font:bold 14px 'MicrosoftYaHei';}
+ /* ----------状态条 E ----------*/
+ /*----------回复 S----------*/
+ .j-reply-textarea{border:#C6D2DD 1px solid;border-radius: 4px;}
+ .j-reply-textarea textarea{ width: 100%; box-sizing: border-box; padding: 15px; font-size: 14px; color: #000;border: 0;resize:none}
+ .j-upload-size{ background:#F3F6FD ; height: 40px; line-height: 40px; padding: 0 15px;}
+ .j-upload-size .j-upload_img{cursor: pointer;}
+ .j-upload-size i{margin-right: 10px;}
+ .j-upload-size span{ color: #8592A3;}
+ .j-upload-size .j-phrase{position: relative;cursor: pointer;}
+ .j-upload-size .j-phrase .j-phrase-list{position:absolute; top:-139px; right: 0;width:400px; height: 120px;overflow-y: auto; box-shadow:0px 1px 6px 0px rgba(0,0,0,0.17);border-radius:4px; padding: 10px 0;}
+ .j-upload-size .j-phrase .j-phrase-list li{ font: 10px/24px 'MicrosoftYaHei'; color: #333; padding: 0 10px; cursor: pointer;}
+ .j-upload-size .j-phrase .j-phrase-list li.on{background: #0084FF; color: #fff;}
+ .j-upload-size .j-phrase .j-list-img{position: absolute;right: 30px;bottom:29px;}
+ .j-upload-size span.j-phrase-name i{margin-left:5px; font-size: 16px;}
+ .j-upload-size span.j-phrase-name.on .j-icon-shangjiantou{ display:inline-block;}
+ .j-upload-size span.j-phrase-name.on .j-icon-xiajiantou{ display: none;}
+ /*----------回复 E----------*/
+ .j-form-box{padding: 10px 15px 0;}
+ .j-reply-textarea .j-size{ padding-right: 10px; color: #CDCDCD; text-align: right;}
+ /* ----------详情样式 E ----------*/
+ .j-from-box.j-top-margin{position: relative;top:-10px;}
+ /* ------------------ 在线服务 E --------------------------*/

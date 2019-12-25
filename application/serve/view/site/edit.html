@@ -1,0 +1,117 @@
+<!-- 在线服务/空间状态/工位状态/工位详情（自由工位区） -->
+<div class="j-indent-boxs">
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_field" class="field-cid" type="select">
+						<option value="">请选择工位区</option>
+						<option value="1">工位区1</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="ban_id" class="field-cid" type="select">
+						<option value="">请所属楼宇</option>
+						{volist name="banArr" id="v"}
+	      			    <option value="{$v['ban_id']}">{$v['ban_name']}</option>
+	      			    {/volist}
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_field" class="field-cid" type="select">
+						<option value="">请选择楼层</option>
+						<option value="1">楼层1</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="settling_time" placeholder="入驻时间"  autocomplete="off" class="layui-input j-explain-input" id="test1">
+					  <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					  <input type="text" name="due_time" placeholder="到期时间"  autocomplete="off" class="layui-input j-explain-input" id="test2">
+					  <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+
+	
+
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+			<a href="{:url('del')}?id={{ d.floor_id }}" hisi-data="{width: '400px', height: '230px'}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">删除</a>
+	
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function() {
+        var $ = layui.$
+		    ,table = layui.table
+			,laydate = layui.laydate;
+		// 时间选择器初始化 开始时间
+		laydate.render({
+			elem: '#test1',
+			format: 'yyyy-MM-dd',
+			done: function (value, date, endDate) {
+				var startDate = new Date(value).getTime();
+				var endTime = new Date($('#test2').val()).getTime();
+				if (endTime < startDate) {
+					layer.msg('到期时间不能小于入驻时间');
+					$('#test1').val($('#test2').val());
+				}
+			}
+			})
+		laydate.render({ //结束时间
+			elem: '#test2',
+			format: 'yyyy-MM-dd',
+			done: function (value, date, endDate) {
+				var startDate = new Date($('#test1').val()).getTime();
+				var endTime = new Date(value).getTime();
+				if (endTime < startDate) {
+					layer.msg('到期时间不能小于入驻时间');
+					$('#test2').val($('#test1').val());
+				}
+			}
+		})
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+			,height: 'full-230'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+			,totalRow: true
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+            	/* {field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+                    return d.LAY_INDEX;
+                }} */
+                {field: 'ban_name', align:'left',minWidth:200, title: '工位区名称',totalRowText: '合计：'}
+				,{field: 'service_name', align:'left',minWidth:80, title: '姓名'}
+				,{field: 'contact_number', align:'left',minWidth:100, title: '联系电话'}
+				,{field: 'service_building', align:'left',minWidth:100, title: '楼宇'}
+				,{field: 'floor', align:'left',minWidth:80, title: '楼层'}         
+                ,{field: 'settling_time', align:'left',minWidth:100, title: '入驻时间'}
+				,{field: 'due_time', align:'left',minWidth:100, title: '到期时间'}
+                ,{field: 'days_remaining', align:'left',minWidth:80, title: '剩余天数'}
+            ]]
+        });
+        $('#refresh').click(function(){
+        	location.reload();
+        });
+    });
+</script>

@@ -1,0 +1,233 @@
+<!-- 在线服务/运营管理/空间活动管理/发布活动 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">发布活动</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin j-padding-right" action="{:url()}" method="post" id="addForm">
+	<div class="layui-row  j-from-box layui-col-space30">
+		<div class="layui-col-md8">
+			<label class="j-form-label"><i class="red">*</i>活动名称：</label>
+			<div class="j-input-inline">
+				<input type="text" name="activity_name"  placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-col-md4">
+			<label class="j-form-label"><i class="red">*</i>活动类型：</label>
+			<div class="j-input-inline">
+				<select name="ban_id" class="field-cid" lay-verify="required"  lay-filter="site_group_type"  lay-verType="tips" type="select">
+					<option value="0">请选择</option>
+					<option value="1">需要报名</option>
+					<option value="2">无需报名</option>
+				</select>
+			</div>
+		</div>
+	</div>
+    <div class="layui-row j-from-box layui-col-space30">
+	   <div class="layui-col-md8">
+		<label class="j-form-label"><i class="red">*</i>时间：</label>
+		  <div class="layui-input-inline j-input-margin fl" style="min-width: 190px;margin-right: 10px;">
+			  <input type="text" name="order_start_time" class="layui-input" lay-verify="required" lay-verType="tips" id="qBeginTime" placeholder="请选择">
+			  <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+		  </div>
+		  <div class="layui-form-mid">-</div>
+		  <div class="layui-input-inline fl" style="min-width: 190px;">
+		   <input type="text" name="order_end_time" class="layui-input" lay-verify="required" lay-verType="tips" id="qEndTime" placeholder="请选择">
+		   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+		  </div>
+	  </div>
+	  <div class="layui-col-md4 j-app-box hide">
+		<label class="layui-form-label"><i class="red">*</i>App显示报名人员：</label>
+		<div class="layui-input-block">
+		  <input type="radio" name="staff" value="是" title="是" checked="">
+		  <input type="radio" name="staff" value="否" title="否">
+		</div>
+	  </div>
+	</div>
+	<div class="layui-row j-from-box layui-col-space30">
+		<div class="layui-col-md8">
+			<label class="j-form-label"><i class="red">*</i>活动地点：</label>
+			<div class="j-input-inline">
+				<input type="text" name="site_group_remark"  placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</div>
+    <div class="layui-row j-from-box layui-col-space30 e-house j-workbays">
+    	<div class="layui-col-md12">
+    		<label class="j-form-label"><i class="red">*</i>主办方：</label>
+    		<div class="j-input-inline">
+				<ul>
+					<li>
+						<input type="text" name="sites[]" value="" autocomplete="off"  lay-verify="required" lay-verType="tips"  placeholder="请输入" class="layui-input j-explain-input">
+						<i class="icon-cancel j-del"></i>
+					</li>
+					<li>
+						<label class="j-form-label j-add"><i class="layui-icon layui-icon-add-1 " style="color:#1E9FFF;"></i>添加工位</label>
+					</li>
+				</ul>
+    		</div>
+    	</div>
+    </div>
+	<div class="layui-row j-from-box layui-col-space30 e-house j-workbays">
+		<div class="layui-col-md12">
+			<label class="j-form-label"><i class="red">*</i>参与人员：</label>
+			<div class="j-input-inline">
+				<ul>
+					<li>
+						<input type="text" name="sites[]" value="" autocomplete="off" lay-verify="required" lay-verType="tips"  placeholder="请输入" class="layui-input j-explain-input">
+						<i class="icon-cancel j-del"></i>
+					</li>
+					<li>
+						<label class="j-form-label j-add"><i class="layui-icon layui-icon-add-1 " style="color:#1E9FFF;"></i>添加工位</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row j-from-box layui-col-space30">
+		<div class="layui-col-md12">
+			<label class="j-form-label"><i class="red">*</i>封面图：</label>
+			<div class="j-input-inline">
+				<div class="j-uplode-icon fl">
+					<i class="layui-icon  layui-icon-add-1"></i>
+					<button type="button" class="layui-btn layui-btn-primary" id="upload_img1">上传图片</button>
+				</div>
+				<div id="upload_img_list1" class="upload_img_list j-viewer-img">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row j-from-box layui-col-space30 j-top-margin">
+		<div class="layui-col-md8">
+			<label class="j-form-label">活动内容：</label>
+			<div class="j-input-inline">
+				<textarea id="editor_id" name="content" style="width:100%;height:300px;"></textarea>
+			</div>
+		</div>
+	</div>
+     {:token()}
+    <div class="layui-form-item j-top-formmargin">
+        <div class="layui-input-block">
+          <a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
+          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
+        </div>
+     </div>
+</form>
+{include file="system@block/layui" /}
+<script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript" src="__PUBLIC_JS__/editor/kindeditor/kindeditor-all.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript" src="__PUBLIC_JS__/editor/kindeditor/lang/zh-CN.js?v={:config('hisiphp.version')}"></script>
+<script>
+	/*上传参数设定*/
+	var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
+	var duotu = true; //是否为多图上传true false
+	layui.use(['jquery', 'laydate', 'upload', 'form','util'], function() {
+		var laydate = layui.laydate,
+			$ = layui.$,
+			upload = layui.upload,
+			form = layui.form,
+			util = layui.util;
+		//工位
+		$(".j-workbays").each(function(){
+			$(this).find('.j-add').click(function(){
+				var html = '<li><input type="text" name="sites[]" value="" autocomplete="off" lay-verify="required" lay-verType="tips"  placeholder="请输入" class="layui-input"><i class="icon-cancel j-del"></i></li>';
+				$(this).parent().before(html);
+			});
+		})
+		$('.e-house').on('click','.j-del',function(){
+		    var that = $(this);
+		    that.parent().remove();
+		});
+		//监听工位区选择
+		form.on('select(site_group_type)', function(data){
+            var sel = data.value;
+			if(sel == 1){
+			  $(".j-app-box").show();
+			}
+			else if(sel == 2){
+			  $(".j-app-box").hide();
+			}
+			else{
+				$(".j-app-box").hide();
+			}
+		})
+		//工位区图片
+		upload.render({
+			elem: '#upload_img1',
+			url: upurl,
+			size: 1024,
+			multiple: duotu,
+			field: 'SiteImg',
+			before: function(obj) {
+				layer.msg('图片上传中...', {
+					icon: 16,
+					shade: 0.01,
+					time: 0
+				})
+			},
+			done: function(res) {
+				layer.close(layer.msg()); //关闭上传提示窗口
+				if (duotu == true) {
+					//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
+				} else {
+					//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
+					$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
+						'"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
+						'" class="img" ><input type="hidden" name="file" value="' + res.data.id + '" /></dd>');
+				}
+			}
+		})
+		/*
+		删除上传图片
+		*/
+		$(document).on("click", ".upload_img_list dd i", function() {
+			$(this).parents("dd").remove();
+		})
+		//时间选择器
+		 laydate.render({
+		  elem: '#qBeginTime'
+		  ,type:'datetime'
+		  ,ready: function(date){
+			  $('.layui-laydate li').click(function () {
+				 $('.laydate-btns-confirm').trigger('click');
+			  });
+		  },done: function(value, date, endDate){
+				var startDate = new Date(value).getTime();
+				var endTime = new Date($('#qEndTime').val()).getTime();
+				if (endTime < startDate) {
+					layer.msg('结束时间不能小于开始时间');
+					$('#qBeginTime').val($('#qEndTime').val());
+				}
+		  }
+		 });
+		 laydate.render({
+			elem: '#qEndTime'
+			,type:'datetime'
+			,ready: function(date){
+				$('.layui-laydate li').click(function () {
+				   $('.laydate-btns-confirm').trigger('click');
+				});
+			},done: function(value, date, endDate){
+			    var startDate = new Date($('#qBeginTime').val()).getTime();
+				var endTime = new Date(value).getTime();
+				if (endTime < startDate) {
+					layer.msg('结束时间不能小于开始时间');
+					$('#qEndTime').val($('#qBeginTime').val());
+				}
+		  }
+		 });
+	});
+	//编辑器
+	KindEditor.ready(function(K) {
+		editor = K.create('textarea[name="content"]', {
+			afterBlur:function(){this.sync();},
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			
+		});
+	});
+</script>

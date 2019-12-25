@@ -1,2 +1,86 @@
+<!-- 在线服务/通知公告/公告管理 -->
+<div class="layui-btn-group j-add-group clearfix">
+  <a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>发布通知</a>
+</div>
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="notice_title" placeholder="公告标题" class="layui-input">
+            </div>
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="notice_name" placeholder="发布人" class="layui-input">
+            </div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="notice_time" id="notice_time" placeholder="发布时间" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('statusRole')}?id={{ d.id }}">
+</script>
+<script type="text/html" title="操作按钮模板" id="buttonTpl">
+  <div class="j-operation-box">
+      <a href="{:url('editUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a> 
+      <a href="{:url('delUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+  </div>
+</script>
+<script type="text/html" id="toolbar"></script>
+
+<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
 {include file="system@block/layui" /}
-公告管理主页
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,format: 'yyyy/MM/dd'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                {field: 'username', minWidth:80,align:'left', title: '公告标题'}
+                ,{field: 'nick', minWidth:100,align:'left', title: '发布人'}
+               ,{field: 'ctime',minWidth: 150,align:'left', title: '发布时间'}
+			   ,{field: 'status', title: '状态', minWidth: 150,align:'left', templet: '#statusTpl'}
+               ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
+            ]]
+        });
+		//通知公告详情
+		 table.on('rowDouble(dataTable)', function(obj){
+		   //$.get("/admin.php/system/api/update_notice_reads/id/"+obj.data.id, function(msg){console.log(msg);});
+			layer.open({
+			  title: '公告详情'
+			  ,offset: 'auto'
+			  ,area: ['70%', '60%']
+			  , btn:false
+			  ,content: '<div id="j-news-details" class="j-news-details j-viewer-img"><h1>待确认问题记录表{2019年5月}</h1><h2>李某某发表于 2019-05-17 14:48:42</h2><div class="j-content-size">详细内容！</div></div>'
+			});
+		 });
+    });
+</script>

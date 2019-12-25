@@ -1,0 +1,90 @@
+<!--在线服务/空间状态/会议室状态/查看详细记录  -->
+<div class="j-indent-boxs">
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_field" class="field-cid" type="select">
+						<option value="">请选择会议室</option>
+						<option value="1">会议室1</option>
+						<option value="2">会议室2</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="预定日期">
+					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<input type="text" name="service_name" placeholder="输入公司名称" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="service_state" class="field-cid" type="select">
+						<option value="">请选择状态</option>
+	      			    <option value="1">状态1</option>
+					</select>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
+			<a href="{:url('del')}?id={{ d.floor_id }}" hisi-data="{width: '400px', height: '230px'}" title="取消" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">取消预约</a>
+	
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function() {
+        var $ = layui.$
+		    ,table = layui.table
+			,laydate = layui.laydate;
+	  //日期
+	   laydate.render({
+		 elem: '#time1'
+	   });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+			,height: 'full-230'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+                    return d.LAY_INDEX;
+                }}
+				,{field: 'service_date', align:'left',minWidth:100, title: '预定日期'}
+				,{field: 'service_time', align:'left',minWidth:100, title: '预定时段'}
+                ,{field: 'service_company', align:'left',minWidth:200, title: '预约公司'}
+				,{field: 'service_name', align:'left',minWidth:80, title: '预约人'}
+                ,{field: 'ban_address', align:'left',minWidth:100, title: '预约会议室'} 
+				,{field: 'last_login_ip', title: '状态', minWidth: 150,align:'left', templet:function(d){
+			       if(d.last_login_ip){
+			           return '<button class="j-table-button j-activated">已使用</button>';
+			       }else{
+			           return '<button class="j-table-button j-notactive">已取消</button> <button class="j-table-button layui-btn-warm">已预约</button> <button class="j-table-button layui-btn-normal">使用中</button>';
+			       }
+			   }}        
+                ,{field: 'operation_time', align:'left',minWidth:100, title: '操作时间'}
+                ,{title: '操作', minWidth:280, Width:280,align:'left', templet: '#buttonTpl', fixed:'right'}
+            ]]
+        });
+        $('#refresh').click(function(){
+        	location.reload();
+        });
+    });
+</script>

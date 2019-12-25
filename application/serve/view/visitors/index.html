@@ -1,2 +1,102 @@
+<!-- 在线服务/运营管理/访客信息管理 -->
+<div class="layui-btn-group j-add-group clearfix">
+  <a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>发布通知</a>
+</div>
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="visitor_ID" placeholder="访客ID" class="layui-input">
+            </div>
+            <div class="layui-input-inline j-input-margin">
+				<select name="ban_id" class="visitor_type" type="select">
+					<option value="0">访客类型</option>
+					<option value="1">类型1</option>
+					<option value="2">类型2</option>
+				</select>
+			</div>
+			<div class="layui-input-inline j-input-margin">
+				<select name="ban_id" class="visitor_objective" type="select">
+					<option value="0">访客目的</option>
+					<option value="1">目的1</option>
+					<option value="2">目的2</option>
+				</select>
+			</div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="notice_time" id="notice_time" placeholder="访问时间" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+
+<script type="text/html" title="操作按钮模板" id="buttonTpl">
+  <div class="j-operation-box">
+      <a href="{:url('editUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">签到</a> 
+  </div>
+</script>
+<script type="text/html" id="toolbar"></script>
+
+<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
 {include file="system@block/layui" /}
-访客信息管理主页
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,format: 'yyyy/MM/dd'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+			     {field: 'visitorId', minWidth:80,align:'left', title: '访客ID'}
+                ,{field: 'visitorType', minWidth:80,align:'left', title: '访客类型'}
+				,{field: 'visitorObj', minWidth:80,align:'left', title: '访客目的'}
+                ,{field: 'name', minWidth:100,align:'left', title: '访客姓名'}
+				,{field: 'telephone', minWidth:100,align:'left', title: '访客电话'}
+				,{field: 'last_login_ip', title: '状态', minWidth: 150,align:'left', templet:function(d){
+				    if(d.last_login_ip){
+				        return '<button class="j-table-button j-activated">已到访</button>';
+				    }else{
+				        return '<button class="j-table-button j-notactive">未到访</button>';
+				    }
+				}}
+               ,{field: 'ctime',minWidth: 150,align:'left', title: '访问时间'}
+			   ,{field: 'Receptionist',minWidth: 100,align:'left', title: '接待人'}
+			   ,{field: 'inviter',minWidth: 100,align:'left', title: '邀请人'}
+			   ,{field: 'remarks',minWidth: 180,align:'left', title: '备注'}
+               ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
+            ]]
+        });
+		 // 鼠标滑过操作列
+		 var tip_index = 0;
+		 $(document).on('mouseenter', '.laytable-cell-1-0-8', function(){
+		 	tip_index = layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">公司</span><span class="fr">楚天新媒有限公司</span></li><li class="clearfix"><span class="fl">电话</span><span class="fr">13975412586</span></li></ul></div>', this,{tips:[2,'#fff9bc'],time:11115000});
+		 }).on('mouseleave',this, function(){
+		 	layer.close(tip_index);
+		 });
+    });
+</script>

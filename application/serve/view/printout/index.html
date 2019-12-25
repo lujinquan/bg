@@ -1,2 +1,72 @@
+<!-- 在线服务/信息统计/打印统计 -->
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="notice_title" placeholder="企业名称" class="layui-input">
+            </div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="notice_time" id="notice_time" placeholder="月份" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('statusRole')}?id={{ d.id }}">
+</script>
+<script type="text/html" title="操作按钮模板" id="buttonTpl">
+  <div class="j-operation-box">
+      <a href="{:url('editUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a> 
+  </div>
+</script>
+<script type="text/html" id="toolbar"></script>
+
+<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
 {include file="system@block/layui" /}
-打印统计主页
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,type: 'month'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+			,totalRow: true
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                {field: 'username', minWidth:180,align:'left', title: '企业名称', totalRowText: '合计'}
+               ,{field: 'ctime',minWidth: 120,align:'left', title: '月份'}
+			   ,{field: 'blackPrint',minWidth: 100,align:'left', title: '黑白打印',totalRow: true}
+			   ,{field: 'colourPrint',minWidth: 100,align:'left', title: '彩色打印',totalRow: true}
+			   ,{field: 'blackCopy',minWidth: 100,align:'left', title: '黑白复印',totalRow: true}
+			   ,{field: 'colourCopy',minWidth: 100,align:'left', title: '彩色复印',totalRow: true}
+			   ,{field: 'totalPrice',minWidth: 100,align:'left', title: '总价',totalRow: true}
+               ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
+            ]]
+        });
+    });
+</script>

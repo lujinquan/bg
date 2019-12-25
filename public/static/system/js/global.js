@@ -584,4 +584,31 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         return false;
     });
     exports('global', {});
+	
+	// //判断是否有滚动条，显示图片查看关闭按钮
+	// $(".j-viewer-img").on("click","img",function(){
+	//  var obj=document.getElementById("switchBody");
+	//  if(obj.scrollHeight>obj.clientHeight){
+	//  	$(".layui-row").addClass("on");
+	//  }
+	//  else
+	//  {
+	// 	$(".layui-row").removeClass("on");
+	//  }
+	// });
+	
+	//添加编辑附件上传图片查看
+	$(".j-viewer-img").on("click",function(){
+	    $(this).viewer({
+	        url: 'data-original',
+	     });
+	     $(this).viewer('update');
+	})
+	//图片加载失败显示默认图片
+	$("img").each(function() {
+	        var img = $(this);
+	        img.one("error", function(e){
+	            img.attr("src", "/static/system/image/add_img.png");
+	        });
+	    });
 });

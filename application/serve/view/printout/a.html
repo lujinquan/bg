@@ -1,0 +1,74 @@
+<!-- 在线服务/信息统计/打印统计/详情 -->
+<!-- 内容区 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+ <ul class="layui-tab-title">
+   <li class="layui-this">详情</li>
+ </ul>
+</div>
+<div class="j-details-from">
+	<div class="page-toolbar j-page-toolbar clearfix">
+	  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+		<div class="j-search-fl">
+			  <div class="layui-input-inline j-input-margin">
+				  <input type="text" name="notice_title" placeholder="企业名称" class="layui-input">
+			  </div>
+			 <div class="layui-input-inline j-input-margin">
+				 <input type="text" name="notice_time" id="notice_time" placeholder="月份" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+			 </div>
+			  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+			  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+				  <i class="layui-icon">&#xe615;</i>
+				  搜索
+			  </button>
+		</div>
+	  </form>
+	</div>
+	<table id="dataTable" class="layui-table" lay-filter='dataTable'></table>
+	<div class="layui-form-item j-top-formmargin ">
+		<div class="layui-input-block fr">
+		  <a href="javascript:history.go(-1)" class="layui-btn layui-btn-normal">返回</a>
+		</div>
+	</div>
+</div>
+<!-- 内容区 -->
+{include file="system@block/layui" /}
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','layer','form'], function() {
+        var $ = layui.$
+            ,table = layui.table
+			,laydate = layui.laydate
+			,layer = layui.layer
+			,form = layui.form;
+		//日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'line'
+			,totalRow: true
+            ,limit: 1000000
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+               {field: 'ctime',minWidth: 120,align:'left', title: '月份', totalRowText: '合计'}
+			   ,{field: 'name',minWidth: 100,align:'left', title: '姓名'}
+			   ,{field: 'blackPrint',minWidth: 100,align:'left', title: '黑白打印',totalRow: true}
+			   ,{field: 'colourPrint',minWidth: 100,align:'left', title: '彩色打印',totalRow: true}
+			   ,{field: 'blackCopy',minWidth: 100,align:'left', title: '黑白复印',totalRow: true}
+			   ,{field: 'colourCopy',minWidth: 100,align:'left', title: '彩色复印',totalRow: true}
+			   ,{field: 'totalPrice',minWidth: 100,align:'left', title: '价格',totalRow: true}
+            ]]
+        });
+    });
+</script>
