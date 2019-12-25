@@ -41,6 +41,7 @@ input:-webkit-autofill {
 .j-back-white {
     background: #fff;
 }
+/* .hisi-theme-1{position: relative;} */
 /*---------------------公用样式 E--------------------*/
 /* 搜索宽度 */
 .j-search-fl .layui-input-inline.j-input-margin{ width: 150px;position: relative;}
@@ -319,6 +320,14 @@ input[type="number"]{-moz-appearance: textfield;}
  /*----------回复 E----------*/
  .j-form-box{padding: 10px 15px 0;}
  .j-reply-textarea .j-size{ padding-right: 10px; color: #CDCDCD; text-align: right;}
+ /* 未读消息 */
+ .j-unread-news{position: absolute; bottom: 60px; right: 20px;font-size: 14px;width: 370px;}
+ .j-unread-news .j-popup-tips{height: 44px; line-height: 44px;background: #20A0FF; border-radius: 10px;padding: 0 20px;color: #fff;cursor: pointer;}
+ .j-popup-box{border-radius: 10px;overflow: hidden;border: #20A0FF 1px solid;position: absolute; bottom:50px;left: 0;z-index: 9999;width: 370px;}
+ .j-popup-box .j-title{background: #20A0FF;height: 34px; line-height: 34px; color: #fff;padding: 0 20px;cursor: pointer;}
+ .j-popup-con{padding:10px 20px;background: #fff;max-height: 200px;overflow-y: auto;width: 330px;}
+ .j-popup-con ol{padding-left: 20px;}
+ .j-popup-con li{list-style: decimal!important;min-height: 30px;line-height:24px;}
  /* ----------详情样式 E ----------*/
  .j-from-box.j-top-margin{position: relative;top:-10px;}
  /* ------------------ 在线服务 E --------------------------*/
