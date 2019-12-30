@@ -40,7 +40,7 @@
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
 			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
-			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">完结</a>
+			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal j-end">完结</a>
 	
 		</div>
 	</script>
@@ -118,8 +118,8 @@
         $('#refresh').click(function(){
         	location.reload();
         });
-		//电量查询
-		$(".j-indent-boxs").click(function(){
+		//完结报修
+		$(".j-indent-boxs a.j-end").click(function(){
 		  layer.open({
 		    title: '完结报修'
 		    ,offset: 'auto'
