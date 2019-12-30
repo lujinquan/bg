@@ -36,27 +36,49 @@ class Site extends Admin
 
     public function index()
     {   
+        $SiteGroupModel = new SiteGroupModel;
+        $group = input('group','union');
         if ($this->request->isAjax()) {
-            $page = input('param.page/d', 1);
-            $limit = input('param.limit/d', 10);
-            $getData = $this->request->get();
-            $SiteGroupModel = new SiteGroupModel;
-            $where = $SiteGroupModel->checkWhere($getData);
-            $fields = 'a.site_group_id,a.site_group_name,a.site_group_type,a.site_num,a.floor_number,b.ban_name,b.ban_address';
-            $data = [];
-            $temps = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
-            foreach ($temps as $k => &$v) {
-                // 统计方式【待优化】
-                $v['shack_num'] = ShackModel::where([['site_group','like','%|'.$v['site_group_id'].'|%'],['shack_status','eq',1]])->count();
+            // $page = input('param.page/d', 1);
+            // $limit = input('param.limit/d', 10);
+            // $getData = $this->request->get();
+            // $SiteGroupModel = new SiteGroupModel;
+            // $where = $SiteGroupModel->checkWhere($getData);
+            // $fields = 'a.site_group_id,a.site_group_name,a.site_group_type,a.site_num,a.floor_number,b.ban_name,b.ban_address';
+            // $data = [];
+            // $temps = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
+            // foreach ($temps as $k => &$v) {
+            //     // 统计方式【待优化】
+            //     $v['shack_num'] = ShackModel::where([['site_group','like','%|'.$v['site_group_id'].'|%'],['shack_status','eq',1]])->count();
                 
-            }
-            //halt($temps);
-            $data['data'] = $temps;
-            $data['count'] = $SiteGroupModel->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('site_group_id');
-            $data['code'] = 0;
-            $data['msg'] = '';
-            return json($data);
+            // }
+            // //halt($temps);
+            // $data['data'] = $temps;
+            // $data['count'] = $SiteGroupModel->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('site_group_id');
+            // $data['code'] = 0;
+            // $data['msg'] = '';
+            // return json($data);
         }
+        $tabData = [];
+        $tabData['menu'] = [
+            [
+                'title' => '联合工位区',
+                'url' => '?group=union',
+            ],
+            [
+                'title' => '独立工位区',
+                'url' => '?group=independent',
+            ],
+            [
+                'title' => '自由工位区',
+                'url' => '?group=free',
+            ]
+        ];
+        $tabData['current'] = url('?group='.$group);
+        $this->assign('group',$group);
+        $this->assign('hisiTabData', $tabData);
+        $this->assign('hisiTabType', 3);
+        return $this->fetch('index_'.$group);
 
         return $this->fetch();
     }

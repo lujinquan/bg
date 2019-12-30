@@ -69,11 +69,11 @@
                 ,{field: 'coupon_num', align:'center',with:80, title: '入驻人数'}
                 ,{field: 'firm_type', align:'center',with:100, title: '状态', templet:function(d){
                     
-					if(d.firm_type == 1){
+					if(parseInt(d.firm_type) == 1){
                     	return '<button class="j-table-button layui-bg-green">已入驻</button>';
-                    }else if(d.firm_type == 2){
+                    }else if(parseInt(d.firm_type) == 2){
 						return '<button class="j-table-button layui-bg-orange">已到期</button>';
-                    }else if(d.firm_type == 3){
+                    }else if(parseInt(d.firm_type) == 3){
 						return '<button class="j-table-button layui-bg-red">已到期</button>';
                     }
                     

@@ -25,9 +25,27 @@
         </div>
       </div>
   </div>
-  <div class="layui-form-item">
+  <!-- <div class="layui-form-item">
         <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
         <div class="layui-input-block" id="floor_number"></div>
+  </div> -->
+  <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
+        <div class="layui-input-inline">
+          <select name="floor_number" class="field-cid" type="select">
+              <option value="">请选择</option>
+              <option value="1"{if condition="$data_info['floor_number'] == 1"}selected{/if}>1楼</option>
+              <option value="2"{if condition="$data_info['floor_number'] == 2"}selected{/if}>2楼</option>
+              <option value="3"{if condition="$data_info['floor_number'] == 3"}selected{/if}>3楼</option>
+              <option value="4"{if condition="$data_info['floor_number'] == 4"}selected{/if}>4楼</option>
+              <option value="5"{if condition="$data_info['floor_number'] == 5"}selected{/if}>5楼</option>
+              <option value="6"{if condition="$data_info['floor_number'] == 6"}selected{/if}>6楼</option>
+              <option value="7"{if condition="$data_info['floor_number'] == 7"}selected{/if}>7楼</option>
+              <option value="8"{if condition="$data_info['floor_number'] == 8"}selected{/if}>8楼</option>
+          </select>
+        </div>
+      </div>
   </div>
   <div class="layui-form-item j-positions-size">
       <div class="layui-inline">

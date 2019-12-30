@@ -1,7 +1,7 @@
 <!-- 在线服务/空间状态/会议室状态 -->
 <div class="j-indent-boxs">
 	<div class="page-toolbar j-page-toolbar clearfix">
-		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl layui-col-md9">
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
 				 	<select name="ban_id" class="field-cid" type="select">
@@ -42,16 +42,19 @@
 		  </form>
 	  </div>
 	  <div class="j-conference-box clearfix">
+	  	{volist name="data" id="v" key="k"} <!-- $k 是ban_id -->
+	  	{volist name="$v['list']" id="vv" key="kk"} <!-- $kk floor_number -->
 		  <div class="j-conference-title clearfix">
 			  <ul>
-				  <li>楼宇：<strong>楼宇一</strong></li>
-				  <li>楼层：<strong>25</strong></li>
+				  <li>楼宇：<strong>{$v['baseinfo']['ban_name']}</strong></li>
+				  <li>楼层：<strong>{$kk}楼</strong></li>
 			  </ul>
 		  </div>
 		  <div class="j-conference-content clearfix">
+		  	  {volist name="$vv" id="vvv" key="kkk"}
 			  <ul class="j-first-floor clearfix">
 				  <li class="j-first clearfix">
-					  <div class="j-title clearfix">会议室1</div>
+					  <div class="j-title clearfix">{$vvv['baseinfo']['meet_name']}</div>
 					  <div class="j-titme clearfix">
 						  <ul>
 							  <li>
@@ -64,16 +67,26 @@
 					  </div>
 				  </li>
 				  <li class="j-list clearfix">
+				  	
 					 <dl>
-						 <dt>08:00</dt>
+						 <dt></dt>
 						 <dd>
 							 <ol>
-							   <li></li>
-							   <li></li>
+							{volist name="$vvv['list']" id="vvvv" key="kkkk"}
+								{if condition="fmod($kkkk,2) == 1"}
+								<!-- 这里显示时间  -->
+							 	<li>{$vvvv['start_time']}</li>
+							 	<li>圈</li>
+							 	{/if}
+							   	<li {if condition="$vvvv['meet_order_status'] == 1"}class="j-green"{elseif condition="$vvvv['meet_order_status'] == 2"}class="j-red" {else /} {/if}></li>
+							   	<!-- 这是弹出的公司信息  -->
+							   	<!-- <div class="j-frame-box"><ul><li class="clearfix"><span class="fl">使用者</span><span class="fr">{$vvvv['member_name']}</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">{$vvvv['member_tel']}</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">{$vvvv['firm_name']}</span></li></ul></div> -->
+							 {/volist}  
 							 </ol>
 						 </dd>
 					 </dl> 
-					 <dl>
+					 
+					 <!-- <dl>
 						 <dt>08:30</dt>
 						 <dd>
 							 <ol>
@@ -87,10 +100,10 @@
 						 <dd>
 							 <ol>
 							   <li class="j-green"></li>
-							   <li class="j-red"</li>
+							   <li class="j-red"></li>
 							 </ol>
 						 </dd>
-					 </dl>
+					 </dl> -->
 				  </li>
 				  <div class=" j-instructions clearfix">
 					  <ul class="clearfix">
@@ -107,7 +120,8 @@
 				  </div>
 			  </ul>
 			  
-			  <ul class="j-first-floor clearfix">
+			  {/volist}
+			  <!-- <ul class="j-first-floor clearfix">
 				  <li class="j-first clearfix">
 					  <div class="j-title clearfix">会议室2</div>
 					  <div class="j-titme clearfix">
@@ -163,9 +177,12 @@
 						  </li>
 					  </ul>
 				  </div>
-			  </ul>
+			  </ul> -->
 		  </div>
 	  </div>
+	  {/volist}
+	  {/volist}
+
 	{include file="system@block/layui" /}
 </div>
 <script type="text/javascript">

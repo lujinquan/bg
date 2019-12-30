@@ -1,0 +1,94 @@
+<div class="j-indent-boxs">
+	<div class="page-toolbar j-page-toolbar clearfix">
+		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="hisi-table-search">
+			<div class="j-search-fl">
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<input type="text" name="meet_name" placeholder="输入会议室名称" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+					<input type="text" name="meet_start_time" class="layui-input" id="time1" placeholder="预定日期">
+					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<input type="text" name="firm_name" placeholder="输入公司名称" class="layui-input">
+				  </div>
+				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  	<select name="meet_order_status" class="field-cid" type="select">
+						<option value="">请选择状态</option>
+	      			    <option value="1">已预约</option>
+	      			    <option value="2">已使用</option>
+	      			    <option value="4">已取消</option>
+					</select>
+				  </div>
+				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
+				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+					  <i class="layui-icon">&#xe615;</i>
+					  搜索
+				  </button>
+			</div>
+		  </form>
+	  </div>
+	<table id="dataTable" lay-filter='dataTable'></table>
+
+	{include file="system@block/layui" /}
+	<script type="text/html" title="操作按钮模板" id="buttonTpl">
+		<div class="j-operation-box">
+			<a href="{:url('detail')}?id={{ d.meet_order_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
+			{{#  if (d.meet_order_status == 1) { }}
+			<a href="{:url('cancel')}?id={{ d.meet_order_id }}" hisi-data="{width: '400px', height: '230px'}" title="取消" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">取消预约</a>
+			{{#  } else { }}
+			<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn--disabled j-iframe-pop">取消预约</a>
+			{{#  } }}
+		</div>
+	</script>
+	<script type="text/html" id="toolbar"></script>
+</div>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function() {
+        var $ = layui.$
+		    ,table = layui.table
+			,laydate = layui.laydate;
+	  //日期
+	   laydate.render({
+		 elem: '#time1'
+	   });
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}?group=record' //数据接口
+            ,page: true //开启分页
+			,height: 'full-230'
+            ,skin: 'line'
+            //,even: false
+            ,limit: 10
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,cols: [[ //表头
+            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+                    return d.LAY_INDEX;
+                }}
+				,{field: 'meet_start_time', align:'left',minWidth:100, title: '预定日期'}
+				,{field: 'order_start_time', align:'left',minWidth:100, title: '预定时段', templet:function(d){
+			        return d.order_start_time + ' ~ ' + d.order_end_time;
+			   }}
+                ,{field: 'firm_name', align:'left',minWidth:200, title: '预约公司'}
+				,{field: 'member_name', align:'left',minWidth:80, title: '预约人'}
+                ,{field: 'meet_name', align:'left',minWidth:100, title: '预约会议室'} 
+				,{field: 'meet_order_status', title: '状态', minWidth: 150,align:'left', templet:function(d){
+					if(parseInt(d.meet_order_status) == 1){ // 已预约
+						return '<button class="j-table-button layui-btn-warm">' + params.meet_order_status[d.meet_order_status] + '</button>';
+					}else if(parseInt(d.meet_order_status) == 2){ // 已使用
+						return '<button class="j-table-button j-activated">' + params.meet_order_status[d.meet_order_status] + '</button>';
+					}else if(parseInt(d.meet_order_status) == 4){ // 已取消
+						return '<button class="j-table-button j-notactive">' + params.meet_order_status[d.meet_order_status] + '</button>';
+					}
+			    }}        
+                ,{field: 'ctime', align:'left',minWidth:100, title: '操作时间'}
+                ,{title: '操作', minWidth:150, align:'left', templet: '#buttonTpl', fixed:'right'}
+            ]]
+        });
+        // $('#refresh').click(function(){
+        // 	location.reload();
+        // });
+    });
+</script>

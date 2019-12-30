@@ -18,6 +18,7 @@ use app\system\admin\Admin;
 use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Meeting as MeetingModel;
+use app\serve\model\MeetingOrder as MeetingOrderModel;
 
 class Meeting extends Admin
 {
@@ -34,24 +35,53 @@ class Meeting extends Admin
 
     public function index()
     {   
-        if ($this->request->isAjax()) {
+        $MeetingOrderModel = new MeetingOrderModel;
+        $group = input('group','status');
+        
+        if($this->request->isAjax() && $group == 'record'){
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
             $getData = $this->request->get();
-            $MeetingModel = new MeetingModel;
-            $where = $MeetingModel->checkWhere($getData);
-            //halt($where);
-            $fields = 'a.meet_id,a.meet_name,a.floor_number,a.meet_volume,a.meet_unit_price,b.ban_id,b.ban_name';
+            //halt($getData);
+            $where = $MeetingOrderModel->checkWhere($getData);
+            //[['a.meet_start_time','between time',[$nowDayDate,$nextDayDate]],['b.ban_id','eq',$b['ban_id']],['b.floor_number','eq',$f['floor_number']]]
+            $fields = 'a.meet_order_id,a.meet_order_status,from_unixtime(a.ctime,\'%Y-%m-%d\') ctime,from_unixtime(a.order_start_time,\'%H:%i\') order_start_time, from_unixtime(a.order_end_time,\'%H:%i\') order_end_time,from_unixtime(a.meet_start_time,\'%Y-%m-%d\') meet_start_time, from_unixtime(a.meet_end_time,\'%Y-%m-%d\') meet_end_time,b.meet_name,c.member_name,d.firm_name';
             $data = [];
-            $data['data'] = Db::name('space_meeting')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
-            //halt($where);
-            $data['count'] = Db::name('space_meeting')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where($where)->count('a.meet_id');
+            $data['data'] = Db::name('space_meeting_order')->alias('a')->where($where)->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->join('space_ban e','b.ban_id = e.ban_id','left')->field($fields)->order('a.ctime desc')->page($page)->limit($limit)->select();
+            // foreach ($temp as $k => &$v) {
+            //     if(){
+
+            //     }
+            // }
+            // = $temp;
+            $data['count'] = Db::name('space_meeting_order')->alias('a')->where($where)->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->join('space_ban e','b.ban_id = e.ban_id','left')->field($fields)->order('a.ctime desc')->count('a.meet_order_id');
             $data['code'] = 0;
             $data['msg'] = '';
+            //halt($data);
             return json($data);
         }
-
-        return $this->fetch();
+        if($group == 'status'){
+            $data = $MeetingOrderModel->getList();
+            //halt($data);
+            $this->assign('data',$data);
+        }
+        
+        $tabData = [];
+        $tabData['menu'] = [
+            [
+                'title' => '会议室状态',
+                'url' => '?group=status',
+            ],
+            [
+                'title' => '会议室记录',
+                'url' => '?group=record',
+            ]
+        ];
+        $tabData['current'] = url('?group='.$group);
+        $this->assign('group',$group);
+        $this->assign('hisiTabData', $tabData);
+        $this->assign('hisiTabType', 3);
+        return $this->fetch('index_'.$group);
     }
 
     public function add()
@@ -127,5 +157,13 @@ class Meeting extends Admin
         }
     }
 
+    public function cancel()
+    {
+        $id = input('param.id/d');
+        halt($id);
+        // $row = BanModel::get($id);
+        // $this->assign('data_info',$row);
+        // return $this->fetch();
+    }
     
 }

@@ -36,11 +36,11 @@ class Meeting extends Model
         return '|'.implode('|',$value).'|';
     }
 
-    public function setFloorNumberAttr($value)
-    {
-        if (empty($value)) return '';
-        return '|'.str_replace(',','|',$value).'|';
-    }
+    // public function setFloorNumberAttr($value)
+    // {
+    //     if (empty($value)) return '';
+    //     return '|'.str_replace(',','|',$value).'|';
+    // }
 
     
     public function checkWhere($data)
