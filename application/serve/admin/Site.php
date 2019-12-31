@@ -59,6 +59,11 @@ class Site extends Admin
             // $data['msg'] = '';
             // return json($data);
         }
+        if($group == 'union'){
+            $data = $SiteGroupModel->getList();
+            //halt($data);
+            $this->assign('data',$data);
+        }
         $tabData = [];
         $tabData['menu'] = [
             [

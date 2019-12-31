@@ -11,25 +11,22 @@
 					</select>
 				 </div>
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<select name="service_field" class="field-cid" type="select">
-						<option value="">请选择楼层</option>
-						<option value="1">楼层1</option>
-					</select>
+				 	<input type="text" name="floor_number" placeholder="请输入楼层" class="layui-input">
 				 </div>
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="service_field" class="field-cid" type="select">
-						<option value="">请选择类型</option>
-						<option value="1">类型1</option>
-						<option value="2">类型2</option>
+				  	<select name="type" class="field-cid" type="select">
+						<option value="">请选择状态</option>
+						<option value="1">已租</option>
+						<option value="2">未租</option>
 					</select>
 				  </div>
-				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  <!-- <div class="layui-input-inline j-input-margin" style="width:150px;">
 				   	<select name="service_field" class="field-cid" type="select">
 						<option value="">请选择状态</option>
 						<option value="1">状态1</option>
 						<option value="2">状态2</option>
 					</select>
-				   </div>
+				   </div> -->
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="请选择时间">
 					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
@@ -43,17 +40,26 @@
 		  </form>
 	  </div>
 	  <div class="j-conference-box clearfix">
+	  	{volist name="data" id="v" key="k"} <!-- $k 是ban_id -->
+	  	{volist name="$v['list']" id="vv" key="kk"} <!-- $kk floor_number -->
+	  	 <div class="j-conference-title clearfix">
+			  <ul>
+				  <li>楼宇：<strong>{$v['baseinfo']['ban_name']}</strong></li>
+				  <li>楼层：<strong>{$kk}楼</strong></li>
+			  </ul>
+		  </div>
 		  <div class="j-conference-content layui-collapse clearfix" lay-filter="test">
+		  	  {volist name="$vv" id="vvv" key="kkk"}
 			  <ul class="j-first-floor layui-colla-item clearfix">
 				  <li class="j-first layui-colla-title clearfix">
-					  <div class="j-title clearfix">联合工位区：工位区1</div>
+					  <div class="j-title clearfix">联合工位区：{$vvv['baseinfo']['site_group_name']}</div>
 					  <div class="j-titme clearfix">
 						  <ul>
 							  <li>
-								  工位数：<label>4</label>
+								  工位数：<label>{$vvv['baseinfo']['all_site_sum']}</label>
 							  </li>
 							  <li>
-							  	  已使用：<label>3</label>
+							  	  已使用：<label>{$vvv['baseinfo']['use_site_sum']}</label>
 							  </li>
 						  </ul>
 					  </div>
@@ -61,23 +67,28 @@
 				  <li class="j-list layui-colla-content clearfix">
 					 <div class="j-from-box">
 						<ul class="j-input-inlines">
+							{volist name="$vvv['list']" id="vvvv" key="kkkk"}
 							<li class="on">
-								<input type="text" name="sites" value="A1-1" autocomplete="off" placeholder="请输入工位名称" class="layui-input j-explain-input">
-								<b class="j-explain-name">已租</b>
+								<input type="text" name="sites" value="{$vvvv['site_name']}" autocomplete="off" class="layui-input j-explain-input">
+								<b class="j-explain-name">{$vvvv['site_status']}</b>
 							</li>
-							<li>
+							<!-- <li>
 								<input type="text" name="sites" value="A1-2" autocomplete="off" placeholder="请输入工位名称" class="layui-input j-explain-input">
 								<b class="j-explain-name">未租</b>
 							</li>
 							<li class="on">
 								<input type="text" name="sites" value="A1-2" autocomplete="off" placeholder="请输入工位名称" class="layui-input j-explain-input">
 								<b class="j-explain-name">已租</b>
-							</li>
+							</li> -->
+							{/volist}
 						</ul>
 					 </div>
 				  </li>
 			  </ul>
-		  </div>  
+			  {/volist}
+		  </div> 
+		  {/volist}
+		  {/volist} 
 	  </div>
 	{include file="system@block/layui" /}
 </div>

@@ -60,10 +60,31 @@ class Meeting extends Admin
             //halt($data);
             return json($data);
         }
-        if($group == 'status'){
-            $data = $MeetingOrderModel->getList();
-            //halt($data);
-            $this->assign('data',$data);
+        if($this->request->isAjax() && $group == 'status'){
+            $getData = $this->request->get();
+            //halt($getData);
+            $data = [];
+            $date = '';
+            $ban_name = '';
+            $meet_name = '';
+            $floor_number = '';
+            if(isset($getData['ban_name']) && $getData['ban_name']){
+                $ban_name = $getData['ban_name'];
+            }
+            if(isset($getData['floor_number']) && $getData['floor_number']){
+                $floor_number = $getData['floor_number'];   
+            }
+            if(isset($getData['meet_name']) && $getData['meet_name']){
+                $meet_name = $getData['meet_name'];  
+            }
+            if(isset($getData['date']) && $getData['date']){
+                $date = $getData['date']; 
+            }
+            $data['data'] = $MeetingOrderModel->getList($ban_name,$floor_number,$meet_name,$date);
+            $data['code'] = 0;
+            $data['msg'] = '';
+            return json($data);
+            //$this->assign('data',$data);
         }
         
         $tabData = [];

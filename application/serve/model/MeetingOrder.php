@@ -73,23 +73,46 @@ class MeetingOrder extends Model
         return $where;
     }
     
-    public function getList($ban_id = '',$floor_number = '',$date = '')
+    public function getList($ban_name = '',$floor_number = '',$meet_name = '',$date = '')
     {
     	
     	$result = [];
-    	$nowDayDate = date('Y-m-d',1577232000);
+        if($date){
+            $nowDayDate = $date;
+        }else{
+            $nowDayDate = date('Y-m-d',1577232000);
+        }
     	$nextDayDate = date('Y-m-d',(strtotime($nowDayDate)+3600*24));
     	// 获取当前项目下的所有有效楼宇数据
-    	$banArr = BanModel::where([['project_id','eq',PROJECT_ID],['status','eq',1]])->field('ban_id,ban_name,ban_address')->order('ctime asc')->select()->toArray();
+        $banWhere = [];
+        $banWhere[] = ['project_id','eq',PROJECT_ID];
+        $banWhere[] = ['status','eq',1];
+        if($ban_name){
+            $banWhere[] = ['ban_name','like','%'.$ban_name.'%'];
+        }
+    	$banArr = BanModel::where($banWhere)->field('ban_id,ban_name,ban_address')->order('ctime asc')->select()->toArray();
+        
 		//halt($banArr);
     	foreach($banArr as $b){
-    		$floorNumberArr = FloorModel::where([['status','eq',1],['ban_id','eq',$b['ban_id']]])->field('floor_number')->order('floor_number asc')->select()->toArray();
+            $floorWhere = [];
+            $floorWhere[] = ['status','eq',1];
+            $floorWhere[] = ['ban_id','eq',$b['ban_id']];
+            if($floor_number){
+                $floorWhere[] = ['floor_number','eq',$floor_number];
+            }
+    		$floorNumberArr = FloorModel::where($floorWhere)->field('floor_number')->order('floor_number asc')->select()->toArray();
 
-    		
     		//halt($floorNumberArr);
     		foreach($floorNumberArr as $f){
+                $listsWhere = [];
+                $listsWhere[] = ['a.meet_start_time','between time',[$nowDayDate,$nextDayDate]];
+                $listsWhere[] = ['b.floor_number','eq',$f['floor_number']];
+                $listsWhere[] = ['b.ban_id','eq',$b['ban_id']]; 
+                if($meet_name){
+                    $listsWhere[] = ['b.meet_name','like','%'.$meet_name.'%'];
+                }
     			$fields = 'a.*,b.meet_name,b.ban_id,b.floor_number,c.member_name,c.member_tel,d.firm_name';
-    			$lists = self::alias('a')->where([['a.meet_start_time','between time',[$nowDayDate,$nextDayDate]],['b.ban_id','eq',$b['ban_id']],['b.floor_number','eq',$f['floor_number']]])->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->field($fields)->select()->toArray();
+    			$lists = self::alias('a')->where($listsWhere)->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->field($fields)->select()->toArray();
     			if(!$lists){
     				continue;
     			}

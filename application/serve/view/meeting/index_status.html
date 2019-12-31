@@ -1,31 +1,32 @@
 <!-- 在线服务/空间状态/会议室状态 -->
 <div class="j-indent-boxs">
 	<div class="page-toolbar j-page-toolbar clearfix">
-		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="hisi-table-search">
+		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="j-table-search">
 			<div class="j-search-fl layui-col-md9">
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<select name="ban_id" class="field-cid" type="select">
+				 	<input type="text" name="ban_name" placeholder="输入楼宇" class="layui-input">
+				 	<!-- <select name="ban_id" class="field-cid" type="select">
 						<option value="">请选择楼宇</option>
-						{volist name="banArr" id="v"}
-						<option value="{$v['ban_id']}">{$v['ban_name']}</option>
-						{/volist}
-					</select>
+						<option value=""></option>
+					</select> -->
 				 </div>
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<select name="service_field" class="field-cid" type="select">
+				 	<input type="text" name="floor_number" placeholder="输入楼层" class="layui-input">
+				 	<!-- <select name="service_field" class="field-cid" type="select">
 						<option value="">请选择楼层</option>
 						<option value="1">楼层1</option>
-					</select>
+					</select> -->
 				 </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="service_field" class="field-cid" type="select">
+				  	<input type="text" name="meet_name" placeholder="输入会议室名称" class="layui-input">
+				  	<!-- <select name="service_field" class="field-cid" type="select">
 						<option value="">请选择会议室</option>
 						<option value="1">会议室1</option>
 						<option value="2">会议室2</option>
-					</select>
+					</select> -->
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="请选择时间">
+					<input type="text" name="date" class="layui-input" id="time1" placeholder="请选择时间">
 					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -41,145 +42,8 @@
 			</div> -->
 		  </form>
 	  </div>
-	  <div class="j-conference-box clearfix">
-	  	{volist name="data" id="v" key="k"} <!-- $k 是ban_id -->
-	  	{volist name="$v['list']" id="vv" key="kk"} <!-- $kk floor_number -->
-		  <div class="j-conference-title clearfix">
-			  <ul>
-				  <li>楼宇：<strong>{$v['baseinfo']['ban_name']}</strong></li>
-				  <li>楼层：<strong>{$kk}楼</strong></li>
-			  </ul>
-		  </div>
-		  <div class="j-conference-content clearfix">
-		  	  {volist name="$vv" id="vvv" key="kkk"}
-			  <ul class="j-first-floor clearfix">
-				  <li class="j-first clearfix">
-					  <div class="j-title clearfix">{$vvv['baseinfo']['meet_name']}</div>
-					  <div class="j-titme clearfix">
-						  <ul>
-							  <li>
-								  最近7日使用时长：<label>47.75小时</label>
-							  </li>
-							  <li>
-							  	  最近30日使用时长：<label>179.75小时</label>
-							  </li>
-						  </ul>
-					  </div>
-				  </li>
-				  <li class="j-list clearfix">
-					 <dl>
-						 <dd>
-							 {volist name="$vvv['list']" id="vvvv" key="kkkk"}
-							 <ol>
-								{if condition="fmod($kkkk,2) == 1"}
-								<!-- 这里显示时间  -->
-							 	<li class="j-time">{$vvvv['start_time']}</li>
-							 	<li class="j-circle"></li>
-							 	{/if}
-							   	<li {if condition="$vvvv['meet_order_status'] == 1"}class="j-gray j-green"{elseif condition="$vvvv['meet_order_status'] == 2"}class="j-gray j-red" {else /}class="j-gray"{/if}></li>
-							   	<!-- 这是弹出的公司信息  -->
-							   	<div class="j-frame-box hide"><ul><li class="clearfix"><span class="fl">使用者</span><span class="fr">{$vvvv['member_name']}</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">{$vvvv['member_tel']}</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">{$vvvv['firm_name']}</span></li></ul></div>
-							 </ol>
-							 {/volist} 
-						 </dd>
-					 </dl> 
-					 
-					 <!-- <dl>
-						 <dt>08:30</dt>
-						 <dd>
-							 <ol>
-							   <li></li>
-							   <li></li>
-							 </ol>
-						 </dd>
-					 </dl> 
-					 <dl>
-						 <dt>09:00</dt>
-						 <dd>
-							 <ol>
-							   <li class="j-green"></li>
-							   <li class="j-red"></li>
-							 </ol>
-						 </dd>
-					 </dl> -->
-				  </li>
-				  <div class=" j-instructions clearfix">
-					  <ul class="clearfix">
-						  <li class="j-lsit1">
-							  <i></i>已使用
-						  </li>
-						  <li class="j-lsit2">
-							  <i></i>已预约
-						  </li>
-						  <li class="j-lsit3">
-							  <i></i>未使用
-						  </li>
-					  </ul>
-				  </div>
-			  </ul>
-			  
-			  {/volist}
-			  <!-- <ul class="j-first-floor clearfix">
-				  <li class="j-first clearfix">
-					  <div class="j-title clearfix">会议室2</div>
-					  <div class="j-titme clearfix">
-						  <ul>
-							  <li>
-								  最近7日使用时长：<label>47.75小时</label>
-							  </li>
-							  <li>
-								  最近30日使用时长：<label>179.75小时</label>
-							  </li>
-						  </ul>
-					  </div>
-				  </li>
-				  <li class="j-list clearfix">
-					 <dl>
-						 <dt>08:00</dt>
-						 <dd>
-							 <ol>
-							   <li></li>
-							   <li></li>
-							 </ol>
-						 </dd>
-					 </dl> 
-					 <dl>
-						 <dt>08:30</dt>
-						 <dd>
-							 <ol>
-							   <li></li>
-							   <li></li>
-							 </ol>
-						 </dd>
-					 </dl> 
-					 <dl>
-						 <dt>09:00</dt>
-						 <dd>
-							 <ol>
-							   <li class="j-green"></li>
-							   <li class="j-red"</li>
-							 </ol>
-						 </dd>
-					 </dl>
-				  </li>
-				  <div class=" j-instructions clearfix">
-					  <ul class="clearfix">
-						  <li class="j-lsit1">
-							  <i></i>已使用
-						  </li>
-						  <li class="j-lsit2">
-							  <i></i>已预约
-						  </li>
-						  <li class="j-lsit3">
-							  <i></i>未使用
-						  </li>
-					  </ul>
-				  </div>
-			  </ul> -->
-		  </div>
-	  </div>
-	  {/volist}
-	  {/volist}
+	  <div class="j-conference-box clearfix" id="j-data"></div>
+	  
 
 	{include file="system@block/layui" /}
 </div>
@@ -191,6 +55,85 @@
 	    laydate.render({
 	      elem: '#time1'
 	    });
+
+	    $('#j-table-search').submit(function() {
+	    	//console.log(1);
+	        var that = $(this), 
+	            arr = that.serializeArray(), 
+	            options = '';
+	            
+	            for(var i in arr) {
+	            	options += arr[i].name +'=' +arr[i].value +'&';
+	            }
+
+	        data_post(options);
+	        return false;
+	    });
+	    data_post();
+	    function data_post(options = ''){
+	    	$.get('{:url('index')}?group=status&'+ options , function(res) {
+		    	var html = '';
+
+		    	for (var i in res.data) {
+		    		//console.log(res.data[i]);
+		    		for (var k in res.data[i]['list']) {
+		    			var meetsinfo = res.data[i]['list'][k];
+		    			
+		    			html +='<div class="j-conference-title clearfix"><ul><li>楼宇：<strong>'+ res.data[i]['baseinfo']['ban_name']  + '</strong></li><li>楼层：<strong>' + k + '楼</strong></li></ul></div><div class="j-conference-content clearfix">';
+
+		    			for (var j in meetsinfo) {
+		    				html +='<ul class="j-first-floor clearfix"><li class="j-first clearfix"><div class="j-title clearfix">'+ res.data[i]['baseinfo']['ban_name'] + '</div><div class="j-titme clearfix"><ul><li>最近7日使用时长：<label>47.75小时</label></li><li>最近30日使用时长：<label>179.75小时</label></li></ul></div></li><li class="j-list clearfix"><dl><dd>';
+		    				var meets = meetsinfo[j]['list'];
+		    				for (var p in meets) {
+
+		    					html += '<ol>';
+		    					if(p%2 == 1){
+		    						//console.log(p);
+		    						html += '<li class="j-time">' + meets[p]['start_time'] + '</li><li class="j-circle"></li>';
+		    					}
+
+		    					if(meets[p]['meet_order_status'] == 1){
+		    						var color_class = 'j-gray j-green';
+		    					}else if(meets[p]['meet_order_status'] == 2){
+		    						var color_class = 'j-gray j-red';
+		    					}else{
+		    						var color_class = 'j-gray';
+		    					}
+
+	                            html += '<li class="' + color_class + '"></li><div class="j-frame-box hide"><ul><li class="clearfix"><span class="fl">使用者</span><span class="fr">' + meets[p]['member_name'] + '</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">' + meets[p]['member_tel'] + '</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">' + meets[p]['firm_name'] + '</span></li></ul></div></ol>';                                                            
+		    				}
+
+		    				html += `</dd>
+			                     </dl> 
+			                  </li>
+			                  <div class=" j-instructions clearfix">
+			                      <ul class="clearfix">
+			                          <li class="j-lsit1">
+			                              <i></i>已使用
+			                          </li>
+			                          <li class="j-lsit2">
+			                              <i></i>已预约
+			                          </li>
+			                          <li class="j-lsit3">
+			                              <i></i>未使用
+			                          </li>
+			                      </ul>
+			                  </div>
+			              </ul>`;
+
+
+		    			}
+
+		    			html +='</div>';
+		    		}
+		    	}
+
+		    	$('#j-data').html(html);
+
+	        });
+	    }
+	    
+
 	 //点击吸附提示
 	 // $(".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red").hover(function (){  
 	 //   var that = this;
@@ -198,7 +141,7 @@
 	 // },function (){  
 	 // layer.closeAll('tips');
 	 // }); 
-	 $(".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red").hover(function (){
+	 $(".j-conference-box").on('hover','.j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red',function(){
 	   $(this).parent().find(".j-frame-box").show();
 	 },function (){  
 	   $(this).parent().find(".j-frame-box").hide();
@@ -206,4 +149,6 @@
 	 //给偶数行
 	 $(".j-conference-content li.j-list ol:nth-child(even)").addClass("on");
   });
+
+
 </script>
