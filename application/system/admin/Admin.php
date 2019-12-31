@@ -130,6 +130,7 @@ class Admin extends Common
                     $this->assign('hisiMenus', MenuModel::getMainMenu());
                     // 分组切换类型 0无需分组切换，1单个分组，2分组切换[无链接]，3分组切换[有链接]，具体请看后台layout.html
                     $this->assign('hisiTabType', 0);
+                    $this->assign('systemusers',session('systemusers'));
 
                     //halt($curMenu);
                     // tab切换数据

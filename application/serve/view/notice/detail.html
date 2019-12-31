@@ -1,0 +1,58 @@
+<!-- 在线服务/通知公告/公告管理/发布公告 -->
+<div class="layui-tab layui-tab-brief j-no-color">
+  <ul class="layui-tab-title">
+    <li class="layui-this">公告详情</li>
+  </ul>
+</div>
+<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post">
+	<div class="layui-form-item">
+		<div class="layui-col-md8">
+			<label class="layui-form-label">
+				<i class="red">*</i>标题：
+			</label>
+			<div class="layui-input-block">
+				<input type="text" name="notice_title" value="{$data_info['title']}" placeholder="请输入" lay-verify="required" lay-verType="tips"
+				autocomplete="off" class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-col-md8">
+			<label class="layui-form-label">
+				<i class="red">*</i>内容：
+			</label>
+			<div class="layui-input-block">
+				<textarea id="editor_id" name="content" style="width:100%;height:300px;"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
+			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确认</button>
+		</div>
+	</div>
+</form>
+{include file="system@block/layui" /}
+<script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript" src="__PUBLIC_JS__/editor/kindeditor/kindeditor-all.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript" src="__PUBLIC_JS__/editor/kindeditor/lang/zh-CN.js?v={:config('hisiphp.version')}"></script>
+<script type="text/javascript">   
+	layui.use(['jquery','form','util', 'layer'], function() {
+		    var laydate = layui.laydate,
+		      $ = layui.$,
+		      form = layui.form,
+			  layer = layui.layer,
+			  util = layui.util;
+			 
+	});
+	//编辑器
+	KindEditor.ready(function(K) {
+		editor = K.create('textarea[name="content"]', {
+			afterBlur:function(){this.sync();},
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			
+		});
+	});	  
+</script>

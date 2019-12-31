@@ -231,6 +231,15 @@ class SystemUser extends Model
             // 缓存登录信息
             session('admin_user', $login);
             session('admin_user_sign', $this->dataSign($login));
+            // 缓存用户表基础数据
+            $users = $this->with('role')->where([['status','eq','1']])->select();
+            $usersArr = [];
+            foreach($users as $v){
+                $usersArr[$v['id']] = $v;
+            }
+            //halt($users);
+            session('systemusers',$usersArr);
+            
             return $user->id;
         }
         return false;

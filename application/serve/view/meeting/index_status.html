@@ -61,11 +61,10 @@
 	        var that = $(this), 
 	            arr = that.serializeArray(), 
 	            options = '';
-	            
+            
 	            for(var i in arr) {
 	            	options += arr[i].name +'=' +arr[i].value +'&';
 	            }
-
 	        data_post(options);
 	        return false;
 	    });
