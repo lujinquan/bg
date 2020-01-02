@@ -55,7 +55,7 @@
 	    laydate.render({
 	      elem: '#time1'
 	    });
-
+  
 	    $('#j-table-search').submit(function() {
 	    	//console.log(1);
 	        var that = $(this), 
@@ -124,10 +124,13 @@
 		    			}
 
 		    			html +='</div>';
-		    		}
+		    		};
+					
 		    	}
 
 		    	$('#j-data').html(html);
+				//给偶数行
+				$(".j-indent-boxs li.j-list ol:nth-child(even)").addClass("on");
 
 	        });
 	    }
@@ -140,14 +143,17 @@
 	 // },function (){  
 	 // layer.closeAll('tips');
 	 // }); 
-	 $(".j-conference-box").on('hover','.j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red',function(){
-	   $(this).parent().find(".j-frame-box").show();
-	 },function (){  
-	   $(this).parent().find(".j-frame-box").hide();
+	 // $(".j-indent-boxs").bind('click','.j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red',function(){
+	 //   $(this).parent().find(".j-frame-box").show();
+	 // },function (){  
+	 //   $(this).parent().find(".j-frame-box").hide();
+	 // });
+	 
+	 $("body").on("mouseenter", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function() {
+	        $(this).parent().find(".j-frame-box").show();
+	     });
+	 $("body").on("mouseleave", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function() {
+		 $(this).parent().find(".j-frame-box").hide();
 	 });
-	 //给偶数行
-	 $(".j-conference-content li.j-list ol:nth-child(even)").addClass("on");
   });
-
-
 </script>
