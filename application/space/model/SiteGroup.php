@@ -6,6 +6,9 @@ use think\Model;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
 
+/**
+ * 工位区
+ */
 class SiteGroup extends Model
 {
 	// 设置模型名称
@@ -27,11 +30,11 @@ class SiteGroup extends Model
         return '|'.implode('|',$value).'|';
     }
 
-    public function setFloorNumberAttr($value)
-    {
-        if (!$value) return '';
-        return '|'.str_replace(',','|',$value).'|';
-    }
+    // public function setFloorNumberAttr($value)
+    // {
+    //     if (!$value) return '';
+    //     return '|'.str_replace(',','|',$value).'|';
+    // }
     
     public function checkWhere($data)
     {

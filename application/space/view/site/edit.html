@@ -23,8 +23,17 @@
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>所属楼层：</label>
-        	<div class="j-input-inline" id="floor_number"></div>
+			<label class="j-form-label"><i class="red">*</i> 所属楼层：</label>
+			<div class="j-input-inline">
+				<select name="floor_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
+					<option value="">请选择</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</div>
 		</div>
 	</div>
     <div class="layui-row j-from-box layui-col-space30">
@@ -239,7 +248,7 @@
             
 		})
 		//}
-		var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
+		//var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
 
 		var formData = '{$data_info['floor_number']}';
 	  	if(formData){
@@ -249,17 +258,17 @@
 	  		}); 
 	  		console.log('被选中的楼层id：'+seletedFloorNumber);
 	  	}
-		//多选标签-基本配置
-	    var tagIns1 = selectM({
-	      //元素容器【必填】
-	      elem: '#floor_number'
-	      //候选数据【必填】
-	      ,data: tagData
-	      ,selected: seletedFloorNumber
-	      //,max:10
-	      //,width:200
-	      //添加验证
-	      ,verify:'required'      
-	    }); 
+		// //多选标签-基本配置
+	 //    var tagIns1 = selectM({
+	 //      //元素容器【必填】
+	 //      elem: '#floor_number'
+	 //      //候选数据【必填】
+	 //      ,data: tagData
+	 //      ,selected: seletedFloorNumber
+	 //      //,max:10
+	 //      //,width:200
+	 //      //添加验证
+	 //      ,verify:'required'      
+	 //    }); 
 	});
 </script>

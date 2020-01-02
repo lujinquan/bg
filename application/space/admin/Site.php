@@ -19,6 +19,7 @@ use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
 use app\space\model\SiteGroup as SiteGroupModel;
+use app\space\model\Site as SiteModel;
 use app\project\model\Shack as ShackModel;
 
 class Site extends Admin
@@ -70,20 +71,33 @@ class Site extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
-            if(isset($data['file'])){ //附件
-                $data['imgs'] = implode(',',$data['file']);
+            // 附件处理
+            if(isset($data['file'])){
                 $AnnexModel = new AnnexModel;
+                $data['imgs'] = implode(',',$data['file']);  
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
             $SiteGroupModel = new SiteGroupModel;
             unset($data['site_id']);
-            // 入库
-            if (!$SiteGroupModel->allowField(true)->create($data)) {
+            // 工位区入库
+            $row = $SiteGroupModel->allowField(true)->create($data);
+            if($row){
+                // 如果新增的工位区为联合工位区，且添加了工位
+                if(isset($data['sites']) && $data['sites']){
+                    $sitesApplyData = [];
+                    foreach($data['sites'] as $k => $v){
+                        $sitesApplyData[$k]['site_group_id'] = $row['site_group_id'];
+                        $sitesApplyData[$k]['site_name'] = $v;
+                    }
+                    $SiteModel = new SiteModel;
+                    $SiteModel->insertAll($sitesApplyData);
+                } 
+                return $this->success('新增成功');
+            }else{
                 return $this->error('新增失败');
             }
-            return $this->success('新增成功');
+            
         }
-
         return $this->fetch();
     }
 
@@ -93,11 +107,12 @@ class Site extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'SiteGroup.add');
+            $result = $this->validate($data, 'SiteGroup.edit');
             if($result !== true) {
                 return $this->error($result);
             }
-            if(isset($data['file'])){ //附件
+            // 附件
+            if(isset($data['file'])){ 
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
@@ -106,14 +121,24 @@ class Site extends Admin
             if (!$SiteGroupModel->allowField(true)->update($data)) {
                 return $this->error('编辑失败');
             }
+            // 如果新增的工位区为联合工位区，且添加了工位
+            if(isset($data['sites']) && $data['sites']){
+                $sitesApplyData = [];
+                $SiteModel = new SiteModel;
+                $SiteModel->where([['site_group_id','eq',$data['site_group_id']]])->delete();
+                foreach($data['sites'] as $k => $v){
+                    $sitesApplyData[$k]['site_group_id'] = $data['site_group_id'];
+                    $sitesApplyData[$k]['site_name'] = $v;
+                }
+                $SiteModel->insertAll($sitesApplyData);
+            }
             return $this->success('编辑成功');
         }
         $id = input('param.id/d');
         $row = SiteGroupModel::get($id)->toArray();
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        $row['sites'] = explode('|',$row['sites']);
-        array_shift($row['sites']);
-        array_pop($row['sites']);
+        $row['sites'] = SiteModel::where([['site_group_id','eq',$row['site_group_id']],['status','eq',1]])->column('site_id,site_name');
+
 
         //获取入驻公司&个体户
         $shackArr = ShackModel::with(['member','firm'])->where([['site_group','like','%|'.$row['site_group_id'].'|%'],['shack_status','eq',1]])->field('firm_id,member_id')->select();
@@ -134,7 +159,6 @@ class Site extends Admin
                 ];
             }
         }
-        //halt($firmArr);
         $this->assign('firmArr',$firmArr);
         $this->assign('data_info',$row);
         return $this->fetch();
@@ -142,7 +166,8 @@ class Site extends Admin
 
     public function del()
     {
-        $ids = $this->request->param('id/a');        
+        $ids = $this->request->param('id/a'); 
+        // 删除工位区前提条件： 1、无个人或企业入驻，2、
         $res = SiteGroupModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
         if($res){
             $this->success('删除成功');

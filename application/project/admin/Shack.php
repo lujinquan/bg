@@ -25,6 +25,9 @@ use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\SiteGroup as SiteGroupModel;
 include EXTEND_PATH.'phpexcel/PHPExcel.php';
 
+/**
+ * 入驻办理
+ */
 class Shack extends Admin
 {
 

@@ -38,7 +38,13 @@ class SiteGroup extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['site_group_name','site_group_type','ban_id','floor_number','sites','site_group_area','__token__']);
+        return $this->only(['site_group_name','site_group_type','ban_id','floor_number','site_group_area','__token__']);
+    }
+
+    // 自定义更新场景
+    public function sceneEdit()
+    {
+        return $this->only(['site_group_name','ban_id','floor_number','site_group_area','__token__']);
     }
 
     

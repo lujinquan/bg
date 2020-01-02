@@ -6,13 +6,13 @@
 <form class="layui-form j-top-margin j-padding-right" action="{:url()}" method="post" id="addForm">
 	<div class="layui-row  j-from-box layui-col-space30">
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>工位区名称：</label>
+			<label class="j-form-label"><i class="red">*</i> 工位区名称：</label>
 			<div class="j-input-inline">
 				<input type="text" name="site_group_name"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>所属楼宇：</label>
+			<label class="j-form-label"><i class="red">*</i> 所属楼宇：</label>
 			<div class="j-input-inline">
 				<select name="ban_id" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
 					<option value="">请选择</option>
@@ -23,14 +23,27 @@
 			</div>
 		</div>
 		<div class="layui-col-md4">
+			<label class="j-form-label"><i class="red">*</i> 所属楼层：</label>
+			<div class="j-input-inline">
+				<select name="floor_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
+					<option value="">请选择</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</div>
+		</div>
+		<!-- <div class="layui-col-md4">
 			<label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
         	<div class="layui-input-block" id="floor_number"></div>
-		</div>
+		</div> -->
 	</div>
 
     <div class="layui-row j-from-box layui-col-space30">
     	<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>工位区类型：</label>
+			<label class="j-form-label"><i class="red">*</i> 工位区类型：</label>
 			<div class="j-input-inline">
 				<select name="site_group_type" class="field-cid" lay-verify="required" lay-filter="site_group_type"  lay-verType="tips" type="select">
 					<option value="">请选择</option>
@@ -103,7 +116,7 @@
 </form>
 {include file="system@block/layui" /}
 <script>
-	var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
+	//var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
 	/*上传参数设定*/
 	var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
 	var duotu = true; //是否为多图上传true false
@@ -177,16 +190,16 @@
 			$(this).parents("dd").remove();
 		})
 
-		//多选标签-基本配置
-	    var tagIns1 = selectM({
-	      //元素容器【必填】
-	      elem: '#floor_number'
-	      //候选数据【必填】
-	      ,data: tagData
-	      //,max:10
-	     // ,width:100
-	      //添加验证
-	      ,verify:'required'  
-	    }); 
+		// //多选标签-基本配置
+	 //    var tagIns1 = selectM({
+	 //      //元素容器【必填】
+	 //      elem: '#floor_number'
+	 //      //候选数据【必填】
+	 //      ,data: tagData
+	 //      //,max:10
+	 //     // ,width:100
+	 //      //添加验证
+	 //      ,verify:'required'  
+	 //    }); 
 	});
 </script>

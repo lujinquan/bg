@@ -46,11 +46,16 @@ class Member extends Model
         if(isset($data['ban_address']) && $data['ban_address']){
             $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         }
-        if($data['group'] == 'y'){
-            $where[] = ['status','eq',1];
+        if(isset($data['group'])){
+            if($data['group'] == 'y'){
+                $where[] = ['status','eq',1];
+            }else{
+                $where[] = ['status','eq',0];
+            }
         }else{
-            $where[] = ['status','eq',0];
+
         }
+        
         
 
         return $where;

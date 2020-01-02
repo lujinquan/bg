@@ -23,6 +23,9 @@ use app\space\model\SiteGroup as SiteGroupModel;
 use app\system\model\SystemGuard as GuardModel;
 use app\system\model\SystemUser as UserModel;
 
+/**
+ * 企业管理
+ */
 class Firm extends Admin
 {
 

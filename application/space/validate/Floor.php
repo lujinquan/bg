@@ -23,7 +23,7 @@ class Floor extends Validate
     protected $rule = [
         'floor_number|楼层'     => 'require|number',
         'floor_area|面积'    	=> 'require',
-        '__token__'      	  	=> 'require|token',
+        //'__token__'      	  	=> 'require|token',
     ];
 
     //定义验证提示
@@ -34,7 +34,7 @@ class Floor extends Validate
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['floor_number', 'floor_area','__token__']);
+        return $this->only(['floor_number', 'floor_area']);
     }
 
     
