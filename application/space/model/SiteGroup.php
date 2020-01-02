@@ -5,6 +5,7 @@ use think\Db;
 use think\Model;
 use app\space\model\Ban as BanModel;
 use app\space\model\Floor as FloorModel;
+use app\space\model\Site as SiteModel;
 
 /**
  * 工位区
@@ -24,11 +25,11 @@ class SiteGroup extends Model
         'ctime' => 'timestamp:Y-m-d H:i:s',
     ];
 
-    public function setSitesAttr($value)
-    {
-        if (!$value[0]) return '';
-        return '|'.implode('|',$value).'|';
-    }
+    // public function setSitesAttr($value)
+    // {
+    //     if (!$value[0]) return '';
+    //     return '|'.implode('|',$value).'|';
+    // }
 
     // public function setFloorNumberAttr($value)
     // {
@@ -77,40 +78,40 @@ class SiteGroup extends Model
         $nextDayDate = date('Y-m-d',(strtotime($nowDayDate)+3600*24));
         // 获取当前项目下的所有有效楼宇数据
         $banArr = BanModel::where([['project_id','eq',PROJECT_ID],['status','eq',1]])->field('ban_id,ban_name,ban_address')->order('ctime asc')->select()->toArray();
-        // 获取所有工位
-        $sites = Db::name('space_site')->column('site_id,site_name');
-        //halt($banArr);
+
+        // 遍历每栋楼下的楼层
         foreach($banArr as $b){
             $floorNumberArr = FloorModel::where([['status','eq',1],['ban_id','eq',$b['ban_id']]])->field('floor_number')->order('floor_number asc')->select()->toArray();
-
             if($site_group_type == 1){ // 联合工位区
-                
-                foreach($floorNumberArr as $f){
-
+                // 遍历每层楼
+                foreach($floorNumberArr as $f){ // $f是楼层
                     $lists = self::where([['ban_id','eq',$b['ban_id']],['site_group_type','eq',$site_group_type],['floor_number','eq',$f['floor_number']],['status','eq',1]])->select()->toArray();
-
+                    // 如果该楼层没有工位区
                     if(!$lists){
                         continue;
-                    }
-                    
-                    $result[$b['ban_id']]['baseinfo'] = [
-                        'ban_name' => $b['ban_name'],
-                    ];
-
+                    }     
                     $k = 0;
+                    // 遍历该楼层下的所有工位区
                     foreach($lists as $i => $l){
-                        //halt($l);
-                        if($l['sites'] != '||'){
-                            $temp_sites = explode('|',trim($l['sites'],'|'));
-                            //halt($temp_sites);
-                            foreach($temp_sites as $e => $t){
+                        // 获取当前工位区下的所有工位
+                        $sitsArr = SiteModel::where([['site_group_id','eq',$l['site_group_id']]])->select()->toArray();
+                        if($sitsArr){
+                            // 遍历当前工位区下的所有工位
+                            foreach($sitsArr as $e => $t){
+                                // 待优化
                                 $result[$b['ban_id']]['list'][$f['floor_number']][$l['site_group_id']]['list'][$e] = [
-                                    'site_name' => $sites[$t],
+                                    'site_name' => $t['site_name'],
                                     'site_status' => '已租',
                                     'site_info' => '测试的公司',
                                 ];
                             }
+                        }else{
+                            continue;  
                         }
+
+                        $result[$b['ban_id']]['baseinfo'] = [
+                            'ban_name' => $b['ban_name'],
+                        ];
                         $result[$b['ban_id']]['list'][$f['floor_number']][$l['site_group_id']]['baseinfo'] = [
                             'use_site_sum' => 100,                           
                             'all_site_sum' => 1000,
@@ -122,7 +123,7 @@ class SiteGroup extends Model
 
    
         }
- 
+ //halt($result);
         return $result;
     }
     
