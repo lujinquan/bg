@@ -1,25 +1,27 @@
+<!-- 联合工位区 -->
 <div class="j-indent-boxs">
 	<div class="page-toolbar j-page-toolbar clearfix">
-		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="j-table-search">
 			<div class="j-search-fl layui-col-md9">
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<select name="ban_id" class="field-cid" type="select">
+				 	<input type="text" name="ban_name" placeholder="输入楼宇" class="layui-input">
+				 	<!-- <select name="ban_id" class="field-cid" type="select">
 						<option value="">请选择楼宇</option>
 						{volist name="banArr" id="v"}
 						<option value="{$v['ban_id']}">{$v['ban_name']}</option>
 						{/volist}
-					</select>
+					</select> -->
 				 </div>
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
 				 	<input type="text" name="floor_number" placeholder="请输入楼层" class="layui-input">
 				 </div>
-				 <div class="layui-input-inline j-input-margin" style="width:150px;">
+				 <!-- <div class="layui-input-inline j-input-margin" style="width:150px;">
 				  	<select name="type" class="field-cid" type="select">
 						<option value="">请选择状态</option>
 						<option value="1">已租</option>
 						<option value="2">未租</option>
 					</select>
-				  </div>
+				  </div> -->
 				  <!-- <div class="layui-input-inline j-input-margin" style="width:150px;">
 				   	<select name="service_field" class="field-cid" type="select">
 						<option value="">请选择状态</option>
@@ -28,7 +30,7 @@
 					</select>
 				   </div> -->
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="请选择时间">
+					<input type="text" name="date" value="{:date('Y-m-d')}" class="layui-input" id="time1" placeholder="请选择时间">
 					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -39,57 +41,7 @@
 			</div>
 		  </form>
 	  </div>
-	  <div class="j-conference-box clearfix">
-	  	{volist name="data" id="v" key="k"} <!-- $k 是ban_id -->
-	  	{volist name="$v['list']" id="vv" key="kk"} <!-- $kk floor_number -->
-	  	 <div class="j-conference-title clearfix">
-			  <ul>
-				  <li>楼宇：<strong>{$v['baseinfo']['ban_name']}</strong></li>
-				  <li>楼层：<strong>{$kk}楼</strong></li>
-			  </ul>
-		  </div>
-		  <div class="j-conference-content layui-collapse clearfix" lay-filter="test">
-		  	  {volist name="$vv" id="vvv" key="kkk"}
-			  <ul class="j-first-floor layui-colla-item clearfix">
-				  <li class="j-first layui-colla-title clearfix">
-					  <div class="j-title clearfix">联合工位区：{$vvv['baseinfo']['site_group_name']}</div>
-					  <div class="j-titme clearfix">
-						  <ul>
-							  <li>
-								  工位数：<label>{$vvv['baseinfo']['all_site_sum']}</label>
-							  </li>
-							  <li>
-							  	  已使用：<label>{$vvv['baseinfo']['use_site_sum']}</label>
-							  </li>
-						  </ul>
-					  </div>
-				  </li>
-				  <li class="j-list layui-colla-content clearfix">
-					 <div class="j-from-box">
-						<ul class="j-input-inlines">
-							{volist name="$vvv['list']" id="vvvv" key="kkkk"}
-							<li class="on">
-								<input type="text" name="sites" value="{$vvvv['site_name']}" autocomplete="off" class="layui-input j-explain-input">
-								<b class="j-explain-name">{$vvvv['site_status']}</b>
-							</li>
-							<!-- <li>
-								<input type="text" name="sites" value="A1-2" autocomplete="off" placeholder="请输入工位名称" class="layui-input j-explain-input">
-								<b class="j-explain-name">未租</b>
-							</li>
-							<li class="on">
-								<input type="text" name="sites" value="A1-2" autocomplete="off" placeholder="请输入工位名称" class="layui-input j-explain-input">
-								<b class="j-explain-name">已租</b>
-							</li> -->
-							{/volist}
-						</ul>
-					 </div>
-				  </li>
-			  </ul>
-			  {/volist}
-		  </div> 
-		  {/volist}
-		  {/volist} 
-	  </div>
+	  <div class="j-conference-box clearfix" id="j-data"></div>
 	{include file="system@block/layui" /}
 </div>
 <script type="text/javascript">
@@ -102,27 +54,92 @@
 	    laydate.render({
 	      elem: '#time1'
 	    });
-	 //点击吸附提示
-	 $(".j-from-box .j-input-inlines li.on").hover(function (){  
-	   var that = this;
-	   layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">剩余</span><span class="fr">1314天</span></li><li class="clearfix"><span class="fl">租期</span><span class="fr">2018/03/15 - 2020/03/15</span></li><li class="clearfix"><span class="fl">联系人</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
-	 },function (){  
-	 layer.closeAll('tips');
-	 }); 
-	 //监听折叠
-	 $("li.j-first").click(function(){
-		 $(this).toggleClass("on").siblings().removeClass("on");
-	 
-	 })
-	/* element.on('collapse(test)', function(data){
-		 layer.msg('展开状态：'+ data.show);
-		 var dat=data.show;
-		 if(dat=="true"){
-		   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
-		 }else{
-		   $(this).find('.layui-colla-title').empty();
-		   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
-		 }
-	 }); */
+
+	    $('#j-table-search').submit(function() {
+	    	//console.log(1);
+	        var that = $(this), 
+	            arr = that.serializeArray(), 
+	            options = '';
+            
+	            for(var i in arr) {
+	            	options += arr[i].name +'=' +arr[i].value +'&';
+	            }
+	        data_post(options);
+	        return false;
+	    });
+	    data_post();
+	    function data_post(options = ''){
+	    	$.get('{:url('index')}?group=union&'+ options , function(res) {
+		    	var html = '';
+		    	console.log('联合工位区数据：',res);
+		    	for (var i in res.data) {
+		    		//console.log(res.data[i]);
+		    		for (var k in res.data[i]['list']) {
+		    			var meetsinfo = res.data[i]['list'][k];
+		    			
+		    			html +='<div class="j-conference-title clearfix"><ul><li>楼宇：<strong>'+ res.data[i]['baseinfo']['ban_name']  + '</strong></li><li>楼层：<strong>' + k + '楼</strong></li></ul></div><div class="j-conference-content layui-collapse clearfix" lay-filter="test">';
+
+		    			for (var j in meetsinfo) {
+		    				html +='<ul class="j-first-floor layui-colla-item clearfix"><li class="j-first layui-colla-title clearfix"><div class="j-title clearfix">联合工位区：'+ meetsinfo[j]['baseinfo']['site_group_name'] + '</div><div class="j-titme clearfix"><ul><li>工位数：<label>'+ meetsinfo[j]['baseinfo']['all_site_sum'] +'</label></li><li>已使用：<label>'+ meetsinfo[j]['baseinfo']['use_site_sum'] +'</label></li></ul></div></li><li class="j-list layui-colla-content clearfix"><div class="j-from-box"><ul class="j-input-inlines">';
+		    				var meets = meetsinfo[j]['list'];
+		    				for (var p in meets) {
+
+		    					// html += '<ol>';
+		    					// if(p%2 == 1){
+		    					// 	//console.log(p);
+		    					// 	html += '<li class="j-time">' + meets[p]['start_time'] + '</li><li class="j-circle"></li>';
+		    					// }
+
+		    					if(meets['site_info']){
+		    						var zu_status = '已租';
+		    					}else{
+		    						var zu_status = '未租';
+		    					}
+
+	                            html += '<li class="on"><input type="text" name="sites" value="'+meets[p]['site_name']+'" autocomplete="off" class="layui-input j-explain-input"><b class="j-explain-name">' + zu_status + '</b></li>';                                                            
+		    				}
+
+		    				html += `/ul>
+					           </div>
+					          </li>
+					        </ul>`;
+
+		    			}
+
+		    			html +='</div>';
+		    		};
+					
+		    	}
+
+		    	$('#j-data').html(html);
+				//给偶数行
+				//$(".j-indent-boxs li.j-list ol:nth-child(even)").addClass("on");
+
+	        });
+	    }
+
+
+		//点击吸附提示
+		$(".j-from-box .j-input-inlines li.on").hover(function (){  
+		   var that = this;
+		   layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">剩余</span><span class="fr">1314天</span></li><li class="clearfix"><span class="fl">租期</span><span class="fr">2018/03/15 - 2020/03/15</span></li><li class="clearfix"><span class="fl">联系人</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
+		},function (){  
+		 	layer.closeAll('tips');
+		}); 
+		//监听折叠
+		$("li.j-first").click(function(){
+			$(this).toggleClass("on").siblings().removeClass("on");
+		 
+		})
+		 element.on('collapse(test)', function(data){
+			 layer.msg('展开状态：'+ data.show);
+			 var dat=data.show;
+			 if(dat=="true"){
+			   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
+			 }else{
+			   $(this).find('.layui-colla-title').empty();
+			   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
+			 }
+		 }); 
   });
 </script>

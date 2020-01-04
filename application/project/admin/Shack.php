@@ -23,6 +23,7 @@ use app\project\model\Member as MemberModel;
 use app\system\model\SystemGuard as GuardModel;
 use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\SiteGroup as SiteGroupModel;
+use app\space\model\Site as SiteModel;
 include EXTEND_PATH.'phpexcel/PHPExcel.php';
 
 /**
@@ -64,14 +65,14 @@ class Shack extends Admin
     }
 
     /**
-     * 获取企业列表
+     * 项目管理>入驻办理>企业入驻：获取企业名称接口
      * @return [type] [description]
      */
     public function getFirms()
     {
         $keywords = input('param.keywords/s');
         $where = [];
-        $where[] = ['status','eq',0];
+        $where[] = ['status','eq',0]; //0为普通企业，1为入驻企业
         // 查询公司名称
         if($keywords){
             $where[] = ['firm_name','like','%'.$keywords.'%'];
@@ -106,7 +107,7 @@ class Shack extends Admin
     }
 
     /**
-     * 获取企业信息
+     * 获取企业（个人）信息
      * @return [type] [description]
      */
     public function getMemberDetail()
@@ -126,7 +127,7 @@ class Shack extends Admin
     }
 
     /**
-     * 获取企业信息
+     * 获取企业（公司）信息
      * @return [type] [description]
      */
     public function getFirmDetail()
@@ -237,12 +238,15 @@ class Shack extends Admin
         
     // }
 
+    /**
+     * 入驻办理
+     */
     public function add()
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            // $result = $this->validate($data, 'Rest.add');
+            // $result = $this->validate($data, 'Shack.add');
             // if($result !== true) {
             //     return $this->error($result);
             // }
@@ -267,37 +271,66 @@ class Shack extends Admin
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            if(isset($data['guard'])){
+            $siteGroupID = [];
+            if(isset($data['lianhe'])){ //联合工位
+                $data['sites'] = '|'.implode('|',$data['lianhe']).'|';
+            }
+            if(isset($data['duli'])){ //独立工位
+                foreach ($data['duli'] as $v1) {
+                    $siteGroupID[] = $v1;
+                }
+            }
+            if(isset($data['ziyou'])){ //自由工位
+                foreach ($data['ziyou'] as $v2) {
+                    $siteGroupID[] = $v2;
+                }
+            }
+            //halt($siteGroupID);
+            if($siteGroupID){
+                $data['site_group'] = '|'.implode('|',$siteGroupID).'|';
+            }
+            if(!$siteGroupID && !isset($data['lianhe'])){
+                return $this->error('请分配工位区');
+            }
+            //halt($siteGroupID);
+            if(isset($data['guard'])){ //门禁
                 $data['guard'] = [
                     'ban' => $data['ban'],
                     'floor' => $data['floor'],
                     'guard' => $data['guard'],
                 ];
+            }else{
+                return $this->error('请设置门禁');
             }
-
             $data['cuid'] = ADMIN_ID;
+            $data['shack_type'] = [1]; // 1为承租，数组中可有多个
+//halt($data);
             $ShackModel = new ShackModel;
-            //unset($data['id']);
-            //halt($data);
             // 入库
             if (!$ShackModel->allowField(true)->create($data)) {
                 return $this->error('分配失败');
             }
-            return $this->success('分配成功');
+            return $this->success('分配成功','',['firm_id'=>$data['firm_id']]);
         }
         
         // 获取工位区
         $siteGroupModel = new SiteGroupModel;
         $sites = $siteGroupModel->where([['status','eq',1]])->field('site_group_id,site_group_type,site_group_name')->select();
         $siteArr = [];
-        $siteArr[1] = [];
-        $siteArr[2] = [];
+        $siteArr[1] = []; // 所有联合工位区
+        $siteArr[2] = []; // 所有独立办公区
+        $siteLianHeArr = [];
         foreach ($sites as $k => $v) {
-            $siteArr[$v['site_group_type']][] = [
-                'value' => $v['site_group_id'],
-                'title' => $v['site_group_name'],
-            ];
+            $siteLianHeArr[] = $v['site_group_id'];
+            if($v['site_group_type'] > 1){
+                $siteArr[$v['site_group_type']][] = [
+                    'value' => $v['site_group_id'],
+                    'title' => $v['site_group_name'],
+                ];
+            }
         }
+        $siteArr[1] = SiteModel::where([['site_group_id','in',$siteLianHeArr]])->field('site_id as value,site_name as title')->select()->toArray();
+        //halt($siteArr);
         $this->assign('siteArr',$siteArr);
         // 获取楼宇
         $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();

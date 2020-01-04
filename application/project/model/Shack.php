@@ -19,7 +19,7 @@ class Shack extends Model
         'shack_end_time' => 'timestamp:Y-m-d',
         'ctime' => 'timestamp:Y-m-d H:i:s',
         'guard' =>  'json',
-        'site_group' =>  'json',
+        //'site_group' =>  'json',
     ];
 
     public function firm()

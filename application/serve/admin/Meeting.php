@@ -45,7 +45,7 @@ class Meeting extends Admin
             //halt($getData);
             $where = $MeetingOrderModel->checkWhere($getData);
             //[['a.meet_start_time','between time',[$nowDayDate,$nextDayDate]],['b.ban_id','eq',$b['ban_id']],['b.floor_number','eq',$f['floor_number']]]
-            $fields = 'a.meet_order_id,a.meet_order_status,from_unixtime(a.ctime,\'%Y-%m-%d\') ctime,from_unixtime(a.order_start_time,\'%H:%i\') order_start_time, from_unixtime(a.order_end_time,\'%H:%i\') order_end_time,from_unixtime(a.meet_start_time,\'%Y-%m-%d\') meet_start_time, from_unixtime(a.meet_end_time,\'%Y-%m-%d\') meet_end_time,b.meet_name,c.member_name,d.firm_name';
+            $fields = 'a.meet_order_id,a.meet_order_status,from_unixtime(a.ctime,\'%Y-%m-%d\') ctime,substring(a.order_start_time,11,6) order_start_time, substring(a.order_end_time,11,6) order_end_time,substring(a.meet_start_time,1,10) meet_start_time,b.meet_name,c.member_name,d.firm_name';
             $data = [];
             $data['data'] = Db::name('space_meeting_order')->alias('a')->where($where)->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->join('space_ban e','b.ban_id = e.ban_id','left')->field($fields)->order('a.ctime desc')->page($page)->limit($limit)->select();
             // foreach ($temp as $k => &$v) {

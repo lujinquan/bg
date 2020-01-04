@@ -37,6 +37,7 @@
 
 			  $('.j-jiaoyan').click(function(){
 			  	var firm_name = $('#deptName').val();
+			  	//console.log($('input[name=firm_credit_code]'));
 			  	if(!firm_name){
 			  		return false;
 			  	}
@@ -52,9 +53,11 @@
 							$('input[name=firm_manager]').val(forData.firm_manager); // 联系人姓名
 							$('input[name=firm_tel]').val(forData.firm_tel); // 联系人电话
 							$('input[name=firm_credit_code]').parent().html('<div class="j-words-border" id="firm_credit_code">'+forData.firm_credit_code+'</div>'); // 社会信用代码
+							$('#new_industry_type').remove();
 							$('#industry_type').addClass('layui-hide').after('<div class="layui-input-inline" id="new_industry_type"><div class="j-words-border">'+params.firm_industry_type[forData.firm_industry_type]+'</div></div>'); // 所属行业
 							$('input[name=firm_registered_capital]').parent().html('<div class="j-words-border" id="new_firm_registered_capital">'+forData.firm_registered_capital+'万元</div>'); // 注册资本
 							$('input[name=firm_legaler]').parent().html('<div class="j-words-border" id="new_firm_legaler">'+forData.firm_legaler+'</div>'); // 法人姓名
+							$('#new_firm_established_time').remove();
 							$('#firm_established_time').addClass('layui-hide').after('<div class="layui-input-inline" id="new_firm_established_time"><div class="j-words-border">'+forData.firm_established_time+'</div></div>'); // 成立日期
 							$('input[name=firm_registered_address]').parent().html('<div class="j-words-border" id="firm_registered_address">'+forData.firm_registered_address+'</div>'); // 注册地址
 							$('input[name=firm_scope]').parent().html('<div class="j-words-border" id="new_firm_scope">'+forData.firm_scope+'</div>'); // 经营范围
@@ -119,6 +122,7 @@
 			  //联合办公区
 			  transfer.render({
 				elem: '#transfer1'
+				,id: 'demo1'
 				,data: data1
 				,title: ['未选', '已选']
 				,showSearch: true
@@ -126,6 +130,7 @@
 			  //独立办公区
 			   transfer.render({
 				elem: '#transfer2'
+				,id: 'demo2'
 				,data: data2
 				,title: ['未选', '已选']
 				,showSearch: true
@@ -327,18 +332,47 @@
 		        } else {
 		            _form = that.parents('form');
 		        }
+		        
+		        
 		        if (that.attr('hisi-data')) {
 		            options = new Function('return '+ that.attr('hisi-data'))();
 		        } else if (that.attr('lay-data')) {
 		            options = new Function('return '+ that.attr('lay-data'))();
 		        }
+
+		        var getData1 = transfer.getData('demo1');
+		        var getData2 = transfer.getData('demo2');
+		        console.log('联合工位区穿梭框右边的值：',getData1);
+		        console.log('独立工位区穿梭框右边的值：',getData2);
+		        var paramStr = '';
+		        if(getData1){
+	        		for(i in getData1){
+	        			paramStr += 'lianhe['+i+']='+ getData1[i].value + '&'
+	        		}
+		        }
+		        if(getData2){
+	        		for(k in getData2){
+	        			paramStr += 'duli['+k+']='+ getData2[k].value + '&'
+	        		}
+		        }
+
+
+		        //var formData = _form.serialize();
+		    	
+		    	//console.log(formData);
+
+				//var transfer_to = $(transferDom).attr('lay-value'); 
+		    	var dataNew = paramStr + _form.serialize();
+				console.log('分配工位表单提交的数据：',dataNew);
+
 		        that.prop('disabled', true).text('提交中...');
 		        $.ajax({
 		            type: "POST",
 		            url: _form.attr('action'),
-		            data: _form.serialize(),
+		            data: dataNew,
 		            success: function(res) {
 		                that.text(res.msg);
+		                console.log('第二步提交返回的数据：',res);
 		                if (res.code == 0) {
 		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
 		                    setTimeout(function(){

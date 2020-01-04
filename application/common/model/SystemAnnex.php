@@ -419,7 +419,7 @@ class SystemAnnex extends Model
             $result = self::with('system_annex_type')->where([['id','in',$data]])->field('id,data_id,file')->select();
             return $result;
         }else{
-            return '附件为空！';
+            return '';
         }
     }
 

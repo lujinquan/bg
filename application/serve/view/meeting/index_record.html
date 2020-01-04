@@ -64,17 +64,17 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+            	{field: '', align:'left',minWidth:40, title: '序号', templet:function(d){
                     return d.LAY_INDEX;
                 }}
-				,{field: 'meet_start_time', align:'left',minWidth:100, title: '预定日期'}
+				,{field: 'meet_start_time', align:'left',minWidth:80, title: '预定日期'}
 				,{field: 'order_start_time', align:'left',minWidth:100, title: '预定时段', templet:function(d){
 			        return d.order_start_time + ' ~ ' + d.order_end_time;
 			   }}
-                ,{field: 'firm_name', align:'left',minWidth:200, title: '预约公司'}
+                ,{field: 'firm_name', align:'left',minWidth:120, title: '预约公司'}
 				,{field: 'member_name', align:'left',minWidth:80, title: '预约人'}
                 ,{field: 'meet_name', align:'left',minWidth:100, title: '预约会议室'} 
-				,{field: 'meet_order_status', title: '状态', minWidth: 150,align:'left', templet:function(d){
+				,{field: 'meet_order_status', title: '状态', minWidth: 100,align:'left', templet:function(d){
 					if(parseInt(d.meet_order_status) == 1){ // 已预约
 						return '<button class="j-table-button layui-btn-warm">' + params.meet_order_status[d.meet_order_status] + '</button>';
 					}else if(parseInt(d.meet_order_status) == 2){ // 已使用
@@ -83,7 +83,7 @@
 						return '<button class="j-table-button j-notactive">' + params.meet_order_status[d.meet_order_status] + '</button>';
 					}
 			    }}        
-                ,{field: 'ctime', align:'left',minWidth:100, title: '操作时间'}
+                ,{field: 'ctime', align:'left',minWidth:80, title: '操作时间'}
                 ,{title: '操作', minWidth:150, align:'left', templet: '#buttonTpl', fixed:'right'}
             ]]
         });

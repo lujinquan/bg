@@ -80,9 +80,14 @@ class MeetingOrder extends Model
         if($date){
             $nowDayDate = $date;
         }else{
-            $nowDayDate = date('Y-m-d',1577232000);
+            $nowDayDate = date('Y-m-d');
         }
     	$nextDayDate = date('Y-m-d',(strtotime($nowDayDate)+3600*24));
+
+        //最近7天（当前时间的最近7天，不随搜索时间变化）
+        $before_seven_time = strtotime(date('Y-m-d'))-6*3600*24;
+        //最近30天（当前时间的最近30天，不随搜索时间变化）
+        $before_thirty_time = strtotime(date('Y-m-d'))-29*3600*24;
     	// 获取当前项目下的所有有效楼宇数据
         $banWhere = [];
         $banWhere[] = ['project_id','eq',PROJECT_ID];
@@ -111,30 +116,55 @@ class MeetingOrder extends Model
                 if($meet_name){
                     $listsWhere[] = ['b.meet_name','like','%'.$meet_name.'%'];
                 }
-    			$fields = 'a.*,b.meet_name,b.ban_id,b.floor_number,c.member_name,c.member_tel,d.firm_name';
+    			$fields = 'a.meet_order_id,a.meet_id,a.member_id,a.firm_id,unix_timestamp(a.order_start_time) as order_start_time,unix_timestamp(a.order_end_time) as order_end_time,unix_timestamp(a.meet_start_time) as meet_start_time,unix_timestamp(a.meet_end_time) as meet_end_time,a.meet_order_status,a.ctime,a.cancel_time,b.meet_name,b.ban_id,b.floor_number,c.member_name,c.member_tel,d.firm_name';
     			$lists = self::alias('a')->where($listsWhere)->join('space_meeting b','a.meet_id = b.meet_id','left')->join('member c','a.member_id = c.member_id','left')->join('member_firm d','a.firm_id = d.firm_id','left')->field($fields)->select()->toArray();
+
     			if(!$lists){
     				continue;
     			}
-    			
+                //halt($lists);
     			$result[$b['ban_id']]['baseinfo'] = [
 					'ban_name' => $b['ban_name'],
 				];
-    			//halt($lists);
     			$t = $lists[0]['meet_end_time'] - $lists[0]['meet_start_time'];
 		    	$s = $t/(60*15);
 
 		    	$k = 0;
+                //dump($lists[0]['meet_start_time']);dump($lists[0]['meet_end_time']);
 		    	while ($lists[0]['meet_start_time'] < $lists[0]['meet_end_time']) {
 		    		$k++;
 		    		$tmp_meet_start_time = $lists[0]['meet_start_time'];
 		    		$lists[0]['meet_start_time'] += 60*15;
-		    		// echo '<pre>';
-		    		// dump($l['meet_start_time']);
-		    		//$result[$b['ban_id']][$f['floor_number']]['list'][]
+                    
+                    //$s = false; // 定义一个标识，一旦出现已使用或已预约则，改变标识状态
 		    		foreach($lists as $i => $l){
+                        // if($tmp_meet_start_time == 1577235600){ // 调试：如果是9点，判断
+                        //     dump(date('Y-m-d H:i:s',$l['order_start_time']));dump(date('Y-m-d H:i:s',$tmp_meet_start_time));dump(date('Y-m-d H:i:s',$l['order_end_time']));dump(date('Y-m-d H:i:s',$lists[0]['meet_start_time']));halt($l);
+                        // }
+                        if(!isset($result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['list'][$k]['flag'])){
+                            $result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['list'][$k] = [
+                                'member_name' => $l['member_name'],
+                                'member_tel' => $l['member_tel'],
+                                'firm_name' => $l['firm_name'],
+                                'start_time' => date('H:i',$tmp_meet_start_time),
+                                'end_time' => date('H:i',$lists[0]['meet_start_time']),
+                                'meet_order_status' => 3, 
+                                //'flag' => false,
+                            ];
+                        }
 
-			     		if(($l['order_start_time'] >= $tmp_meet_start_time) && ($l['order_end_time'] > $lists[0]['meet_start_time'])){
+                        $result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['baseinfo'] = [
+                            'ban_id' => $l['ban_id'],                           
+                            'meet_id' => $l['meet_id'],
+                            'ban_name' => $b['ban_name'],
+                            'meet_name' => $l['meet_name'],
+                            'floor_number' => $l['floor_number'],
+                            // 'seven_total_use_time' => 200,
+                            // 'thirty_total_use_time' => 300,
+                        ];
+
+                        // 预约起始时间 <= 每一个小段的开始时间 ，且预约结束时间 >= 每一个小段的结束时间
+			     		if(($l['order_start_time'] <= $tmp_meet_start_time) && ($l['order_end_time'] >= $lists[0]['meet_start_time'])){
 			     			$result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['list'][$k] = [
 			     				'member_name' => $l['member_name'],
 								'member_tel' => $l['member_tel'],
@@ -142,79 +172,35 @@ class MeetingOrder extends Model
 			    				'start_time' => date('H:i',$tmp_meet_start_time),
 			    				'end_time' => date('H:i',$lists[0]['meet_start_time']),
 			    				'meet_order_status' => $l['meet_order_status'], 
+                                'flag' => true,
 			    			];
-			     		}else{
-			     			$result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['list'][$k] = [
-			     				'member_name' => $l['member_name'],
-								'member_tel' => $l['member_tel'],
-								'firm_name' => $l['firm_name'],
-			    				'start_time' => date('H:i',$tmp_meet_start_time),
-			    				'end_time' => date('H:i',$lists[0]['meet_start_time']),
-			    				'meet_order_status' => 3, 
-			    			];
+                            continue;
+                            //$s = true;
 			     		}
-			     		$result[$b['ban_id']]['list'][$f['floor_number']][$l['meet_id']]['baseinfo'] = [
-							'ban_id' => $l['ban_id'],							
-							'meet_id' => $l['meet_id'],
-							'ban_name' => $b['ban_name'],
-							'meet_name' => $l['meet_name'],
-							'floor_number' => $l['floor_number'],
-						];
+			     		 
 			     	}
 
 		    	}
+
+                foreach ($result[$b['ban_id']]['list'][$f['floor_number']] as $key => &$value) { //统计最近7天的使用时长
+                    $sevenTotalTimes = self::alias('a')->where([['meet_id','eq',$key],['meet_order_status','eq',2],['ctime','>=',$before_seven_time]])->field('meet_id,unix_timestamp(order_start_time) as order_start_time,unix_timestamp(order_end_time) as order_end_time')->select()->toArray();
+                    $value['baseinfo']['seven_total_use_time'] = 0;
+                    $value['baseinfo']['thirty_total_use_time'] = 0;
+                    
+                    foreach($sevenTotalTimes as $t){
+                        $value['baseinfo']['seven_total_use_time'] += $t['order_end_time'] - $t['order_start_time'];
+                    }
+                    $value['baseinfo']['seven_total_use_time'] = $value['baseinfo']['seven_total_use_time'] / 3600;
+
+                    $thirtyTotalTimes = self::alias('a')->where([['meet_id','eq',$key],['meet_order_status','eq',2],['ctime','>=',$before_thirty_time]])->field('meet_id,unix_timestamp(order_start_time) as order_start_time,unix_timestamp(order_end_time) as order_end_time')->select()->toArray();
+                    foreach($thirtyTotalTimes as $t){
+                        $value['baseinfo']['thirty_total_use_time'] += $t['order_end_time'] - $t['order_start_time'];
+                    }
+                    $value['baseinfo']['thirty_total_use_time'] = $value['baseinfo']['thirty_total_use_time'] / 3600;
+                }
 		    }	
     	}
-
-    	// 		foreach($lists as $i => $l){
-		   //  		//halt($l);
-		    		
-		   //  		$k = 0;
-		   //  		while ($l['meet_start_time'] < $l['meet_end_time']) {
-		   //  			$k++;
-		   //  			$tmp_meet_start_time = $l['meet_start_time'];
-		   //  			$l['meet_start_time'] += 60*15;
-		   //  			// echo '<pre>';
-		   //  			//dump($l['order_start_time']);dump($tmp_meet_start_time);dump($l['order_end_time']);dump($l['meet_start_time']);exit;
-		   //  			if(($l['order_start_time'] >= $tmp_meet_start_time) && ($l['order_end_time'] > $l['meet_start_time'])){
-		   //  				//echo 1;
-		   //  				$result[$b['ban_id']][$f['floor_number']][$i]['list'][$k] = [
-			  //   				'start_time' => date('H:i',$tmp_meet_start_time),
-			  //   				'end_time' => date('H:i',$l['meet_start_time']),
-			  //   				'meet_order_status' => $l['meet_order_status'], 
-			  //   			];
-		   //  			}else{
-
-		   //  				$result[$b['ban_id']][$f['floor_number']][$i]['list'][$k] = [
-			  //   				'start_time' => date('H:i',$tmp_meet_start_time),
-			  //   				'end_time' => date('H:i',$l['meet_start_time']),
-			  //   				'meet_order_status' => 3, 
-			  //   			];
-		   //  			}
-		    			
-		   //  		}
-		   //  		$result[$b['ban_id']][$f['floor_number']][$i]['baseinfo'] = [
-					// 	'ban_id' => $l['ban_id'],
-					// 	'meet_id' => $l['meet_id'],
-					// 	'meet_name' => $l['meet_name'],
-					// 	'floor_number' => $l['floor_number'],
-					// ];
-		   //  		//exit;
-
-		   //  		//halt($result);
-		   //  	}
-
-
-
-
-
-
-    	
-
-
-    	//foreach ($result as $value) {
-    		# code...
-    	//}
+//exit;
     	//halt($result);
     	return $result;
     }

@@ -26,7 +26,7 @@
 					</select> -->
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					<input type="text" name="date" class="layui-input" id="time1" placeholder="请选择时间">
+					<input type="text" name="date" value="{:date('Y-m-d')}" class="layui-input" id="time1" placeholder="请选择时间">
 					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -72,7 +72,7 @@
 	    function data_post(options = ''){
 	    	$.get('{:url('index')}?group=status&'+ options , function(res) {
 		    	var html = '';
-
+		    	console.log('会议室状态数据：',res);
 		    	for (var i in res.data) {
 		    		//console.log(res.data[i]);
 		    		for (var k in res.data[i]['list']) {
@@ -81,7 +81,7 @@
 		    			html +='<div class="j-conference-title clearfix"><ul><li>楼宇：<strong>'+ res.data[i]['baseinfo']['ban_name']  + '</strong></li><li>楼层：<strong>' + k + '楼</strong></li></ul></div><div class="j-conference-content clearfix">';
 
 		    			for (var j in meetsinfo) {
-		    				html +='<ul class="j-first-floor clearfix"><li class="j-first clearfix"><div class="j-title clearfix">'+ res.data[i]['baseinfo']['ban_name'] + '</div><div class="j-titme clearfix"><ul><li>最近7日使用时长：<label>47.75小时</label></li><li>最近30日使用时长：<label>179.75小时</label></li></ul></div></li><li class="j-list clearfix"><dl><dd>';
+		    				html +='<ul class="j-first-floor clearfix"><li class="j-first clearfix"><div class="j-title clearfix">'+ meetsinfo[j]['baseinfo']['meet_name'] + '</div><div class="j-titme clearfix"><ul><li>最近7日使用时长：<label>'+ meetsinfo[j]['baseinfo']['seven_total_use_time'] +'小时</label></li><li>最近30日使用时长：<label>'+ meetsinfo[j]['baseinfo']['thirty_total_use_time'] +'小时</label></li></ul></div></li><li class="j-list clearfix"><dl><dd>';
 		    				var meets = meetsinfo[j]['list'];
 		    				for (var p in meets) {
 
@@ -92,9 +92,9 @@
 		    					}
 
 		    					if(meets[p]['meet_order_status'] == 1){
-		    						var color_class = 'j-gray j-green';
-		    					}else if(meets[p]['meet_order_status'] == 2){
 		    						var color_class = 'j-gray j-red';
+		    					}else if(meets[p]['meet_order_status'] == 2){
+		    						var color_class = 'j-gray j-green';
 		    					}else{
 		    						var color_class = 'j-gray';
 		    					}

@@ -88,6 +88,10 @@ class Firm extends Admin
         return $this->fetch();
     }
 
+    /**
+     * 项目管理>入驻办理>企业入驻： 企业入驻第一步
+     * 
+     */
     public function add()
     {
         if ($this->request->isPost()) {
@@ -109,10 +113,10 @@ class Firm extends Admin
             $FirmModel = new FirmModel;
 
             if($data['firm_id']){ //如果存在即是编辑
-                if (!$FirmModel->allowField(true)->update($data)) {
+                if (!$FirmModel->allowField(true)->update(array_filter($data))) {
                     return $this->error('录入失败');
                 }
-                return $this->success('录入成功');
+                return $this->success('录入成功','',['firm_id'=>$data['firm_id']]);
             }else{ //如果不存在即是新增 
                 // 入库
                 $res = $FirmModel->allowField(true)->create($data);

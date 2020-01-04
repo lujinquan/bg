@@ -26,7 +26,7 @@ class Firm extends Validate
         'firm_tel|联系人电话'    	=> 'require|mobile',
         'firm_credit_code|社会信用代码'     => 'require',
         'firm_industry_type|所属行业'    	=> 'require',
-        'firm_registered_capital|注册资本'      => 'require|float',
+        'firm_registered_capital|注册资本'      => 'require|float|gt:0',
         'firm_legaler|法人姓名'        => 'require',
         'firm_established_time|成立日期'        => 'require',
         'firm_registered_address|注册地址'        => 'require',
@@ -36,13 +36,14 @@ class Firm extends Validate
 
     //定义验证提示
     protected $message = [
-
+        'firm_name.unique' => '企业名称已存在，请点击效验按钮',
+        'firm_registered_capital.gt' => '请输入正确注册资本金额',
     ];
 
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['firm_name','firm_manager','firm_tel','firm_credit_code','firm_industry_type','firm_registered_capital','firm_legaler','firm_established_time','firm_registered_address','firm_scope']);
+        return $this->only(['firm_name','firm_manager','firm_tel','firm_registered_capital','firm_legaler','firm_established_time','firm_registered_address']);
     }
 
      // 自定义更新场景
