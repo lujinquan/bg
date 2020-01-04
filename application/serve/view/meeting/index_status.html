@@ -137,23 +137,12 @@
 	    
 
 	 //点击吸附提示
-	 // $(".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red").hover(function (){  
-	 //   var that = this;
-	 //   layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">使用者</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
-	 // },function (){  
-	 // layer.closeAll('tips');
-	 // }); 
-	 // $(".j-indent-boxs").bind('click','.j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red',function(){
-	 //   $(this).parent().find(".j-frame-box").show();
-	 // },function (){  
-	 //   $(this).parent().find(".j-frame-box").hide();
-	 // });
-	 
 	 $("body").on("mouseenter", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function() {
 	        $(this).parent().find(".j-frame-box").show();
 	     });
 	 $("body").on("mouseleave", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function() {
 		 $(this).parent().find(".j-frame-box").hide();
 	 });
+	 
   });
 </script>
