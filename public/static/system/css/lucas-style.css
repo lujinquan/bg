@@ -252,14 +252,17 @@ input[type="number"]{-moz-appearance: textfield;}
  .j-instructions .j-lsit2 i{ background: #FF0000;}
  .j-instructions .j-lsit3 i{ background: #EBEBEB;}
  .j-frame-box{font-size: 14px;color: #333; position: absolute;left: 10px;top:-100px;z-index: 999;background: #fff;width:200px;box-shadow:0px 0px 15px 0px rgba(0,0,0,0.24);
-border-radius:4px;padding:10px 20px;}
+border-radius:4px;padding:10px 20px;box-sizing: border-box;}
  .j-conference-content li.j-list dl dd ol.on .j-frame-box{left: -40px;}
  .j-frame-box li{margin-bottom: 10px;float: initial!important;}
  .j-frame-box li .fl{width: 40%;color:#737F90;}
  .j-frame-box li .fr{width: 60%; text-align: right;}
  .j-conference-content .layui-colla-title{ height: auto; line-height: inherit;}
  .j-conference-box .layui-collapse{border: 0;}
- .j-conference-box .layui-colla-icon{left: auto;right: 15px;top:50%; margin-top: -10px;}
+  .j-indent-boxs.j-width-from .j-from-box .j-input-inline li,.j-indent-boxs.j-width-from .j-from-box .j-input-inlines li{min-width:320px;margin:0 30px 20px 0;}
+ .j-from-box .j-input-inlines li .j-frame-box li{width: auto!important;margin: 0!important;}
+ .j-from-box .j-input-inlines li .j-frame-box{width: auto;}
+ .j-conference-box .layui-colla-icon{left: auto;right: 15px;top:50%; margin-top: -15px;}
  .j-conference-box .layui-colla-icon{background: url(../image/j-tab-down.png) no-repeat center; display: inline-block; width: 24px;height: 24px;}
  .j-conference-box .layui-colla-title.on .layui-colla-icon{background: url(../image/j-tab-up.png) no-repeat center;display: inline-block; width: 24px;height: 24px;}
  /* 穿梭框 */

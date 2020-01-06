@@ -1,5 +1,5 @@
 <!-- 联合工位区 -->
-<div class="j-indent-boxs">
+<div class="j-indent-boxs j-width-from">
 	<div class="page-toolbar j-page-toolbar clearfix">
 		  <form class="layui-form layui-form-pane" action="{url('index')}?group={$group}"  method="get" id="j-table-search">
 			<div class="j-search-fl layui-col-md9">
@@ -80,7 +80,7 @@
 		    			html +='<div class="j-conference-title clearfix"><ul><li>楼宇：<strong>'+ res.data[i]['baseinfo']['ban_name']  + '</strong></li><li>楼层：<strong>' + k + '楼</strong></li></ul></div><div class="j-conference-content layui-collapse clearfix" lay-filter="test">';
 
 		    			for (var j in meetsinfo) {
-		    				html +='<ul class="j-first-floor layui-colla-item clearfix"><li class="j-first layui-colla-title clearfix"><div class="j-title clearfix">联合工位区：'+ meetsinfo[j]['baseinfo']['site_group_name'] + '</div><div class="j-titme clearfix"><ul><li>工位数：<label>'+ meetsinfo[j]['baseinfo']['all_site_sum'] +'</label></li><li>已使用：<label>'+ meetsinfo[j]['baseinfo']['use_site_sum'] +'</label></li></ul></div></li><li class="j-list layui-colla-content clearfix"><div class="j-from-box"><ul class="j-input-inlines">';
+		    				html +='<ul class="j-first-floor layui-colla-item clearfix"><li class="j-first layui-colla-title clearfix"><div class="j-title clearfix">联合工位区：'+ meetsinfo[j]['baseinfo']['site_group_name'] + '</div><div class="j-titme clearfix"><ul><li>工位数：<label>'+ meetsinfo[j]['baseinfo']['all_site_sum'] +'</label></li><li>已使用：<label>'+ meetsinfo[j]['baseinfo']['use_site_sum'] +'</label></li></ul></div><i class="layui-icon layui-colla-icon"></i></li><li class="j-list layui-colla-content clearfix"><div class="j-from-box"><ul class="j-input-inlines">';
 		    				var meets = meetsinfo[j]['list'];
 		    				for (var p in meets) {
 
@@ -96,10 +96,10 @@
 		    						var zu_status = '未租';
 		    					}
 
-	                            html += '<li class="on"><input type="text" name="sites" value="'+meets[p]['site_name']+'" autocomplete="off" class="layui-input j-explain-input"><b class="j-explain-name">' + zu_status + '</b></li>';                                                            
+	                            html += '<li class="on"><input type="text" name="sites" value="'+meets[p]['site_name']+'" autocomplete="off" class="layui-input j-explain-input"><b class="j-explain-name">' + zu_status + '</b><div class="j-frame-box hide"><ul><li class="clearfix"><span class="fl">剩余</span><span class="fr">1314天</span></li><li class="clearfix"><span class="fl">租期</span><span class="fr">2018/03/15 - 2020/03/15</span></li><li class="clearfix"><span class="fl">联系人</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div></li>';                                                            
 		    				}
 
-		    				html += `/ul>
+		    				html += `</ul>
 					           </div>
 					          </li>
 					        </ul>`;
@@ -120,26 +120,44 @@
 
 
 		//点击吸附提示
-		$(".j-from-box .j-input-inlines li.on").hover(function (){  
-		   var that = this;
-		   layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">剩余</span><span class="fr">1314天</span></li><li class="clearfix"><span class="fl">租期</span><span class="fr">2018/03/15 - 2020/03/15</span></li><li class="clearfix"><span class="fl">联系人</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
-		},function (){  
-		 	layer.closeAll('tips');
-		}); 
+		// $(".j-from-box .j-input-inlines li.on").hover(function (){  
+		//    var that = this;
+		//    layer.tips('<div class="j-frame-box"><ul><li class="clearfix"><span class="fl">剩余</span><span class="fr">1314天</span></li><li class="clearfix"><span class="fl">租期</span><span class="fr">2018/03/15 - 2020/03/15</span></li><li class="clearfix"><span class="fl">联系人</span><span class="fr">李么么</span></li><li class="clearfix"><span class="fl">联系方式</span><span class="fr">13975412586</span></li><li class="clearfix"><span class="fl">所属企业</span><span class="fr">楚天新媒科技有限公司楚天新媒科技有限公司</span></li></ul></div>', that, { tips: [1, '#fff'],time: 0});
+		// },function (){  
+		//  	layer.closeAll('tips');
+		// }); 
+		$(".j-indent-boxs").on("mouseenter", ".j-from-box .j-input-inlines li.on", function(event) {
+				$(this).find(".j-frame-box").show();
+				if($(this).parent().find(".j-frame-box li:eq(4) .fr").text().length>13){
+					$(".j-frame-box").css({"left":"0","top":"-160px"});
+				}
+				else{
+					$(".j-frame-box").css({"left":"0","top":"-140px"});
+				}
+				
+		});
+		$(".j-indent-boxs").on("mouseleave", ".j-from-box .j-input-inlines li.on", function(event) {
+				$(this).find(".j-frame-box").hide();
+		});
 		//监听折叠
-		$("li.j-first").click(function(){
+		$(".j-indent-boxs").on("click","li.j-first",function(){
 			$(this).toggleClass("on").siblings().removeClass("on");
-		 
+		    if($(this).hasClass("on")){
+					$(this).next().show();
+				}
+				else{
+					$(this).next().hide();
+				}
 		})
-		 element.on('collapse(test)', function(data){
-			 layer.msg('展开状态：'+ data.show);
-			 var dat=data.show;
-			 if(dat=="true"){
-			   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
-			 }else{
-			   $(this).find('.layui-colla-title').empty();
-			   $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
-			 }
-		 }); 
+		 // element.on('collapse(test)', function(data){
+			//  layer.msg('展开状态：'+ data.show);
+			//  var dat=data.show;
+			//  if(dat=="true"){
+			//    $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
+			//  }else{
+			//    $(this).find('.layui-colla-title').empty();
+			//    $(this).find('.layui-colla-title').html(' <i class="iconfont color-gray " style="font-size:24px!important;"></i>');
+			//  }
+		 // }); 
   });
 </script>
