@@ -121,7 +121,7 @@ class Floor extends Admin
             $password = $this->request->param('password');
             $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
             if(!password_verify(md5($password), $realPassword)){
-                $this->error('密码效验失败');
+                $this->error('密码输入错误，请重新输入！');
             }
             $floorNumber = FloorModel::where([['floor_id','eq',$id]])->value('floor_number');   
             $sites = SiteGroupModel::where([['floor_number','like','|%'.$floorNumber.'%|']])->find(); 

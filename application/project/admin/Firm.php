@@ -334,7 +334,7 @@ class Firm extends Admin
             //halt(ADMIN_ID);
             //dump($password);halt($realPassword);
             if(!password_verify(md5($password), $realPassword)){
-                $this->error('密码效验失败');
+                $this->error('密码输入错误，请重新输入！');
             }
             $row = ShackModel::get($id);  
             if($row['member_id']){

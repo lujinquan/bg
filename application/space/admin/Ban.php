@@ -108,7 +108,7 @@ class Ban extends Admin
             $password = $this->request->param('password');
             $realPassword = UserModel::where([['id','eq',ADMIN_ID]])->value('password');
             if(!password_verify(md5($password), $realPassword)){
-                $this->error('密码效验失败');
+                $this->error('密码输入错误，请重新输入！');
             }   
             $floors = FloorModel::where([['ban_id','eq',$id]])->count('floor_id'); 
             if($floors){

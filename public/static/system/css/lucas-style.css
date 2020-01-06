@@ -15,6 +15,12 @@ input:-webkit-autofill {
 .layui-side .layui-this a, .layui-side .layui-this i.aicon{ font-weight: bold;}
 .layui-nav-tree .layui-nav-item.layui-nav-itemed a.j-two-name{font-weight: bold;}
 /* 表格按钮状态 S*/
+.j-table-button{height: 30px;line-height: 30px;padding: 0 10px;font-size: 12px;display: inline-block;color: #fff;white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;}
 .j-table-button.j-notactive{ background:#737F90;}
 .j-table-button.j-activated{ background:#60D09C;}
 .layui-form-label i.red{ margin-right: 5px;}
