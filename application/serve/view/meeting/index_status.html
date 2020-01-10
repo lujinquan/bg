@@ -138,6 +138,7 @@
 
 	 //点击吸附提示
 	 $(".j-indent-boxs").on("mouseenter", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function(event) {
+		var rightWidth=$(window).width()-$(this).parent().find(".j-frame-box").offset().left-$(this).parent().find(".j-frame-box").width();
 		$(this).parent().find(".j-frame-box").show();
 		if($(this).parent().find(".j-frame-box li:eq(2) .fr").text().length>8){
 			$(".j-frame-box").css("top","-120px");
@@ -145,7 +146,10 @@
 		else{
 			$(".j-frame-box").css("top","-100px");
 		}
-		
+		//判断j-frame-box框距离屏幕右边距离
+		if(($(window).width()-$(this).parent().find(".j-frame-box").offset().left-$(this).parent().find(".j-frame-box").width())<20){
+			$(this).parent().find(".j-frame-box").css("left","-150px");
+		}
 	 });
 	 $(".j-indent-boxs").on("mouseleave", ".j-conference-content li.j-list dl dd ol li.j-green,.j-conference-content li.j-list dl dd ol li.j-red", function(event) {
 		$(this).parent().find(".j-frame-box").hide();
