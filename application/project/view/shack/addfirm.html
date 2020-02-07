@@ -16,452 +16,419 @@
 {include file="system@block/layui" /}
 <script src="__ADMIN_JS__/viewjs/folded.js?v={:config('hisiphp.version')}"></script>
 <script type="text/javascript">   
-            
-		  /*上传参数设定*/
-		  var upurl = "{:url('system/Api/upload')}?input=Licence&group=ban&water=no"; //上传营业执照
-		  var duotu = true; //是否为多图上传true false
-		   layui.use(['jquery', 'laydate','table', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
-		    var laydate = layui.laydate,
-		      $ = layui.$,
-		      upload = layui.upload,
-		      form = layui.form,
-			  table = layui.table,
-			  transfer = layui.transfer,
-			  layer = layui.layer,
-			  step = layui.step,
-			  selectN = layui.selectN,
-			  selectM = layui.selectM,
-			  util = layui.util,
-			  yutons_sug = layui.yutons_sug;
+     
+	
+	layui.use(['jquery', 'laydate','table', 'upload', 'form', 'step','selectN','selectM','transfer','util', 'layer','yutons_sug'], function() {
+	    var laydate = layui.laydate,
+	      $ = layui.$,
+	      upload = layui.upload,
+	      form = layui.form,
+		  table = layui.table,
+		  transfer = layui.transfer,
+		  layer = layui.layer,
+		  step = layui.step,
+		  selectN = layui.selectN,
+		  selectM = layui.selectM,
+		  util = layui.util,
+		  duotu = true, //是否为多图上传true false
+		  yutons_sug = layui.yutons_sug;
 
+		/*******************   第一步页面js  *******************/
 
-			  $('.j-jiaoyan').click(function(){
-			  	var firm_name = $('#deptName').val();
-			  	//console.log($('input[name=firm_credit_code]'));
-			  	if(!firm_name){
-			  		return false;
-			  	}
-			  	$.ajax({
-					type: 'post',
-					url: '{:url("project/shack/getFirmDetail")}',
-					data: "firm_name=" + firm_name,
-					success: function(datas) {
-						console.log(datas);
-						if(datas.code){
-							var forData = datas.data;
-							
-							$('input[name=firm_manager]').val(forData.firm_manager); // 联系人姓名
-							$('input[name=firm_tel]').val(forData.firm_tel); // 联系人电话
-							$('input[name=firm_credit_code]').parent().html('<div class="j-words-border" id="firm_credit_code">'+forData.firm_credit_code+'</div>'); // 社会信用代码
-							$('#new_industry_type').remove();
-							$('#industry_type').addClass('layui-hide').after('<div class="layui-input-inline" id="new_industry_type"><div class="j-words-border">'+params.firm_industry_type[forData.firm_industry_type]+'</div></div>'); // 所属行业
-							$('input[name=firm_registered_capital]').parent().html('<div class="j-words-border" id="new_firm_registered_capital">'+forData.firm_registered_capital+'万元</div>'); // 注册资本
-							$('input[name=firm_legaler]').parent().html('<div class="j-words-border" id="new_firm_legaler">'+forData.firm_legaler+'</div>'); // 法人姓名
-							$('#new_firm_established_time').remove();
-							$('#firm_established_time').addClass('layui-hide').after('<div class="layui-input-inline" id="new_firm_established_time"><div class="j-words-border">'+forData.firm_established_time+'</div></div>'); // 成立日期
-							$('input[name=firm_registered_address]').parent().html('<div class="j-words-border" id="firm_registered_address">'+forData.firm_registered_address+'</div>'); // 注册地址
-							$('input[name=firm_scope]').parent().html('<div class="j-words-border" id="new_firm_scope">'+forData.firm_scope+'</div>'); // 经营范围
+	  	// 搜索，初始化部门输入提示框 //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
+		yutons_sug.render({
+			id: "deptName", //设置容器唯一id
+			type: 'sug', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
+			url: "/admin.php/project/shack/getFirms?keywords=" //设置异步数据接口,url为必填项
+		});
 
-							if(forData.imgs){
-								var str = '';
-								for (var i in forData.imgs) {
-									str += '<dd class="item_img">\
-									<div class="operate">\
-										<i class="layui-icon-close-fill layui-icon"></i>\
-									</div>\
-									<img data-original="'+ forData.imgs[i].file+'" src="'+forData.imgs[i].file +'" class="img" />\
-								</dd>';
-								}
-								$('#upload_img_list1').html(str);
+		//点击校验
+		$('.j-jiaoyan').click(function(){ 
+		  	var firm_name = $('#deptName').val();
+		  	if(!firm_name){ return false; }
+		  	$.ajax({
+				type: 'post',
+				url: '{:url("project/shack/getFirmDetail")}',
+				data: "firm_name=" + firm_name,
+				success: function(datas) {
+					console.log('点击校验返回结果：',datas);
+					if(datas.code){
+						var forData = datas.data;
+						$('input[name=firm_manager]').val(forData.firm_manager); // 联系人姓名
+						$('input[name=firm_tel]').val(forData.firm_tel); // 联系人电话
+						$('input[name=firm_credit_code]').parent().html('<div class="j-words-border" id="firm_credit_code">'+forData.firm_credit_code+'</div>'); // 社会信用代码
+						$('#new_industry_type').remove();
+						$('#industry_type').addClass('layui-hide').after('<div class="layui-input-inline" id="new_industry_type"><div class="j-words-border">'+params.firm_industry_type[forData.firm_industry_type]+'</div></div>'); // 所属行业
+						$('input[name=firm_registered_capital]').parent().html('<div class="j-words-border" id="new_firm_registered_capital">'+forData.firm_registered_capital+'万元</div>'); // 注册资本
+						$('input[name=firm_legaler]').parent().html('<div class="j-words-border" id="new_firm_legaler">'+forData.firm_legaler+'</div>'); // 法人姓名
+						$('#new_firm_established_time').remove();
+						$('#firm_established_time').addClass('layui-hide').after('<div class="layui-input-inline" id="new_firm_established_time"><div class="j-words-border">'+forData.firm_established_time+'</div></div>'); // 成立日期
+						$('input[name=firm_registered_address]').parent().html('<div class="j-words-border" id="firm_registered_address">'+forData.firm_registered_address+'</div>'); // 注册地址
+						$('input[name=firm_scope]').parent().html('<div class="j-words-border" id="new_firm_scope">'+forData.firm_scope+'</div>'); // 经营范围
+						if(forData.imgs){
+							var str = '';
+							for (var i in forData.imgs) {
+								str += '<dd class="item_img">\
+								<div class="operate">\
+									<i class="layui-icon-close-fill layui-icon"></i>\
+								</div>\
+								<img data-original="'+ forData.imgs[i].file+'" src="'+forData.imgs[i].file +'" class="img" /><input type="hidden" name="file[]" value="' + forData.imgs[i].id + '" />\
+							</dd>';
 							}
-						    
-							$('input[name=coupon_num]').val(forData.coupon_num); // 抵用券发放数量
-							$('input[name=coupon_issue_time]').val(forData.coupon_issue_time); // 发放起始时间
-							$('input[name=firm_remark]').val(forData.firm_remark); // 备注
-							$('input[name=firm_id]').val(forData.firm_id); // 公司id
-							// 营业执照没处理
-						}else{
-							$('input[name=firm_manager]').val(''); // 联系人姓名
-							$('input[name=firm_tel]').val(''); // 联系人电话
-							$('#firm_credit_code').parent().html('<input type="text" name="firm_credit_code" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 社会信用代码
-							$('#industry_type').addClass('layui-show').removeClass('layui-hide');
-							$('#new_industry_type').addClass('layui-hide'); // 所属行业
-							$('#new_firm_registered_capital').parent().html('<input type="text" name="firm_registered_capital" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input"><b class="j-explain-name">万元</b>');// 注册资本
-							$('#new_firm_legaler').parent().html('<input type="text" name="firm_legaler" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 法人姓名
-							$('#firm_established_time').addClass('layui-show').removeClass('layui-hide'); // 所属行业
-							$('#new_firm_established_time').addClass('layui-hide'); // 成立日期
-							$('#firm_registered_address').parent().html('<input type="text" name="firm_registered_address" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 注册地址
-							$('#new_firm_scope').parent().html('<input type="text" name="firm_scope" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 经营范围
-							$('#upload_img_list1').html('');
-							$('input[name=coupon_num]').val(''); // 抵用券发放数量
-							$('input[name=coupon_issue_time]').val(''); // 发放起始时间
-							$('input[name=firm_remark]').val(''); // 备注
-							$('input[name=firm_id]').val(''); //公司id
+							$('#upload_img_list1').html(str);
 						}
-						
+						$('input[name=coupon_num]').val(forData.coupon_num); // 抵用券发放数量
+						$('input[name=coupon_issue_time]').val(forData.coupon_issue_time); // 发放起始时间
+						$('input[name=firm_remark]').val(forData.firm_remark); // 备注
+						$('input[name=firm_id]').val(forData.firm_id); // 公司id
+						// 营业执照没处理
+					}else{
+						$('input[name=firm_manager]').val(''); // 联系人姓名
+						$('input[name=firm_tel]').val(''); // 联系人电话
+						$('#firm_credit_code').parent().html('<input type="text" name="firm_credit_code" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 社会信用代码
+						$('#industry_type').addClass('layui-show').removeClass('layui-hide');
+						$('#new_industry_type').addClass('layui-hide'); // 所属行业
+						$('#new_firm_registered_capital').parent().html('<input type="text" name="firm_registered_capital" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input"><b class="j-explain-name">万元</b>');// 注册资本
+						$('#new_firm_legaler').parent().html('<input type="text" name="firm_legaler" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 法人姓名
+						$('#firm_established_time').addClass('layui-show').removeClass('layui-hide'); // 所属行业
+						$('#new_firm_established_time').addClass('layui-hide'); // 成立日期
+						$('#firm_registered_address').parent().html('<input type="text" name="firm_registered_address" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 注册地址
+						$('#new_firm_scope').parent().html('<input type="text" name="firm_scope" placeholder="请输入" lay-verType="tips" autocomplete="off" class="layui-input">'); // 经营范围
+						$('#upload_img_list1').html('');
+						$('input[name=coupon_num]').val(''); // 抵用券发放数量
+						$('input[name=coupon_issue_time]').val(''); // 发放起始时间
+						$('input[name=firm_remark]').val(''); // 备注
+						$('input[name=firm_id]').val(''); //公司id
 					}
-				});
-			  	return false;
-			  });
+				}
+			});
+		  	return false;
+		});
 
+		laydate.render({elem: '#test1'}); // 成立日期
+		laydate.render({elem: '#test2'}); // 发放起始时间
 
-			  //搜索
-			  //sessionStorage.setItem("/admin.php/system/api/ceshi", data2);
-			  //初始化部门输入提示框
-			   yutons_sug.render({
-				id: "deptName", //设置容器唯一id
-				type: 'sug', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
-				url: "/admin.php/project/shack/getFirms?keywords=" //设置异步数据接口,url为必填项
-			  });
-			  
-			 
-			  /* 穿梭框显示搜索框 */
-			  //var data1 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据
-			  var data1 = {:json_encode($siteArr[1])};
-			  var data2 = {:json_encode($siteArr[2])};
-			  //联合办公区
-			  transfer.render({
-				elem: '#transfer1'
-				,id: 'demo1'
-				,data: data1
-				,title: ['未选', '已选']
-				,showSearch: true
-			  });
-			  //独立办公区
-			   transfer.render({
-				elem: '#transfer2'
-				,id: 'demo2'
-				,data: data2
-				,title: ['未选', '已选']
-				,showSearch: true
-			  });
-			var firm_id = $('input[name=firm_id]').val();
-			var upurl1 = "{:url('import')}?firm_id=" + firm_id + "&input=ImportMember&group=project&water=no";
-			upload.render({
-		      elem: '#import',
-		      url: upurl1,
-		      size: 1024,
-		      exts:'xlsx|xls',
-		      accept: 'file',
-		      field: 'ImportMember',
-		      before: function(obj) {
-		        layer.msg('导入中...', {
-		          icon: 16,
-		          shade: 0.01,
-		          time: 0
-		        })
-		      },
-		      done: function(res) {
-		      	layer.close(layer.msg()); //关闭上传提示窗口
-		      	// if(res.code){
-		      	// 	layer.msg(res.msg);
-		      	// }
-		      }
-		  });
-		    //场地图片
-		    upload.render({
-		      elem: '#upload_img1',
-		      url: upurl,
-		      size: 1024,
-		      multiple: duotu,
-		      field: 'Licence',
-		      before: function(obj) {
-		        layer.msg('图片上传中...', {
-		          icon: 16,
-		          shade: 0.01,
-		          time: 0
-		        })
-		      },
-		      done: function(res) {
+		// 上传营业执照附件
+	    upload.render({
+	      	elem: '#upload_img1',
+	      	url: "{:url('system/Api/upload')}?input=Licence&group=ban&water=no",
+	      	size: 1024,
+	      	multiple: duotu,
+	      	field: 'Licence',
+	      	before: function(obj) {
+	        	layer.msg('图片上传中...', {icon: 16,shade: 0.01,time: 0})
+	      	},
+	      	done: function(res) {
 		        layer.close(layer.msg()); //关闭上传提示窗口
 		        if (duotu == true) {
-		          //调用多图上传方法,其中res.imgid为后台返回的一个随机数字
-		          $('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
+		          	//调用多图上传方法,其中res.imgid为后台返回的一个随机数字
+		          	$('#upload_img_list1').append('<dd class="item_img" id="' + res.data.name +
 		            '"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
 		            '" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
 		        } else {
-		          //调用单图上传方法,其中res.imgid为后台返回的一个随机数字
-		          $('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
+		          	//调用单图上传方法,其中res.imgid为后台返回的一个随机数字
+		          	$('#upload_img_list1').html('<dd class="item_img" id="' + res.data.name +
 		            '"><div class="operate"><i  class="layui-icon-close-fill layui-icon"></i></div><img src="' + res.data.file +
 		            '" class="img" ><input type="hidden" name="file[]" value="' + res.data.id + '" /></dd>');
 		        }
-		      }
-		    })
-		    /*
-		    删除上传图片
-		    */
-		    $(document).on("click", ".upload_img_list dd i", function() {
-		      $(this).parents("dd").remove();
-		    })
-			//门禁
-			form.on('select(filter)', function(data){
-			 $(".j-hides").show();
-			  var guards = {:json_encode($guardArr)};
-			  //console.log(guards);
-			  for (var i = 0 ; i < guards.length; i++) {
-			    if(guards[i].id == data.value){
-			      var bans = guards[i].childs;
-			      var str = '';
+		    }
+	    })
+
+	    //分步表单提交
+		step.render({
+		    elem: '#stepForm',
+		    filter: 'stepForm',
+		    width: '100%', //设置容器宽度
+		    //stepWidth: '750px',
+		    height: '100%',
+		    stepItems: [{
+		        title: '录入企业信息'
+		    }, {
+		        title: '分配工位'
+		    }, {
+		        title: '录入员工信息'
+		    }]
+		});
+
+		// 第一步的提交
+		form.on('submit(formStep)', function (data) {
+	 	    var _form = '', 
+            that = $(this), 
+            text = that.text(),
+            options = {pop: false, refresh: true, jump: false, callback: null};
+	        if ($(this).attr('data-form')) {
+	            _form = $(that.attr('data-form'));
+	        } else {
+	            _form = that.parents('form');
+	        }
+	        if (that.attr('hisi-data')) {
+	            options = new Function('return '+ that.attr('hisi-data'))();
+	        } else if (that.attr('lay-data')) {
+	            options = new Function('return '+ that.attr('lay-data'))();
+	        }
+	        that.prop('disabled', true).text('提交中...');
+	        $.ajax({
+	            type: "POST",
+	            url: _form.attr('action'),
+	            data: _form.serialize(),
+	            success: function(res) {
+	            	console.log('第一步提交返回结果：',res);
+	                if (res.code == 0) {
+	                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger').text(res.msg);
+	                    setTimeout(function(){
+	                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+	                    }, 3000);
+	                } else {
+	                    setTimeout(function() {
+	                        //that.text(text).prop('disabled', false);
+	                        that.prop('disabled', false).text('确定');
+	                        $('input[name=firm_id]').val(res.data.firm_id);
+	                        step.next('#stepForm');
+	                    }, 3000);
+	                }
+	            }
+	        });
+		    return false;
+		});
+	  	
+		
+
+
+
+		/*******************   第二步页面js  *******************/	  
 			
-			      if(bans.length > 0){
-			        for (var j = 0 ; j < bans.length; j++) {
-			          if(j==0){
-			            var current = 'current';
-						  var hide = '';
-			          }else{
-			            var current = '';
-						  var hide = 'hide';
-			          }
-			          str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
-			          var floors = bans[j].childs;
+		laydate.render({elem: '#test3'}); // 入驻开始时间
+		laydate.render({elem: '#test4'}); // 入驻结束时间 
+
+	  	/* 穿梭框显示搜索框 */
+	  	//var data1 = [{"value": "1", "title": "李白"},{"value": "2", "title": "杜甫"}]; //模拟数据
+	  	//联合办公区
+	  	transfer.render({
+			elem: '#transfer1'
+			,id: 'demo1'
+			,data: {:json_encode($siteArr[1])} // 初始化联合办公区数据
+			,title: ['未选', '已选']
+			,showSearch: true
+	  	});
+	  	//独立办公区
+	   	transfer.render({
+			elem: '#transfer2'
+			,id: 'demo2'
+			,data: {:json_encode($siteArr[2])} // 初始化独立办公区数据
+			,title: ['未选', '已选']
+			,showSearch: true
+		});
+	   	//门禁
+		form.on('select(filter)', function(data){
+		 	$(".j-hides").show();
+		  	var guards = {:json_encode($guardArr)};
+		  	for (var i = 0 ; i < guards.length; i++) {
+		    	if(guards[i].id == data.value){
+			      	var bans = guards[i].childs;
+			      	var str = '';
+		
+			      	if(bans.length > 0){
+			        	for (var j = 0 ; j < bans.length; j++) {
+				          	if(j==0){
+				            	var current = 'current';
+							  	var hide = '';
+				          	}else{
+				            	var current = '';
+							  	var hide = 'hide';
+				          	}
+			          		str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+			          		var floors = bans[j].childs;
 			
-			          if(floors.length > 0){
-			            for (var k = 0 ; k < floors.length; k++) {
-			              str += '<dl class="clearfix">\
-			                        <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
-			                            <ul>';
-			              var guards = floors[k].childs;
-			              if(guards.length > 0){
-			                for (var h = 0 ; h < guards.length; h++) {
-			                  str += '<li>\
-			                             <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
-			                          </li>';
-			                }
-			              }
-			              str += '</ul>\
-			                        </dd></dl>';
-			            }  
-			          }
-			          str += '</div>';
+					        if(floors.length > 0){
+					            for (var k = 0 ; k < floors.length; k++) {
+					              	str += '<dl class="clearfix">\
+					                        <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+					                            <ul>';
+					              	var guards = floors[k].childs;
+					              	if(guards.length > 0){
+					                	for (var h = 0 ; h < guards.length; h++) {
+					                  		str += '<li>\
+					                             <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+					                          </li>';
+					                	}
+					              	}
+					              	str += '</ul>\
+					                        </dd></dl>';
+					            }  
+					        }
+			          		str += '</div>';
+			        	}   
+				        str += '</div>';     
+				        //console.log(str);
+				        $('#firstpane').html(str);
+				        form.render();
+			    	}
+		    	}
+		  	}
+		});
+		// 第二步的提交
+		form.on('submit(formStep2)', function (data) {
+			var _form = '', 
+            that = $(this), 
+            text = that.text(),
+            options = {pop: false, refresh: true, jump: false, callback: null};
+	        if ($(this).attr('data-form')) {
+	            _form = $(that.attr('data-form'));
+	        } else {
+	            _form = that.parents('form');
+	        }
+	        if (that.attr('hisi-data')) {
+	            options = new Function('return '+ that.attr('hisi-data'))();
+	        } else if (that.attr('lay-data')) {
+	            options = new Function('return '+ that.attr('lay-data'))();
+	        }
+	        var getData1 = transfer.getData('demo1');
+	        var getData2 = transfer.getData('demo2');
+	        console.log('联合工位区穿梭框右边的值：',getData1);
+	        console.log('独立工位区穿梭框右边的值：',getData2);
+	        var paramStr = '';
+	        if(getData1){
+        		for(i in getData1){
+        			paramStr += 'lianhe['+i+']='+ getData1[i].value + '&'
+        		}
+	        }
+	        if(getData2){
+        		for(k in getData2){
+        			paramStr += 'duli['+k+']='+ getData2[k].value + '&'
+        		}
+	        }
+	    	var dataNew = paramStr + _form.serialize();
+			console.log('分配工位表单提交的数据：',dataNew);
+	        that.prop('disabled', true).text('提交中...');
+	        $.ajax({
+	            type: "POST",
+	            url: _form.attr('action'),
+	            data: dataNew,
+	            success: function(res) {
+	                that.text(res.msg);
+	                console.log('第二步提交返回结果：',res);
+	                if (res.code == 0) {
+	                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+	                    setTimeout(function(){
+	                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+	                    }, 3000);
+	                } else {
+	                    setTimeout(function() {
+	                        //that.text(text).prop('disabled', false);
+	                        that.prop('disabled', false);
+	                        $('#step2_firm_id').val(res.data.firm_id);
+	                        step.next('#stepForm');
+	                    }, 3000);
+	                }
+	            }
+	        });
+		    return false;
+		});
+		//上一步
+		$('.pre').click(function () {
+		    step.pre('#stepForm');
+		});
+
+
+
+
+
+		/*******************   第三步页面js  *******************/
+		// step.next('#stepForm'); //直接跳转到第二个页面
+		// step.next('#stepForm');
+
+		//var firm_id = $('#step2_firm_id').val();
+		// var firm_id = 1;
+		// console.log('批量导入初入的firm_id的值：',firm_id);
+		// var upurl1 = "{:url('import')}?firm_id=" + firm_id + "&input=ImportMember&group=project&water=no";
+		upload.render({
+	      	elem: '#import',
+	      	url: "{:url('import')}?firm_id=" + $('#step2_firm_id').val() + "&input=ImportMember&group=project&water=no",
+	      	size: 1024,
+	      	exts:'xlsx|xls',
+	      	accept: 'file',
+	      	field: 'ImportMember',
+	      	before: function(obj) {
+	        	layer.msg('导入中...', {icon: 16,shade: 0.01,time: 0})
+	      	},
+	      	done: function(res) {
+	      		layer.msg(res.msg); //layer.close(layer.msg()); //关闭上传提示窗口
+	      	}
+	  	});
+		//下载模板
+		$('#download').click(function(){
+			var down_load_url = '/static/project/personnel_list_template.xlsx';
+			console.log(down_load_url);
+			//personnel_list_template
+			document.location.href = down_load_url;
+		})
+		//添加删除一般员工
+		$('.j-add-personnel').click(function(){
+		    var html = `<div class="j-admin-list clearfix">
+				<ul>
+					<li class="j-required-li">
+						 <input type="text" name="member_name[]"  lay-verify="required"  placeholder="姓名" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+						 <i class="red">*</i>
+					</li>
+					<li class="j-required-li">
+						 <input type="text" name="member_tel[]"  lay-verify="required|phone"  placeholder="电话" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
+						 <i class="red">*</i>
+					</li>
+					<li>
+						 <input type="text" name="member_post[]"  placeholder="职位" lay-verType="tips" autocomplete="off" class="layui-input">
+					</li>
+					<li>
+						 <input type="text" name="member_department[]"  placeholder="部门" lay-verType="tips" autocomplete="off" class="layui-input">
+					</li>
+					<li>
+						 <input type="text" name="member_card[]"  placeholder="身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+					</li>
+				</ul>
+				<i class="icon-cancel j-del"></i>
+			</div>`;
+		    $('.j-add-personnel').prev(".j-admin-list").after(html);
+		});
+		$('.j-admin-con').on('click','.j-del',function(){
+		    var that = $(this);
+		    that.parent().remove();
+		});
+
+		//二次录入选择入驻人员
+		//表格选择入驻人员
+		table.render({
+		    elem: '#dataTable'
+		    ,url: '' //数据接口
+		    ,page: true //开启分页
+			//,height: 'full-280'
+		    ,skin: 'line'
+		    //,even: false
+		    ,limit: 10
+		    ,text: {
+		        none : '暂无相关数据'
+		    }
+		    ,cols: [[ //表头
+			    {type:'checkbox'}
+		    	,{field: 'member_name', align:'center',minWidth:100, title: '姓名'}
+		        ,{field: 'member_tel', align:'center',minWidth:100, title: '电话'}
+		        ,{field: 'member_post', align:'center',minWidth:100, title: '职位'}
+				,{field: 'member_department', align:'center',minWidth:100, title: '部门'},
+		  		,{field: 'member_sex', align:'center',minWidth:100, title: '性别', templet: function(d) {
+				    return d.member_sex?'男':'女';
+				}}
+		   		,{field: 'member_card', align:'center',minWidth:100, title: '身份证号'}
+  				,{field: 'member_type', align:'center',minWidth:100, title: '类型', templet: function(d) {
+			      	return params.member_type[d.member_type];
+			  	}}
+		        // ,{title: 'member_type',align:'center', minWidth:280, templet: '#buttonTpl', width: 280,fixed:'right'}
+		    ]]
+		});	
+	});
+    
+    /*
+    删除上传图片
+    */
+    $(document).on("click", ".upload_img_list dd i", function() {
+      $(this).parents("dd").remove();
+    })
 			
-			        }   
-			        str += '</div>';     
-			        //console.log(str);
-			        $('#firstpane').html(str);
-			        form.render();
-			      }
-			      
-			    }
-			  }
-			});
-			
-			//成立日期
-			laydate.render({
-				elem: '#test1'
-				
-			});
-			//发放起始时间
-			laydate.render({
-				elem: '#test2'
-			});
-			//入驻开始时间
-			laydate.render({
-				elem: '#test3'
-			});
-			//入驻结束时间
-			laydate.render({
-				elem: '#test4'
-			});
-			//分步表单提交
-			 step.render({
-			    elem: '#stepForm',
-			    filter: 'stepForm',
-			    width: '100%', //设置容器宽度
-			    //stepWidth: '750px',
-			    height: '100%',
-			    stepItems: [{
-			        title: '录入企业信息'
-			    }, {
-			        title: '分配工位'
-			    }, {
-			        title: '录入员工信息'
-			    }]
-			});
-
-			// 第一步的提交
-			form.on('submit(formStep)', function (data) {
-
-		 	    var _form = '', 
-	            that = $(this), 
-	            text = that.text(),
-	            options = {pop: false, refresh: true, jump: false, callback: null};
-		        if ($(this).attr('data-form')) {
-		            _form = $(that.attr('data-form'));
-		        } else {
-		            _form = that.parents('form');
-		        }
-		        if (that.attr('hisi-data')) {
-		            options = new Function('return '+ that.attr('hisi-data'))();
-		        } else if (that.attr('lay-data')) {
-		            options = new Function('return '+ that.attr('lay-data'))();
-		        }
-		        that.prop('disabled', true).text('提交中...');
-		        $.ajax({
-		            type: "POST",
-		            url: _form.attr('action'),
-		            data: _form.serialize(),
-		            success: function(res) {
-		                that.text(res.msg);
-		                if (res.code == 0) {
-		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
-		                    setTimeout(function(){
-		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
-		                    }, 3000);
-		                } else {
-		                    setTimeout(function() {
-		                        //that.text(text).prop('disabled', false);
-		                        that.prop('disabled', false);
-		                        $('input[name=firm_id]').val(res.data.firm_id);
-		                        step.next('#stepForm');
-		                    }, 3000);
-		                }
-		            }
-		        });
-		        //step.next('#stepForm');
-			    return false;
-			});
-
-			// 第二步的提交
-			form.on('submit(formStep2)', function (data) {
-				var _form = '', 
-	            that = $(this), 
-	            text = that.text(),
-	            options = {pop: false, refresh: true, jump: false, callback: null};
-		        if ($(this).attr('data-form')) {
-		            _form = $(that.attr('data-form'));
-		        } else {
-		            _form = that.parents('form');
-		        }
-		        
-		        
-		        if (that.attr('hisi-data')) {
-		            options = new Function('return '+ that.attr('hisi-data'))();
-		        } else if (that.attr('lay-data')) {
-		            options = new Function('return '+ that.attr('lay-data'))();
-		        }
-
-		        var getData1 = transfer.getData('demo1');
-		        var getData2 = transfer.getData('demo2');
-		        console.log('联合工位区穿梭框右边的值：',getData1);
-		        console.log('独立工位区穿梭框右边的值：',getData2);
-		        var paramStr = '';
-		        if(getData1){
-	        		for(i in getData1){
-	        			paramStr += 'lianhe['+i+']='+ getData1[i].value + '&'
-	        		}
-		        }
-		        if(getData2){
-	        		for(k in getData2){
-	        			paramStr += 'duli['+k+']='+ getData2[k].value + '&'
-	        		}
-		        }
-
-
-		        //var formData = _form.serialize();
-		    	
-		    	//console.log(formData);
-
-				//var transfer_to = $(transferDom).attr('lay-value'); 
-		    	var dataNew = paramStr + _form.serialize();
-				console.log('分配工位表单提交的数据：',dataNew);
-
-		        that.prop('disabled', true).text('提交中...');
-		        $.ajax({
-		            type: "POST",
-		            url: _form.attr('action'),
-		            data: dataNew,
-		            success: function(res) {
-		                that.text(res.msg);
-		                console.log('第二步提交返回的数据：',res);
-		                if (res.code == 0) {
-		                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
-		                    setTimeout(function(){
-		                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
-		                    }, 3000);
-		                } else {
-		                    setTimeout(function() {
-		                        //that.text(text).prop('disabled', false);
-		                        that.prop('disabled', false);
-		                        $('input[name=firm_id]').val(res.data.firm_id);
-		                        step.next('#stepForm');
-		                    }, 3000);
-		                }
-		            }
-		        });
-			    return false;
-			});
-			//上一步
-			 $('.pre').click(function () {
-			    step.pre('#stepForm');
-			});
-			//添加删除一般员工
-			$('.j-add-personnel').click(function(){
-			    var html = `<div class="j-admin-list clearfix">
-							<ul>
-								<li class="j-required-li">
-									 <input type="text" name="member_name[]"  lay-verify="required"  placeholder="姓名" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
-									 <i class="red">*</i>
-								</li>
-								<li class="j-required-li">
-									 <input type="text" name="member_tel[]"  lay-verify="required|phone"  placeholder="电话" lay-verType="tips" autocomplete="off" class="layui-input j-required-input">
-									 <i class="red">*</i>
-								</li>
-								<li>
-									 <input type="text" name="member_post[]"  placeholder="职位" lay-verType="tips" autocomplete="off" class="layui-input">
-								</li>
-								<li>
-									 <input type="text" name="member_department[]"  placeholder="部门" lay-verType="tips" autocomplete="off" class="layui-input">
-								</li>
-								<li>
-									 <input type="text" name="member_card[]"  placeholder="身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
-								</li>
-							</ul>
-							<i class="icon-cancel j-del"></i>
-						</div>`;
-			    $('.j-add-personnel').prev(".j-admin-list").after(html);
-			});
-			$('.j-admin-con').on('click','.j-del',function(){
-			    var that = $(this);
-			    that.parent().remove();
-			});
-			
-			//二次录入选择入驻人员
-			//表格选择入驻人员
-			table.render({
-			    elem: '#dataTable'
-			    ,url: '' //数据接口
-			    ,page: true //开启分页
-				//,height: 'full-280'
-			    ,skin: 'line'
-			    //,even: false
-			    ,limit: 10
-			    ,text: {
-			        none : '暂无相关数据'
-			    }
-			    ,cols: [[ //表头
-				     {type:'checkbox'}
-			    	 ,{field: 'member_name', align:'center',minWidth:100, title: '姓名'}
-			        ,{field: 'member_tel', align:'center',minWidth:100, title: '电话'}
-			        ,{field: 'member_post', align:'center',minWidth:100, title: '职位'}
-								       ,{field: 'member_department', align:'center',minWidth:100, title: '部门'},
-			  					     ,{field: 'member_sex', align:'center',minWidth:100, title: '性别', templet: function(d) {
-			      return d.member_sex?'男':'女';
-			  }}
-			   ,{field: 'member_card', align:'center',minWidth:100, title: '身份证号'}
-			  					     ,{field: 'member_type', align:'center',minWidth:100, title: '类型', templet: function(d) {
-			      return params.member_type[d.member_type];
-			  }}
-			
-			        // ,{title: 'member_type',align:'center', minWidth:280, templet: '#buttonTpl', width: 280,fixed:'right'}
-			    ]]
-			});
-			
-		  });
-		  //图片查看
-		  /* $(".j-viewer-img").on("click",function(){
-		    $(this).viewer({
-		      url: 'data-original',
-		     });
-		  }) */
-		  
-		</script>
+</script>

@@ -606,9 +606,21 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
 	})
 	//图片加载失败显示默认图片
 	$("img").each(function() {
-	        var img = $(this);
-	        img.one("error", function(e){
-	            img.attr("src", "/static/system/image/add_img.png");
-	        });
-	    });
+        var img = $(this);
+        img.one("error", function(e){
+            img.attr("src", "/static/system/image/add_img.png");
+        });
+    });
+
+    
 });
+
+function bytesToSize(bytes) {  
+　　if (bytes === 0) return '0 B';
+　　var k = 1024;
+　　sizes = ['B','K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+　　i = Math.floor(Math.log(bytes) / Math.log(k))　　
+　　//return (bytes / Math.pow(k, i)) + ' ' + sizes[i];
+　　return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+　　//toPrecision(3) 后面保留两位小数，如1.00GB  
+}

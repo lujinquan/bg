@@ -3,7 +3,7 @@
 				<div class="j-admin-box clearfix">
 					<div class="j-admin-title clearfix">
 						<span class="j-name fl">管理员<label class="j-tips">( <i class="layui-icon layui-icon-tips"></i> 拥有企业所有管理权限 )</label></span>
-						<span class="j-button fr"><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="import"><i class="layui-icon layui-icon-download-circle"></i>批量导入</a></span>
+						<span class="j-button fr"><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="download"><i class="layui-icon layui-icon-download-circle"></i>模板下载</a><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="import"><i class="layui-icon layui-icon-download-circle"></i>批量导入</a></span>
 					</div>
 					<div class="j-admin-con clearfix">
 						<div class="j-admin-list clearfix">
@@ -62,7 +62,7 @@
 				  <div class="j-admin-box j-staff clearfix">
 				  	<div class="j-admin-title clearfix">
 				  		<span class="j-name fl">选择入驻人员</span>
-				  		<span class="j-button fr"><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="import"><i class="layui-icon layui-icon-download-circle"></i>批量导入</a></span>
+				  		<!-- <span class="j-button fr"><a class="layui-btn layui-btn-normal layui-btn-sm layui-icon" id="import"><i class="layui-icon layui-icon-download-circle"></i>批量导入</a></span> -->
 				  	</div>
 					<table id="dataTable" lay-filter='dataTable'></table>
 				  	<div class="j-admin-con clearfix">
@@ -91,7 +91,7 @@
 				  	</div>
 				  </div>
 				<!-- 二次录入 E -->
-				<input type="hidden" name="firm_id" value="1">
+				<input type="hidden" name="firm_id" id="step3_firm_id" value="">
 				<div class="layui-form-item j-right-button">
 					<div class="layui-input-block">
 						<button type="button" class="layui-btn layui-btn-primary pre">返回上一步</button>

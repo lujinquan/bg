@@ -65,23 +65,20 @@ class Shack extends Admin
     }
 
     /**
-     * 项目管理>入驻办理>企业入驻：获取企业名称接口
+     * 项目管理 >入驻办理 > 企业入驻：获取企业名称接口
      * @return [type] [description]
      */
     public function getFirms()
     {
         $keywords = input('param.keywords/s');
-        $where = [];
-        $where[] = ['status','eq',0]; //0为普通企业，1为入驻企业
+        $where = $data = [];
+        // 0为普通企业，1为入驻企业，注：初次录入企业信息状态为普通企业，企业入驻成功后状态变为入驻企业，入驻企业失效后状态变为普通企业
+        $where[] = ['status','eq',0]; 
         // 查询公司名称
-        if($keywords){
-            $where[] = ['firm_name','like','%'.$keywords.'%'];
-        }
-        $data = [];
+        if($keywords){ $where[] = ['firm_name','like','%'.$keywords.'%']; }
         $data['data'] = FirmModel::where($where)->field('firm_id as userCode,firm_name as userName,firm_name as deptName')->select();
         $data['count'] = FirmModel::where($where)->count();
         return json($data);
-
     }
 
     /**
@@ -91,19 +88,14 @@ class Shack extends Admin
     public function getMembers()
     {
         $keywords = input('param.keywords/s');
-        $where = [];
+        $where = $data = [];
         $where[] = ['status','eq',1];
         // 查询公司名称
-        if($keywords){
-            $where[] = ['member_name','like','%'.$keywords.'%'];
-        }
-        $data = [];
+        if($keywords){ $where[] = ['member_name','like','%'.$keywords.'%']; }
         $data['code'] = 0;
         $data['data'] = MemberModel::with('firm')->where($where)->field('firm_id ,member_id,member_name,member_tel')->select();
         $data['count'] = MemberModel::where($where)->count();
-        //halt($data);
         return json($data);
-
     }
 
     /**
@@ -113,11 +105,10 @@ class Shack extends Admin
     public function getMemberDetail()
     {
         $member_name = input('param.member_name');
+        $where = $data = [];
         $where[] = ['member_name','eq',$member_name];
-        //halt($where);
         $row = MemberModel::where($where)->find();
         if($row){
-            $data = [];
             $data['data'] = $row;
             $data['code'] = 1;
             return json($data);
@@ -133,12 +124,11 @@ class Shack extends Admin
     public function getFirmDetail()
     {
         $firm_name = input('param.firm_name');
-        $where = [];
+        $where = $data = [];
         $where[] = ['firm_name','eq',$firm_name];
         $row = FirmModel::where($where)->find();
         if($row){
             $row['imgs'] = AnnexModel::changeFormat($row['firm_imgs']);
-            $data = [];
             $data['data'] = $row;
             $data['code'] = 1;
             return json($data);
@@ -147,9 +137,14 @@ class Shack extends Admin
         }
     }
 
+    /**
+     * 项目管理 >入驻办理 > 企业入驻：批量导入管理员及一般员工
+     * @return [type] [description]
+     */
     public function import($from = 'input', $group = 'sys', $water = '', $thumb = '', $thumb_type = '', $input = 'file')
     {
-
+        $firm_id = input('firm_id');
+        halt($firm_id);
         $res = AnnexModel::upload($from, $group, $water, $thumb, $thumb_type, $input);
         //halt($res['data']['file']);
         //$fileName = "./upload/project/file/20190830/d1f12e109079fb4886b53beaee1e4c95.xls";
@@ -165,13 +160,10 @@ class Shack extends Admin
             $objPhpExcel = $objReader ->load($fileName);
         } else if ($extension=='csv') {
             $PHPReader = new \PHPExcel_Reader_CSV();
-     
             //默认输入字符集
             $PHPReader->setInputEncoding('GBK');
-     
             //默认的分隔符
             $PHPReader->setDelimiter(',');
-     
             //载入文件
             $objPhpExcel = $PHPReader->load($fileName);
         }
@@ -179,10 +171,15 @@ class Shack extends Admin
         $sheet = $objPhpExcel->getSheet(0);
         $highestRow = $sheet->getHighestRow();//获得总行数
         $highestColumn = $sheet->getHighestColumn();//获得总列数
+        //halt('总行数：'.$highestRow.',最大列号：'.$highestColumn);
         $to = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI'];
         $k = 0;
         $data = [];
-        $hightNum = array_search($highestColumn,$to);
+        $hightNum = array_search($highestColumn,$to) - 1;
+        if(($hightNum + 1) != count($keyNames)){
+            return $this->error('导入列数与模板不一致');
+        }
+        //halt('总列数：'.($hightNum + 1).',模板要求列数：'.count($keyNames));
         if($hightNum <2){
             return $this->error('导入数据为空');
         }
@@ -250,6 +247,9 @@ class Shack extends Admin
             // if($result !== true) {
             //     return $this->error($result);
             // }
+            if(empty($data['shack_start_time']) || empty($data['shack_end_time']) || (strtotime($data['shack_start_time']) >= strtotime($data['shack_end_time']))){
+                return $this->error('请选择正确的入驻时间！');
+            }
             if (isset($data['member_name'])) {
                 $memberModel = new MemberModel;
                 if(isset($data['member_id'])){
@@ -310,6 +310,7 @@ class Shack extends Admin
             if (!$ShackModel->allowField(true)->create($data)) {
                 return $this->error('分配失败');
             }
+            FirmModel::where([['firm_id','eq',$data['firm_id']]])->update(['status'=>1]);
             return $this->success('分配成功','',['firm_id'=>$data['firm_id']]);
         }
         
@@ -400,11 +401,13 @@ class Shack extends Admin
     {
         $id = input('param.id/d');
         $row = ShackModel::get($id);
+        $shack_type = explode('|',trim($row['shack_type'],'|'));
+        $this->assign('shack_type',$shack_type);
         $AnnexModel = new AnnexModel;
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
-        //halt($row);
+        //halt($shack_type);
         $this->assign('data_info',$row);
         return $this->fetch();
     }

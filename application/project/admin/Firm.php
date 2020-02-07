@@ -106,7 +106,7 @@ class Firm extends Admin
                 return $this->error($result);
             }
             if(isset($data['file'])){ //附件
-                $data['imgs'] = implode(',',$data['file']);
+                $data['firm_imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
@@ -182,6 +182,7 @@ class Firm extends Admin
                     'firm_manager' => $data['firm_manager'], //更新联系人姓名
                     'firm_industry_type' => $data['firm_industry_type'], //更新企业所属行业
                     'firm_remark' => $data['firm_remark'], //更新企业备注信息
+
                 ];
                 if (!$FirmModel->allowField(true)->update($firmUpdateData)) {
                     return $this->error('修改失败');

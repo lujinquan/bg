@@ -55,7 +55,7 @@ class User extends Admin
         // $projectModel = new Project;
         // $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
         if ($this->request->isAjax()) {
-            $where      = $data = [];
+            $where      = $data = $whereOr = [];
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
             $username    = $this->request->param('username/s');
@@ -63,7 +63,8 @@ class User extends Admin
             $status    = $this->request->param('status/d');
             $where[]    = ['id', 'neq', 1];
             $where[] = ['status', 'eq', 1];
-            $where[]    = ['pro_ids', 'eq', PROJECT_ID];
+            //halt(PROJECT_ID);
+            
             if ($username) {
                 $where[] = ['username', 'like', "%{$username}%"];
             }
@@ -79,11 +80,16 @@ class User extends Admin
                 }
                 
             }
-            
-            $temp = UserModel::with('role')->where($where)->page($page)->limit($limit)->order('ctime desc')->select();
+            $where[]    = ['group_id', 'eq', GROUP_ID];
+            $where[]    = ['pro_ids', 'like', '%,'.PROJECT_ID.'%'];
+            $whereOr[]    = ['pro_ids', 'like', '%'.PROJECT_ID.',%'];
+            $whereOr[]    = ['pro_ids', 'eq', PROJECT_ID];
+            //halt($where);
+            $temp = UserModel::with('role')->where($where)->whereOr($whereOr)->page($page)->limit($limit)->order('ctime desc')->select();
 
             $data['data'] = $temp;
-            $data['count'] = UserModel::where($where)->count('id');
+            $data['count'] = UserModel::where($where)->whereOr($whereOr)->count('id');
+            //halt(UserModel::getLastSql());
             $data['code'] = 0;
             $data['msg'] = '';
             //halt($temp);
@@ -344,6 +350,7 @@ class User extends Admin
             
             
             $data['pro_ids'] = [PROJECT_ID];
+            $data['group_id'] = GROUP_ID;
             $data['last_login_ip'] = '';
             $data['auth'] = '';
 
