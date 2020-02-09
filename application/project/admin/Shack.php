@@ -89,7 +89,9 @@ class Shack extends Admin
     {
         $keywords = input('param.keywords/s');
         $where = $data = [];
-        $where[] = ['status','eq',1];
+        $where[] = ['status','eq',1]; //正常会员
+        $where[] = ['member_status','eq',0]; //未入驻
+        $where[] = ['project_id','eq',PROJECT_ID]; //当前项目
         // 查询公司名称
         if($keywords){ $where[] = ['member_name','like','%'.$keywords.'%']; }
         $data['code'] = 0;
@@ -109,7 +111,7 @@ class Shack extends Admin
         $where[] = ['member_name','eq',$member_name];
         $row = MemberModel::where($where)->find();
         if($row){
-            $data['data'] = $row;
+            $data['data'] = $row->toArray();
             $data['code'] = 1;
             return json($data);
         }else{
@@ -250,22 +252,6 @@ class Shack extends Admin
             if(empty($data['shack_start_time']) || empty($data['shack_end_time']) || (strtotime($data['shack_start_time']) >= strtotime($data['shack_end_time']))){
                 return $this->error('请选择正确的入驻时间！');
             }
-            if (isset($data['member_name'])) {
-                $memberModel = new MemberModel;
-                if(isset($data['member_id'])){
-                    $memSaveData = [
-                        'member_name' => $data['member_name'],
-                        'member_tel' => $data['member_tel'],
-                        'member_sex' => $data['member_sex'],
-                        'member_card' => $data['member_card'],
-                        'member_remark' => $data['member_remark'],
-                    ];
-                    $memberModel->allowField(true)->save($memSaveData);
-                }else{
-                    $memberModel->allowField(true)->create($data);
-                }  
-            }
-
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
@@ -285,7 +271,6 @@ class Shack extends Admin
                     $siteGroupID[] = $v2;
                 }
             }
-            //halt($siteGroupID);
             if($siteGroupID){
                 $data['site_group'] = '|'.implode('|',$siteGroupID).'|';
             }
@@ -304,19 +289,77 @@ class Shack extends Admin
             }
             $data['cuid'] = ADMIN_ID;
             $data['shack_type'] = [1]; // 1为承租，数组中可有多个
-//halt($data);
+
             $ShackModel = new ShackModel;
-            // 入库
-            if (!$ShackModel->allowField(true)->create($data)) {
-                return $this->error('分配失败');
+            
+            switch ($data['shack_classify']) {
+                //企业入驻
+                case 'addfirm':
+                    $firmStatus = FirmModel::where([['firm_id','eq',$data['firm_id']]])->value('status');
+                    if($firmStatus == 1){
+                        return $this->error('当前企业已入驻');
+                    }
+                    // 入库
+                    if (!$ShackModel->allowField(true)->create($data)) {
+                        return $this->error('分配失败');
+                    }
+                    if(isset($data['lianhe'])){
+                        SiteModel::where([['site_id','in',$data['lianhe']]])->update(['status'=>1]);
+                    }
+                    FirmModel::where([['firm_id','eq',$data['firm_id']]])->update(['status'=>1]);
+                    return $this->success('分配成功','',['firm_id'=>$data['firm_id']]);
+                break; 
+                //个人入驻
+                case 'addpersion': 
+                    $memberModel = new MemberModel;
+                    if(isset($data['member_id'])){
+                        $memberStatus = $memberModel->where([['member_id','eq',$data['member_id']]])->value('member_status');
+                        if($memberStatus == 1){
+                            return $this->error('当前会员已入驻');
+                        }
+                        $memSaveData = [
+                            'member_name' => $data['member_name'],
+                            'member_tel' => $data['member_tel'],
+                            'member_sex' => $data['member_sex'],
+                            'member_card' => $data['member_card'],
+                            'member_remark' => $data['member_remark'],
+                            'member_status' => 1, //会员状态改成已入驻
+                        ];
+                        $memberModel->allowField(true)->save($memSaveData,['member_id'=>$data['member_id']]);
+                    }else{
+                        //查到相同的手机号，代表是同一个用户
+                        $memberInfo = $memberModel->where([['member_tel','eq',$data['member_tel']]])->find();
+                        if($memberInfo){
+                            return $this->error('当前会员已存在请点击校验');
+                        }
+                        $data['member_status'] = 1;
+                        $memberModel->allowField(true)->create($data);
+                    }
+                    // 入库
+                    if (!$ShackModel->allowField(true)->create($data)) {
+                        return $this->error('分配失败');
+                    }
+                    if(isset($data['lianhe'])){
+                        SiteModel::where([['site_id','in',$data['lianhe']]])->update(['status'=>1]);
+                    }
+                    return $this->success('入驻成功');
+                    break;
+                
+                default:
+                    # code...
+                    break;
             }
-            FirmModel::where([['firm_id','eq',$data['firm_id']]])->update(['status'=>1]);
-            return $this->success('分配成功','',['firm_id'=>$data['firm_id']]);
+
+            
+            
+            
         }
-        
+
+
         // 获取工位区
         $siteGroupModel = new SiteGroupModel;
-        $sites = $siteGroupModel->where([['status','eq',1]])->field('site_group_id,site_group_type,site_group_name')->select();
+        $sites = Db::name('space_site_group')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->where([['a.status','eq',1],['b.project_id','eq',PROJECT_ID]])->field('site_group_id,site_group_type,site_group_name')->select();
+        //halt($sites);
         $siteArr = [];
         $siteArr[1] = []; // 所有联合工位区
         $siteArr[2] = []; // 所有独立办公区
@@ -330,7 +373,8 @@ class Shack extends Admin
                 ];
             }
         }
-        $siteArr[1] = SiteModel::where([['site_group_id','in',$siteLianHeArr]])->field('site_id as value,site_name as title')->select()->toArray();
+        //取出非正在使用的工位且为有效工位区下的所有工位
+        $siteArr[1] = Db::name('space_site')->alias('a')->join('space_site_group b','a.site_group_id = b.site_group_id','left')->where([['a.status','eq',0],['a.site_group_id','in',$siteLianHeArr]])->field('a.site_id as value,concat_ws("_",a.site_name,b.site_group_name) as title')->select();
         //halt($siteArr);
         $this->assign('siteArr',$siteArr);
         // 获取楼宇
@@ -403,11 +447,35 @@ class Shack extends Admin
         $row = ShackModel::get($id);
         $shack_type = explode('|',trim($row['shack_type'],'|'));
         $this->assign('shack_type',$shack_type);
+
+        //工位区
+        $site_group_ids = explode('|',trim($row['site_group'],'|'));
+        $siteGroupModel = new SiteGroupModel;
+        $siteGroups = $siteGroupModel->where([['site_group_id','in',$site_group_ids]])->field('site_group_id,site_group_type,ban_id,floor_number,site_group_name')->select()->toArray();
+        $floor_numbers = $ban_names =[];
+        foreach ($siteGroups as $k => $s) {
+            $ban_names[] = BanModel::where([['ban_id','eq',$s['ban_id']]])->value('ban_name');
+            $floor_numbers[] = $s['floor_number'];
+        }
+        //dump($ban_names);halt($floor_numbers);
+        $this->assign('banNames',array_unique($ban_names));
+        $this->assign('floorNumbers',array_unique($floor_numbers));
+        $this->assign('siteGroups',$siteGroups);
+        //工位
+        $site_ids = explode('|',trim($row['sites'],'|'));
+        $siteModel = new SiteModel;
+        $sites = $siteModel->where([['site_id','in',$site_ids]])->field('site_id,site_name,site_group_id')->select();
+        $this->assign('sites',$sites);
+        //门禁
+        $GuardModel = new GuardModel;
+        $guards = $GuardModel->where([['id','in',$row['guard']['guard']]])->field('id,title')->select();
+        //halt($guards);
+        $this->assign('guards',$guards);
+        //附件
         $AnnexModel = new AnnexModel;
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $banArr = BanModel::where([['status','eq',1]])->field('ban_id,ban_name')->select();
         $this->assign('banArr',$banArr);
-        //halt($shack_type);
         $this->assign('data_info',$row);
         return $this->fetch();
     }

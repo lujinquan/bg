@@ -43,40 +43,51 @@
    <div class="layui-form-item">
 	  <label class="layui-form-label">楼宇：</label>
 	  <div class="layui-input-block">
-		<div class="j-words-border">楼宇三</div>
+		<div class="j-words-border">|
+		{volist name="banNames" id="vo"}
+		{$vo}栋 |
+		{/volist}
+		</div>
 	  </div>
    </div>
    <div class="layui-form-item">
 	  <label class="layui-form-label">楼层：</label>
 	  <div class="layui-input-block">
-		<div class="j-words-border">12</div>
+		<div class="j-words-border">|
+		{volist name="floorNumbers" id="vo"}
+		{$vo}楼 |
+		{/volist}
+		</div>
 	  </div>
    </div>
    <div class="layui-form-item j-no-disabled">
 		 <label class="layui-form-label">联合工位区：</label>
 		 <div class="layui-input-block j-input-route">
-		   <input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="A301" checked="" disabled>
-		   <input type="checkbox" name="union_ids[]" value="2"  lay-skin="primary" title="A302" checked="" disabled>
+		   {volist name="siteGroups" id="vo"}
+		   <input type="checkbox" name="union_ids[]" value="1"  lay-skin="primary" title="{$vo['site_group_name']}" checked="" disabled>
+		   {/volist}
 		 </div>
 	</div>
 	<div class="layui-form-item j-no-disabled">
 		  <label class="layui-form-label">独立工位区：</label>
 		  <div class="layui-input-block j-input-route">
-			<input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="A308-1" checked="" disabled>
-			<input type="checkbox" name="Independent_ids[]" value="2"  lay-skin="primary" title="A302-2" checked="" disabled>
+		  	{volist name="sites" id="vo"}
+			<input type="checkbox" name="Independent_ids[]" value="1"  lay-skin="primary" title="{$vo['site_name']}" checked="" disabled>
+			{/volist}
 		  </div>
 	 </div>
 	 <div class="layui-form-item j-no-disabled">
 		   <label class="layui-form-label">门禁：</label>
 		   <div class="layui-input-block j-input-route">
-			 <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="门禁一" checked="" disabled>
-			 <input type="checkbox" name="door_ids[]" value="2"  lay-skin="primary" title="门禁二" checked="" disabled>
+		   	 {volist name="guards" id="vo"}
+			 <input type="checkbox" name="door_ids[]" value="1"  lay-skin="primary" title="{$vo['title']}" checked="" disabled>
+			 {/volist}
 		   </div>
 	  </div>
 	  <div class="layui-form-item">
 		  <label class="layui-form-label">备注：</label>
 		  <div class="layui-input-block">
-			<div class="j-words-border">我是备注我是备注我是备注内容</div>
+			<div class="j-words-border">{$data_info['shack_remark']}</div>
 		  </div>
 	  </div>
 	  <div class="layui-form-item j-top-formmargin">
