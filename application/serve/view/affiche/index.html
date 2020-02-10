@@ -1,18 +1,18 @@
 <!-- 在线服务/通知公告/通知管理 -->
 <div class="layui-btn-group j-add-group clearfix">
-  <a href="{:url('addUser')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="添加管理员"><i class="layui-icon layui-icon-add-1"></i>发布通知</a>
+  <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="发布通知"><i class="layui-icon layui-icon-add-1"></i>发布通知</a>
 </div>
 <div class="page-toolbar j-page-toolbar clearfix">
     <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
       <div class="j-search-fl">
             <div class="layui-input-inline j-input-margin">
-                <input type="text" name="notice_title" placeholder="通知标题" class="layui-input">
+                <input type="text" name="title" placeholder="通知标题" class="layui-input">
             </div>
             <div class="layui-input-inline j-input-margin">
-                <input type="text" name="notice_name" placeholder="发布人" class="layui-input">
+                <input type="text" name="cuid" placeholder="发布人" class="layui-input">
             </div>
            <div class="layui-input-inline j-input-margin">
-               <input type="text" name="notice_time" id="notice_time" placeholder="发布时间" class="layui-input j-explain-input">
+               <input type="text" name="ctime" id="notice_time" placeholder="发布时间" class="layui-input j-explain-input">
          <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
            </div>
             <button type="reset" class="layui-btn j-btn-reset">重置</button>
@@ -26,8 +26,9 @@
 
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
   <div class="j-operation-box">
-      <a href="{:url('editUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a> 
-      <a href="{:url('delUser')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+      <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+      <a href="{:url('detail')}?id={{ d.id }}" hisi-data="{width: '800px', height: '400px',refresh: 2}" title="通知详情" class="layui-btn layui-btn-xs layui-btn-normal j-iframe-pop">详情</a>
+      <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
   </div>
 </script>
 <script type="text/html" id="toolbar"></script>
@@ -62,23 +63,15 @@
             }
             ,defaultToolbar: ['filter']
             ,cols: [[ //表头
-                {field: 'username', minWidth:80,align:'left', title: '通知标题'}
-                ,{field: 'nick', minWidth:100,align:'left', title: '发布人'}
+                {field: 'title', minWidth:80,align:'left', title: '通知标题'}
+                ,{field: 'cuid', minWidth:100,align:'left', title: '发布人'}
                ,{field: 'ctime',minWidth: 150,align:'left', title: '发布时间'}
-         ,{field: 'last_login_ip', title: '紧急程度', minWidth: 150,align:'left', templet:function(d){
-             if(d.last_login_ip){
-                 return '紧急';
-             }else{
-                 return '一般';
-             }
-         }},
-         {field: 'last_login_level', title: '授权级别', minWidth: 150,align:'left', templet:function(d){
-             if(d.last_login_leve){
-                 return '全员';
-             }else{
-                 return '用户授权';
-             }
-         }}
+               ,{field: 'urgent_level', title: '紧急程度', minWidth: 150,align:'left', templet:function(d){
+                   return params.urgent_level[d.urgent_level];
+               }},
+               {field: 'authorize_level', title: '授权级别', minWidth: 150,align:'left', templet:function(d){
+                   return params.authorize_level[d.authorize_level];
+               }}
                 ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
             ]]
         });

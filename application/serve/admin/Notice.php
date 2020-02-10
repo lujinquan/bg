@@ -25,8 +25,6 @@ class Notice extends Admin
     protected function initialize()
     {
         parent::initialize();
-        // $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
-        // $this->assign('banArr',$banArr);
     }
 
     /**
@@ -36,7 +34,6 @@ class Notice extends Admin
      */
     public function index()
     {
-        //halt(session('systemusers'));
         if ($this->request->isAjax()) {
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
@@ -71,7 +68,8 @@ class Notice extends Admin
             }
             $systemNotice = new NoticeModel;
             $data['cuid'] = ADMIN_ID;
-            $data['ctime'] = time();
+            $data['project_id'] = PROJECT_ID;
+            //$data['ctime'] = time();
             $data['content'] = htmlspecialchars($data['content']);
             // 入库
             if (!$systemNotice->allowField(true)->create($data)) {
@@ -93,9 +91,12 @@ class Notice extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            $result = $this->validate($data, 'SystemNotice');
+            $result = $this->validate($data, 'Notice');
             if($result !== true) {
                 return $this->error($result);
+            }
+            if(!isset($data['is_show'])){
+                $data['is_show'] = 0;
             }
             // 入库
             if (!$systemNotice->allowField(true)->update($data)) {
@@ -105,9 +106,8 @@ class Notice extends Admin
         }
         $id = input('param.id/d');
         $row = $systemNotice->find($id);
-        //halt($row);
         $this->assign('data_info',$row);
-        return $this->fetch('form');
+        return $this->fetch();
     }
 
     /**

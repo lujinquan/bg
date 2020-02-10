@@ -1,17 +1,17 @@
 <!-- 在线服务/通知公告/公告管理/发布公告 -->
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
-    <li class="layui-this">发布公告</li>
+    <li class="layui-this">公告编辑</li>
   </ul>
 </div>
-<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post" id="addForm">
+<form class="layui-form j-top-margin j-long-words" action="{:url('edit')}" method="post">
 	<div class="layui-form-item">
 		<div class="layui-col-md8">
 			<label class="layui-form-label">
 				<i class="red">*</i>标题：
 			</label>
 			<div class="layui-input-block">
-				<input type="text" name="title" placeholder="请输入" lay-verify="required" lay-verType="tips"
+				<input type="text" name="title" value="{$data_info['title']}" placeholder="请输入" lay-verify="required" lay-verType="tips"
 				autocomplete="off" class="layui-input">
 			</div>
 		</div>
@@ -19,10 +19,28 @@
 	<div class="layui-form-item">
 		<div class="layui-col-md8">
 			<label class="layui-form-label">
-				<i class="red">*</i>显示：
+				<i class="red">*</i>紧急程度：
 			</label>
 			<div class="layui-input-block">
-				<input type="checkbox" name="is_show" value="1" lay-skin="switch" lay-text="是|否" checked>
+				<select name="urgent_level" class="field-cid" type="select">
+					{volist name="params['urgent_level']" id="v"}
+	                <option value="{$key}" {if condition="$data_info['urgent_level'] == $key"}selected{/if}>{$v}</option>
+	                {/volist}
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-col-md8">
+			<label class="layui-form-label">
+				<i class="red">*</i>授权级别
+			</label>
+			<div class="layui-input-block">
+				<select name="authorize_level" class="field-cid" type="select">
+					{volist name="params['authorize_level']" id="v"}
+	                <option value="{$key}" {if condition="$data_info['authorize_level'] == $key"}selected{/if}>{$v}</option>
+	                {/volist}
+				</select>
 			</div>
 		</div>
 	</div>
@@ -32,10 +50,11 @@
 				<i class="red">*</i>内容：
 			</label>
 			<div class="layui-input-block">
-				<textarea id="editor_id" name="content" style="width:100%;height:300px;"></textarea>
+				<textarea id="editor_id" name="content" style="width:100%;height:300px;">{:htmlspecialchars_decode($data_info['content'])}</textarea>
 			</div>
 		</div>
 	</div>
+	<input type="hidden" name="id" value="{$data_info['id']}">
 	<div class="layui-form-item">
 		<div class="layui-input-block">
 			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>

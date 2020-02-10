@@ -5,14 +5,15 @@ namespace app\serve\model;
 use think\Model;
 use app\system\model\SystemUser as UserModel;
 
+
 /**
- * 系统公告模型
+ * 系统通知模型
  * @package app\system\model
  */
-class Notice extends Model
+class Affiche extends Model
 {
 	// 设置模型名称
-    protected $name = 'system_notice';
+    protected $name = 'system_affiche';
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
     // 定义时间戳字段名
@@ -61,6 +62,7 @@ class Notice extends Model
             $end = strtotime($data['ctime'])+3600*24;
             $where[] = ['ctime','between',[$start,$end]];
         }
+
 
         return $where;
     }

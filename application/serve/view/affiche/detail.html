@@ -4,21 +4,27 @@
     <li class="layui-this">公告详情</li>
   </ul>
 </div> -->
-<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post">
+<form class="layui-form j-top-margin j-long-words" action="{:url('edit')}" method="post">
 	<div class="layui-form-item">
 		{$data_info['title']}
 	</div>
 	<div class="layui-form-item">
-		{$data_info['cuid']} 发表于 { {$data_info['ctime']} }
+		{$data_info['cuid']} 发布于 { {$data_info['ctime']} }
+	</div>
+	<div class="layui-form-item">
+		紧急程度：{$params.urgent_level[$data_info['urgent_level']]}
+	</div>
+	<div class="layui-form-item">
+		授权级别：{$params.authorize_level[$data_info['authorize_level']]}
 	</div>
 	<div class="layui-form-item">
 		{:htmlspecialchars_decode($data_info['content'])}
 	</div>
-	
+
 	<!-- <div class="layui-form-item">
 		<div class="layui-input-block">
 			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
-			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确认</button>
+			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
 		</div>
 	</div> -->
 </form>

@@ -1,6 +1,6 @@
 <!-- 在线服务/通知公告/公告管理 -->
 <div class="layui-btn-group j-add-group clearfix">
-  <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="发布通告"><i class="layui-icon layui-icon-add-1"></i>发布通告</a>
+  <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="发布公告"><i class="layui-icon layui-icon-add-1"></i>发布公告</a>
 </div>
 <div class="page-toolbar j-page-toolbar clearfix">
     <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
@@ -28,7 +28,8 @@
 </script>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
   <div class="j-operation-box">
-      <a href="{:url('detail')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a> 
+      <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
+      <a href="{:url('detail')}?id={{ d.id }}" hisi-data="{width: '800px', height: '400px',refresh: 2}" title="公告详情" class="layui-btn layui-btn-xs layui-btn-normal j-iframe-pop">详情</a>
       <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
   </div>
 </script>
@@ -67,7 +68,7 @@
                 {field: 'title', minWidth:80,align:'left', title: '公告标题'}
                 ,{field: 'cuid', minWidth:100,align:'left', title: '发布人'}
                 ,{field: 'ctime',minWidth: 150,align:'left', title: '发布时间'}
-                ,{field: 'status', title: '状态', minWidth: 150,align:'left', templet: '#statusTpl'}
+                ,{field: 'status', title: '显示', minWidth: 150,align:'left', templet: '#statusTpl'}
                 ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
             ]]
         });
