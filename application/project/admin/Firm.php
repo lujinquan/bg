@@ -15,12 +15,15 @@ namespace app\project\admin;
 
 use think\Db;
 use app\system\admin\Admin;
-use app\common\model\SystemAnnex as AnnexModel;
+use app\space\model\Ban as BanModel;
 use app\project\model\Firm as FirmModel;
-use app\project\model\Member as MemberModel;
 use app\project\model\Shack as ShackModel;
-use app\space\model\SiteGroup as SiteGroupModel;
+use app\space\model\Rest as RestModel;
+use app\project\model\Member as MemberModel;
 use app\system\model\SystemGuard as GuardModel;
+use app\common\model\SystemAnnex as AnnexModel;
+use app\space\model\SiteGroup as SiteGroupModel;
+use app\space\model\Site as SiteModel;
 use app\system\model\SystemUser as UserModel;
 
 /**
@@ -60,6 +63,9 @@ class Firm extends Admin
                     $v['firm_type'] = 2; //即将到期
                 }else{
                     $v['firm_type'] = 3; //已到期
+                }
+                if($v['shack_status'] == 0){ //已停用
+                    $v['firm_type'] = 4;
                 }
             }
             $data['data']  = array_slice($temps, ($page- 1) * $limit, $limit);
@@ -139,7 +145,7 @@ class Firm extends Admin
         
         if ($this->request->isPost()) {
             $data = $this->request->post();
-
+            
             /*企业编辑实际上是入驻的个人或者企业的编辑*/
 
             if(isset($data['member_id'])){ //如果入驻的单位是个体户
@@ -201,8 +207,23 @@ class Firm extends Admin
                 }
                 return $this->success('修改成功');
             }
-
-           
+            // 如果是在详情中只是修改了附件或者备注
+            $row = ShackModel::get($data['id']);
+            $row->shack_remark = $data['shack_remark'];
+            $row->save();
+            if($row['member_id']){
+                //更新个人基础信息member
+                $MemberInfo = MemberModel::get($row['member_id']);
+                $MemberInfo->member_remark = $data['member_remark'];
+                $MemberInfo->save();
+            }
+            if($row['firm_id']){
+                //更新个人基础信息member
+                $FirmInfo = FirmModel::get($row['firm_id']);
+                $FirmInfo->firm_remark = $data['firm_remark'];
+                $FirmInfo->save();
+            }
+            return $this->success('备注成功');
         }
 
         $id = input('param.id/d');
@@ -224,6 +245,38 @@ class Firm extends Admin
         if($row['firm_id']){
             $row['firm_imgs'] = AnnexModel::changeFormat($row['firm_imgs']);
         }
+        //工位区
+        $site_group_ids = explode('|',trim($row['site_group'],'|'));
+        $siteGroupModel = new SiteGroupModel;
+        $siteGroups = $siteGroupModel->where([['site_group_id','in',$site_group_ids]])->field('site_group_id,site_group_type,ban_id,floor_number,site_group_name')->select()->toArray();
+        $floor_numbers = $ban_names =[];
+        foreach ($siteGroups as $k => $s) {
+            $ban_names[] = BanModel::where([['ban_id','eq',$s['ban_id']]])->value('ban_name');
+            $floor_numbers[] = $s['floor_number'];
+        }
+        //dump($ban_names);halt($floor_numbers);
+        $this->assign('banNames',array_unique($ban_names));
+        $this->assign('floorNumbers',array_unique($floor_numbers));
+        $this->assign('siteGroups',$siteGroups);
+        //工位
+        $site_ids = explode('|',trim($row['sites'],'|'));
+        $siteModel = new SiteModel;
+        $sites = $siteModel->where([['site_id','in',$site_ids]])->field('site_id,site_name,site_group_id')->select();
+        $this->assign('sites',$sites);
+        //其他场地
+        if($row['rest_id']){
+            $RestModel = new RestModel;
+            $restInfo = $RestModel->where([['rest_id','eq',$row['rest_id']]])->find();
+            $banName = BanModel::where([['ban_id','eq',$restInfo['ban_id']]])->value('ban_name');
+            $this->assign('banName',$banName);
+            $this->assign('floorNumber',$restInfo['floor_number']);
+            $this->assign('restInfo',$restInfo);
+        }
+        //门禁
+        $GuardModel = new GuardModel;
+        $guards = $GuardModel->where([['id','in',$row['guard']['guard']]])->field('id,title')->select();
+        //halt($guards);
+        $this->assign('guards',$guards);
         //halt($row);
         $this->assign('data_info',$row);
         return $this->fetch();
@@ -337,7 +390,9 @@ class Firm extends Admin
             if(!password_verify(md5($password), $realPassword)){
                 $this->error('密码输入错误，请重新输入！');
             }
-            $row = ShackModel::get($id);  
+            $row = ShackModel::get($id); 
+            
+            
             if($row['member_id']){
                 $res = MemberModel::where([['firm_id','eq',$row['member_id']]])->update(['status'=>0]);
             }
@@ -347,6 +402,13 @@ class Firm extends Admin
             }
             
             if($res){
+                $row->shack_status = 0;
+                $row->save();
+                //halt($row);
+                if($row['sites']){
+                    $site_ids = explode('|',trim($row['sites'],'|'));
+                    SiteModel::where([['site_id','in',$site_ids]])->update(['status'=>0]);
+                }
                 $this->success('停用成功');
             }else{
                 $this->error('停用失败');

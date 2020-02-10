@@ -69,13 +69,13 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: 'firm_name', align:'center',with:120, title: '企业名称'}
-                ,{field: 'member_name', align:'center',with:100, title: '姓名'}
-                ,{field: 'member_tel', align:'center',with:100, title: '电话'}
-                ,{field: 'member_post', align:'center',with:100, title: '职位'}
-                ,{field: 'member_department', align:'center',with:100, title: '部门'}
-                ,{field: 'ctime', align:'center',with:100, title: '入驻时间'}
-                ,{field: 'is_activate', align:'center',with:100, title: '状态', templet:function(d){
+            	{field: 'firm_name', align:'center',minWidth:120, title: '企业名称'}
+                ,{field: 'member_name', align:'center',minWidth:80, title: '姓名'}
+                ,{field: 'member_tel', align:'center',minWidth:100, title: '电话'}
+                ,{field: 'member_post', align:'center',minWidth:80, title: '职位'}
+                ,{field: 'member_department', align:'center',minWidth:100, title: '部门'}
+                ,{field: 'ctime', align:'center',width:160, title: '入驻时间'}
+                ,{field: 'is_activate', align:'center',minWidth:100, title: '状态', templet:function(d){
                 	
                     if(d.is_activate){
                     	return '<button class="j-table-button j-activated">已激活</button>';
@@ -83,7 +83,7 @@
 						return '<button class="j-table-button j-notactive">未激活</button>';
                     }
                 }}
-                ,{title: '操作', with:280, hide: ishide, templet: '#buttonTpl',fixed:'right'}
+                ,{title: '操作', width:120, hide: ishide, templet: '#buttonTpl',fixed:'right'}
             ]]
         },ishide);
     });

@@ -63,7 +63,7 @@
 	   		  <div class="layui-inline">
 	   			<label class="layui-form-label">自由工位区选择：</label>
 	   			<div class="layui-input-inline">
-	   			  <select name="site_id" class="field-role_id"  lay-verType="tips" lay-filter="filter" type="select">
+	   			  <select name="ziyou[]" class="field-role_id"  lay-verType="tips" lay-filter="filter" type="select">
 		              <option value="">请选择</option>
 		              {volist name="siteGroupArr" id="v"}	           
 		              <option value="{$v['site_group_id']}">{$v['site_group_name']}</option>
@@ -101,6 +101,7 @@
 			   </div>
 		 </div>
 		<input type="hidden" name="member_id" value="">
+		<input type="hidden" name="shack_classify" value="addsitegroup">
 		<div class="layui-form-item j-item-top">
 		   <div class="layui-input-block">
 			 <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -218,56 +219,53 @@
 			  });
 			   
 			//门禁
-			form.on('select(filter)', function(data){
-			 $(".j-hides").show();
-			  var guards = {:json_encode($guardArr)};
-			  //console.log(guards);
-			  for (var i = 0 ; i < guards.length; i++) {
-			    if(guards[i].id == data.value){
-			      var bans = guards[i].childs;
-			      var str = '';
-			
-			      if(bans.length > 0){
+	form.on('select(filter)', function(data){
+	 	$(".j-hides").show();
+	  	var guards = {:json_encode($guardArr)};
+	  	//console.log(guards);
+	  	for (var i = 0 ; i < guards.length; i++) {
+		    if(guards[i].id == data.value){
+		      	var bans = guards[i].childs;
+		      	var str = '';
+		      	if(bans.length > 0){
 			        for (var j = 0 ; j < bans.length; j++) {
-			          if(j==0){
-			            var current = 'current';
-						  var hide = '';
-			          }else{
-			            var current = '';
-						  var hide = 'hide';
-			          }
-			          str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
-			          var floors = bans[j].childs;
-			
-			          if(floors.length > 0){
-			            for (var k = 0 ; k < floors.length; k++) {
-			              str += '<dl class="clearfix">\
-			                        <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
-			                            <ul>';
-			              var guards = floors[k].childs;
-			              if(guards.length > 0){
-			                for (var h = 0 ; h < guards.length; h++) {
-			                  str += '<li>\
-			                             <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
-			                          </li>';
-			                }
-			              }
-			              str += '</ul>\
-			                        </dd></dl>';
-			            }  
-			          }
-			          str += '</div>';
-			
-			        }   
+				        if(j==0){
+				            var current = 'current';
+							var hide = '';
+				        }else{
+				            var current = '';
+							var hide = 'hide';
+				        }
+				        str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+				        var floors = bans[j].childs;
+				
+				        if(floors.length > 0){
+				            for (var k = 0 ; k < floors.length; k++) {
+				              	str += '<dl class="clearfix">\
+				                        <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+				                            <ul>';
+				              	var guards = floors[k].childs;
+				              	if(guards.length > 0){
+				                	for (var h = 0 ; h < guards.length; h++) {
+				                  		str += '<li>\
+				                             <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+				                          </li>';
+				                	}
+				              	}
+				              	str += '</ul>\
+				                        </dd></dl>';
+				            }  
+				        }
+				        str += '</div>';
+				    }   
 			        str += '</div>';     
 			        //console.log(str);
 			        $('#firstpane').html(str);
 			        form.render();
-			      }
-			      
 			    }
-			  }
-			});
+	    	}
+		}
+	});
 
 			// 第一步的提交
 			form.on('submit(formStep)', function (data) {
@@ -299,7 +297,7 @@
 		        } else if (that.attr('lay-data')) {
 		            options = new Function('return '+ that.attr('lay-data'))();
 		        }
-		        formData = $.param({'site_group':arr})+'&'+_form.serialize();
+		        formData = _form.serialize();
 		        //formData = $.param({'sites1':arr1,'sites2':arr2})+'&'+_form.serialize();
 		        console.log(formData);
 		        that.prop('disabled', true).text('提交中...');

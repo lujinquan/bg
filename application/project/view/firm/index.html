@@ -38,7 +38,7 @@
 			<a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a>
 			<a href="{:url('manage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">管理</a>
 			<a href="{:url('coupon')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">发券</a>
-			<a href="{:url('stop')}?id={{ d.id }}" hisi-data="{width: '400px', height: '230px'}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">停用</a>
+			<a href="{:url('stop')}?id={{ d.id }}" hisi-data="{width: '400px', height: '230px',refresh: 2}" title="密码效验" class="layui-btn layui-btn-xs layui-btn-danger j-iframe-pop">停用</a>
 			{else /}
 			<a href="{:url('detail')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
 			{/if}
@@ -62,12 +62,12 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: 'group_name', align:'center',with:120, title: '企业名称'}
-                ,{field: 'shack_start_time', align:'center',with:100, title: '入驻时间'}
-                ,{field: 'shack_end_time', align:'center',with:100, title: '到期时间'}
-                ,{field: 'coupon_num', align:'center',with:80, title: '租用工位数'}
-                ,{field: 'coupon_num', align:'center',with:80, title: '入驻人数'}
-                ,{field: 'firm_type', align:'center',with:100, title: '状态', templet:function(d){
+            	{field: 'group_name', align:'center',minWidth:120, title: '企业名称'}
+                ,{field: 'shack_start_time', align:'center',width:120, title: '入驻时间'}
+                ,{field: 'shack_end_time', align:'center',width:120, title: '到期时间'}
+                ,{field: 'coupon_num', align:'center',minWidth:80, title: '租用工位数'}
+                ,{field: 'coupon_num', align:'center',minWidth:80, title: '入驻人数'}
+                ,{field: 'firm_type', align:'center',minWidth:80, title: '状态', templet:function(d){
                     
 					if(parseInt(d.firm_type) == 1){
                     	return '<button class="j-table-button layui-bg-green">已入驻</button>';
@@ -75,10 +75,12 @@
 						return '<button class="j-table-button layui-bg-orange">已到期</button>';
                     }else if(parseInt(d.firm_type) == 3){
 						return '<button class="j-table-button layui-bg-red">已到期</button>';
+                    }else if(parseInt(d.firm_type) == 4){
+						return '<button class="j-table-button layui-bg-red">已停用</button>';
                     }
                     
                 }}
-                ,{title: '操作', with:300, templet: '#buttonTpl',fixed:'right'}
+                ,{title: '操作', width:260, templet: '#buttonTpl',fixed:'right'}
             ]]
         });
     });

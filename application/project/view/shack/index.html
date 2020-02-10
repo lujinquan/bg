@@ -59,8 +59,8 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: 'group_name', align:'center',with:120, title: '企业名称'}
-                ,{field: 'member_name', align:'center',with:100, title: '类型', templet:function(d){
+            	{field: 'group_name', align:'center',minWidth:120, title: '企业名称'}
+                ,{field: 'member_name', align:'center',minWidth:100, title: '类型', templet:function(d){
                     if(d.shack_type){
                     	var str = '';
                     	for(var k in d.shack_type){
@@ -75,9 +75,9 @@
 						return '';
                     }
                 }}
-                ,{field: 'nick', align:'center',with:100, title: '操作人'}
-                ,{field: 'ctime', align:'center',with:100, title: '操作时间'}
-                ,{title: '操作', with:280, templet: '#buttonTpl', width: 150,fixed:'right'}
+                ,{field: 'nick', align:'center',minWidth:100, title: '操作人'}
+                ,{field: 'ctime', align:'center',minWidth:160, title: '操作时间'}
+                ,{title: '操作', minWidth:100, templet: '#buttonTpl', width: 150,fixed:'right'}
             ]]
         });
     });

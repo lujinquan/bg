@@ -101,6 +101,7 @@
 			   </div>
 		 </div>
 		<input type="hidden" name="member_id" value="">
+		<input type="hidden" name="shack_classify" value="addrest">
 		<div class="layui-form-item j-item-top">
 		   <div class="layui-input-block">
 			 <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -299,7 +300,7 @@
 		        } else if (that.attr('lay-data')) {
 		            options = new Function('return '+ that.attr('lay-data'))();
 		        }
-		        formData = $.param({'site_group':arr})+'&'+_form.serialize();
+		        formData = _form.serialize();
 		        //formData = $.param({'sites1':arr1,'sites2':arr2})+'&'+_form.serialize();
 		        console.log(formData);
 		        that.prop('disabled', true).text('提交中...');

@@ -274,9 +274,7 @@ class Shack extends Admin
             if($siteGroupID){
                 $data['site_group'] = '|'.implode('|',$siteGroupID).'|';
             }
-            if(!$siteGroupID && !isset($data['lianhe'])){
-                return $this->error('请分配工位区');
-            }
+            
             //halt($siteGroupID);
             if(isset($data['guard'])){ //门禁
                 $data['guard'] = [
@@ -295,6 +293,9 @@ class Shack extends Admin
             switch ($data['shack_classify']) {
                 //企业入驻
                 case 'addfirm':
+                    if(!$siteGroupID && !isset($data['lianhe'])){
+                        return $this->error('请分配工位区');
+                    }
                     $firmStatus = FirmModel::where([['firm_id','eq',$data['firm_id']]])->value('status');
                     if($firmStatus == 1){
                         return $this->error('当前企业已入驻');
@@ -311,6 +312,47 @@ class Shack extends Admin
                 break; 
                 //个人入驻
                 case 'addpersion': 
+                    if(!$siteGroupID && !isset($data['lianhe'])){
+                        return $this->error('请分配工位区');
+                    }
+                    $memberModel = new MemberModel;
+                    if(isset($data['member_id'])){
+                        $memberStatus = $memberModel->where([['member_id','eq',$data['member_id']]])->value('member_status');
+                        if($memberStatus == 1){
+                            return $this->error('当前会员已入驻');
+                        }
+                        $memSaveData = [
+                            'member_name' => $data['member_name'],
+                            'member_tel' => $data['member_tel'],
+                            'member_sex' => $data['member_sex'],
+                            'member_card' => $data['member_card'],
+                            'member_remark' => $data['member_remark'],
+                            'member_status' => 1, //会员状态改成已入驻
+                        ];
+                        $memberModel->allowField(true)->save($memSaveData,['member_id'=>$data['member_id']]);
+                    }else{
+                        if(!$siteGroupID){
+                            return $this->error('请分配工位区');
+                        }
+                        //查到相同的手机号，代表是同一个用户
+                        $memberInfo = $memberModel->where([['member_tel','eq',$data['member_tel']]])->find();
+                        if($memberInfo){
+                            return $this->error('当前会员已存在请点击校验');
+                        }
+                        $data['member_status'] = 1;
+                        $memberModel->allowField(true)->create($data);
+                    }
+                    // 入库
+                    if (!$ShackModel->allowField(true)->create($data)) {
+                        return $this->error('分配失败');
+                    }
+                    if(isset($data['lianhe'])){
+                        SiteModel::where([['site_id','in',$data['lianhe']]])->update(['status'=>1]);
+                    }
+                    return $this->success('入驻成功');
+                    break;
+                //自由工位入驻
+                case 'addsitegroup': 
                     $memberModel = new MemberModel;
                     if(isset($data['member_id'])){
                         $memberStatus = $memberModel->where([['member_id','eq',$data['member_id']]])->value('member_status');
@@ -339,12 +381,40 @@ class Shack extends Admin
                     if (!$ShackModel->allowField(true)->create($data)) {
                         return $this->error('分配失败');
                     }
-                    if(isset($data['lianhe'])){
-                        SiteModel::where([['site_id','in',$data['lianhe']]])->update(['status'=>1]);
+                    return $this->success('入驻成功');
+                    break;
+                //其他场地入驻
+                case 'addrest':
+                    $memberModel = new MemberModel;
+                    if(isset($data['member_id'])){
+                        $memberStatus = $memberModel->where([['member_id','eq',$data['member_id']]])->value('member_status');
+                        if($memberStatus == 1){
+                            return $this->error('当前会员已入驻');
+                        }
+                        $memSaveData = [
+                            'member_name' => $data['member_name'],
+                            'member_tel' => $data['member_tel'],
+                            'member_sex' => $data['member_sex'],
+                            'member_card' => $data['member_card'],
+                            'member_remark' => $data['member_remark'],
+                            'member_status' => 1, //会员状态改成已入驻
+                        ];
+                        $memberModel->allowField(true)->save($memSaveData,['member_id'=>$data['member_id']]);
+                    }else{
+                        //查到相同的手机号，代表是同一个用户
+                        $memberInfo = $memberModel->where([['member_tel','eq',$data['member_tel']]])->find();
+                        if($memberInfo){
+                            return $this->error('当前会员已存在请点击校验');
+                        }
+                        $data['member_status'] = 1;
+                        $memberModel->allowField(true)->create($data);
+                    }
+                    // 入库
+                    if (!$ShackModel->allowField(true)->create($data)) {
+                        return $this->error('分配失败');
                     }
                     return $this->success('入驻成功');
                     break;
-                
                 default:
                     # code...
                     break;
@@ -466,6 +536,15 @@ class Shack extends Admin
         $siteModel = new SiteModel;
         $sites = $siteModel->where([['site_id','in',$site_ids]])->field('site_id,site_name,site_group_id')->select();
         $this->assign('sites',$sites);
+        //其他场地
+        if($row['rest_id']){
+            $RestModel = new RestModel;
+            $restInfo = $RestModel->where([['rest_id','eq',$row['rest_id']]])->find();
+            $banName = BanModel::where([['ban_id','eq',$restInfo['ban_id']]])->value('ban_name');
+            $this->assign('banName',$banName);
+            $this->assign('floorNumber',$restInfo['floor_number']);
+            $this->assign('restInfo',$restInfo);
+        }
         //门禁
         $GuardModel = new GuardModel;
         $guards = $GuardModel->where([['id','in',$row['guard']['guard']]])->field('id,title')->select();
