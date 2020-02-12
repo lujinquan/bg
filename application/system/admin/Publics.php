@@ -57,7 +57,7 @@ class Publics extends Common
 
                     $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
                     if(!$row){
-                        return $this->error('用户名不存在或被禁用');
+                        return $this->error('账号不存在，请联系您所属企业管理员！');
                     }
 
                     $auth = new ServerCodeAPI();
@@ -88,7 +88,7 @@ class Publics extends Common
                 case 3: //验证
                     $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
                     if(!$row){
-                        return $this->error('用户名不存在或被禁用');
+                        return $this->error('账号不存在，请联系您所属企业管理员！');
                     }
                     //验证通过即发送短信
                     $auth = new ServerCodeAPI();
@@ -132,7 +132,7 @@ class Publics extends Common
 
             $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
             if(!$row){
-                return $this->error('用户名不存在或被禁用');
+                return $this->error('账号不存在，请联系您所属企业管理员！');
             }
 
             $auth = new ServerCodeAPI();
@@ -228,7 +228,7 @@ class Publics extends Common
                 $where[] = ['status','eq',1];
                 $row = $model->where($where)->find();
                 if(!$row){
-                    return $this->error('用户名不存在或被禁用');
+                    return $this->error('账号不存在，请联系您所属企业管理员！');
                 }else{
                     if($row['last_login_ip']){
                         return $this->error('您的账号已登录过，请选择登录或忘记密码！');
@@ -240,7 +240,7 @@ class Publics extends Common
                 $where[] = ['status','eq',1];
                 $row = $model->where($where)->find();
                 if(!$row){
-                    return $this->error('用户名不存在或被禁用');
+                    return $this->error('账号不存在，请联系您所属企业管理员！');
                 }else{
                     if(!$row['password']){
                         return $this->error('您的账号尚未设置密码，请返回选择首次登录！');
@@ -293,7 +293,7 @@ class Publics extends Common
 
             $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
             if(!$row){
-                return $this->error('用户名不存在或被禁用');
+                return $this->error('账号不存在，请联系您所属企业管理员！');
             }else{
                 if(!$row['password']){
                    return $this->error('当前账号尚未登录，请点击首次登录！'); 
