@@ -58,12 +58,13 @@ class User extends Admin
             $where      = $data = $whereOr = [];
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
-            $username    = $this->request->param('username/s');
-            $nick       = $this->request->param('nick/s');
-            $status    = $this->request->param('status/d');
+            $username    = $this->request->param('username');
+            $nick       = $this->request->param('nick');
+            $roleid       = $this->request->param('role_id');
+            $status    = $this->request->param('status');
             $where[]    = ['id', 'neq', 1];
             $where[] = ['status', 'eq', 1];
-            //halt(PROJECT_ID);
+            //halt($username);
             
             if ($username) {
                 $where[] = ['username', 'like', "%{$username}%"];
@@ -71,7 +72,9 @@ class User extends Admin
             if ($nick) {
                 $where[] = ['nick', 'like', "%{$nick}%"];
             }
-            
+            if ($roleid) {
+                $where[] = ['role_id', 'eq', $roleid];
+            }
             if ($status) {
                 if($status == 1){
                     $where[] = ['last_login_ip', 'neq', ''];
@@ -80,10 +83,11 @@ class User extends Admin
                 }
                 
             }
+            // 待优化，pro_ids查询不合理，数字查询用like有风险
             $where[]    = ['group_id', 'eq', GROUP_ID];
-            $where[]    = ['pro_ids', 'like', '%,'.PROJECT_ID.'%'];
-            $whereOr[]    = ['pro_ids', 'like', '%'.PROJECT_ID.',%'];
-            $whereOr[]    = ['pro_ids', 'eq', PROJECT_ID];
+            $where[]    = ['pro_ids', 'like', '%'.PROJECT_ID.'%'];
+            // $whereOr[]    = ['pro_ids', 'like', '%'.PROJECT_ID.',%'];
+            // $whereOr[]    = ['pro_ids', 'eq', PROJECT_ID];
             //halt($where);
             $temp = UserModel::with('role')->where($where)->whereOr($whereOr)->page($page)->limit($limit)->order('ctime desc')->select();
 
@@ -95,7 +99,9 @@ class User extends Admin
             //halt($temp);
             return json($data);
         }
-        //$this->assign('proArr',$proArr);
+        $roleArr = RoleModel::where([['id','>',1],['status','eq',1]])->field('id,name')->select();
+        //halt($roleArr);
+        $this->assign('roleArr',$roleArr);
         $this->assign('leadUrlExtra','user/indexManage');
         return $this->fetch();
     }
@@ -359,9 +365,9 @@ class User extends Admin
             }
 
             $data['guard'] = [
-                'ban' => $data['ban'],
-                'floor' => $data['floor'],
-                'guard' => $data['guard'],
+                'ban' => array_values($data['ban']),
+                'floor' => array_values($data['floor']),
+                'guard' => array_values($data['guard']),
             ];
             
             unset($data['id'],$data['ban'],$data['floor']);
@@ -408,12 +414,12 @@ class User extends Admin
             }
 
             $data['guard'] = [
-                'ban' => $data['ban'],
-                'floor' => $data['floor'],
-                'guard' => $data['guard'],
+                'ban' => array_values($data['ban']),
+                'floor' => array_values($data['floor']),
+                'guard' => array_values($data['guard']),
             ];
-            unset($data['id'],$data['ban'],$data['floor']);
-            
+            unset($data['ban'],$data['floor']);
+     
             if (!UserModel::update($data)) {
                 return $this->error('编辑失败');
             }

@@ -24,7 +24,13 @@
 	     <div class="layui-inline">
 	       <label class="layui-form-label">状态：</label>
 	       <div class="layui-input-inline">
-	         <div class="j-words-border">已激活</div>
+	         <div class="j-words-border">
+           {if condition="$data_info['last_login_ip']"}
+           已激活
+           {else /}
+           未激活
+           {/if}
+           </div>
 	       </div>
 	     </div>
 	  </div>
@@ -119,11 +125,20 @@
 layui.use(['form','layer','jquery'], function(){
   var layer = layui.layer
       $= layui.jquery;
-   var   form = layui.form;
+  var   form = layui.form;
+
+   
+  var selectBan = {:json_encode($data_info['guard']['ban'])};
+  console.log('已选择的门禁所在楼宇selectBan：',selectBan);
+  var selectFloor = {:json_encode($data_info['guard']['floor'])};
+  console.log('已选择的门禁所在楼层selectFloor：',selectFloor);
+  var selectGuard = {:json_encode($data_info['guard']['guard'])};
+  console.log('已选择的门禁selectGuard：',selectGuard);
+
   form.on('select(filter)', function(data){
-	  $(".j-hides").show();
     var guards = {:json_encode($guardArr)};
-    //console.log(guards);
+    console.log('门禁权限：',guards);
+	  $(".j-hides").show();
     for (var i = 0 ; i < guards.length ; i++) {
       if(guards[i].id == data.value){
         var bans = guards[i].childs;
@@ -133,24 +148,40 @@ layui.use(['form','layer','jquery'], function(){
           for (var j = 0 ; j < bans.length ; j++) {
             if(j==0){
               var current = 'current';
-        var hide = '';
+              var hide = '';
             }else{
               var current = '';
-        var hide = 'hide';
+              var hide = 'hide';
             }
-            str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
+            if(selectBan.indexOf(String(bans[j].id)) != -1){
+               var checkBan = 'checked';
+            }else{
+              var checkBan = '';
+            }
+            str += '<div class="menu_head '+current+'"><input type="checkbox" name="ban[]" '+checkBan+' value="'+ bans[j].id +'" title="'+bans[j].title +'"  lay-skin="primary" lay-filter="chooseAll" class="chooseAllMessage"><b class="j-icon"></b></div><div class="menu_body '+hide+'" >';
             var floors = bans[j].childs;
 
             if(floors.length > 0){
               for (var k = 0 ; k < floors.length ; k++) {
+                if(selectFloor.indexOf(String(floors[k].id)) != -1){
+                   var checkFloor = 'checked';
+                }else{
+                  var checkFloor = '';
+                }
                 str += '<dl class="clearfix">\
-                          <dt class="clearfix"><input type="checkbox" name="floor[]" value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
+                          <dt class="clearfix"><input type="checkbox" name="floor[]" '+checkFloor+' value="'+ floors[k].id +'" title="'+ floors[k].title+'"  lay-skin="primary" lay-filter="secondAll" class="secondAllMessage list"></dt><dd class="clearfix">\
                               <ul>';
                 var guards = floors[k].childs;
                 if(guards.length > 0){
-                  for (var h = 0 ; h < guards.length ; h++) {
+                  for (var h = 0 ; h < guards.length ; h++) { 
+                    console.log('当前门禁',String(guards[h].id),'是否在已选列中：',selectGuard.indexOf(String(guards[h].id)));
+                    if(selectGuard.indexOf(String(guards[h].id)) != -1){
+                       var checkGuard = 'checked';
+                    }else{
+                      var checkGuard = '';
+                    }
                     str += '<li>\
-                               <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
+                               <input type="checkbox" name="guard[]" value="'+ guards[h].id +'" '+checkGuard+' title="'+guards[h].title+'"  lay-skin="primary" lay-filter="list" class="listMessage list"> \
                             </li>';
                   }
                 }

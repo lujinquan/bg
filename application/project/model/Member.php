@@ -2,6 +2,7 @@
 namespace app\project\model;
 
 use think\Model;
+use app\project\model\Firm as FirmModel;
 
 class Member extends Model
 {
@@ -34,13 +35,14 @@ class Member extends Model
         if(!$data){
             $data = request()->param();
         } 
-        // 检索楼宇名称
-        if(isset($data['firm_id']) && $data['firm_id']){
-            $where[] = ['firm_id','eq',$data['firm_id']];
+        // 检索公司名称
+        if(isset($data['firm_name']) && $data['firm_name']){
+            $firmid = FirmModel::where([['firm_name','like','%'.$data['firm_name'].'%']])->value('firm_id');
+            $where[] = ['firm_id','eq',$firmid];
         } 
-        // 检索楼宇名称
-        if(isset($data['ban_name']) && $data['ban_name']){
-            $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];
+        // 检索会员名称
+        if(isset($data['member_name']) && $data['member_name']){
+            $where[] = ['member_name','like','%'.$data['member_name'].'%'];
         }
         // 检索地址
         if(isset($data['ban_address']) && $data['ban_address']){

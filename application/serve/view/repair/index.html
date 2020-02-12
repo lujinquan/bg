@@ -4,27 +4,30 @@
 		  <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
 			<div class="j-search-fl">
 				 <div class="layui-input-inline j-input-margin" style="width:150px;">
-				 	<input type="text" name="operate_number" placeholder="编号" class="layui-input">
+				 	<input type="text" name="repair_number" placeholder="编号" class="layui-input">
 				 </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="service_field" class="field-cid" type="select">
-						<option value="">类别</option>
-						<option value="1">类别1</option>
-						<option value="2">类别2</option>
+				  	<select name="repair_type" class="field-cid" type="select">
+						<option value="">维修类别</option>
+						{volist name="params['repair_type']" id="v"}
+						<option value="{$key}">{$v}</option>
+						{/volist}
 					</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					<input type="text" name="service_time" class="layui-input" id="time1" placeholder="提交时间">
+					<input type="text" name="ctime" class="layui-input" id="time1" placeholder="提交时间">
 					<b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<select name="service_state" class="field-cid" type="select">
-						<option value="">状态</option>
-	      			    <option value="1">状态1</option>
+				  	<select name="repair_status" class="field-cid" type="select">
+						<option value="">报修状态</option>
+	      			    {volist name="params['repair_status']" id="v"}
+						<option value="{$key}">{$v}</option>
+						{/volist}
 					</select>
 				  </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-				  	<input type="text" name="operate_keyword" placeholder="关键词" class="layui-input">
+				  	<input type="text" name="repair_content" placeholder="关键词" class="layui-input">
 				  </div>
 				  <button type="reset" class="layui-btn j-btn-reset">重置</button>
 				  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
@@ -39,9 +42,13 @@
 	{include file="system@block/layui" /}
 	<script type="text/html" title="操作按钮模板" id="buttonTpl">
 		<div class="j-operation-box">
-			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
-			<a href="{:url('edit')}?id={{ d.floor_id }}" class="layui-btn layui-btn-xs layui-btn-normal j-end">完结</a>
-	
+			<a href="{:url('detail')}?id={{ d.repair_id }}" class="layui-btn layui-btn-xs layui-btn-normal">详情</a>
+			{{# if (d.repair_status != 3){ }}
+		  	<!-- <a href="" class="layui-btn layui-btn-xs layui-btn-normal j-end">完结</a> -->
+		  	<a href="{:url('complete')}?id={{ d.repair_id }}" hisi-data="{width: '600px', height: '300px',refresh: 2}" title="报事报修完结" class="layui-btn layui-btn-xs layui-btn-normal j-iframe-pop">完结</a>
+		  	{{#  } else { }}
+		  	<a href="javasript:;" class="layui-btn layui-btn-xs layui-btn-normal layui-bg-gray">完结</a>
+		  	{{# } }}
 		</div>
 	</script>
 	<script type="text/html" id="toolbar"></script>
@@ -66,18 +73,7 @@
 	 <div class="j-popup-tips"><i class="layui-icon iconfont j-icon-laba"></i>（20）您有新的报事报修待处理</div>
 </div>
 <!-- 完结报修 -->
-<div class="j-powerquery hide" id="j-powerquery">
-	<form class="layui-form j-long-words  j-top-margin" action="" method="post" >
-	   <div class="layui-form-item">
-	    <div class="layui-col-md12">
-	      <label class="layui-form-label"><i class="red">*</i>处理结果：</label>
-	      <div class="layui-input-block">
-	        <textarea placeholder="请输入内容" lay-verify="required" lay-verType="tips" class="layui-textarea"></textarea>
-	      </div>
-	    </div>
-	  </div>
-	</form>
-</div>
+
 <script type="text/javascript">
     layui.use(['table','jquery','laydate','form'], function() {
         var $ = layui.$
@@ -100,19 +96,23 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-                 {field: 'operate_number', align:'left',minWidth:100, title: '编号'}
-				,{field: 'operate_type', align:'left',minWidth:100, title: '类型'}
-				,{field: 'operate_problem', align:'left',minWidth:100, title: '问题描述'}
-                ,{field: 'operate_name', align:'left',minWidth:200, title: '提交人'}
-				,{field: 'last_login_ip', title: '状态', minWidth: 150,align:'left', templet:function(d){
-			       if(d.last_login_ip){
-			           return '<button class="j-table-button j-activated">已完结</button>';
-			       }else{
-			           return '<button class="j-table-button j-activated">已完结</button> <button class="j-table-button layui-btn-warm">待处理</button> <button class="j-table-button layui-btn-normal">处理中</button>';
+                 {field: 'repair_number', align:'left',minWidth:100, title: '编号'}
+				,{field: 'repair_type', align:'left',minWidth:100, title: '类型',templet: function(d) {
+						return params.repair_type[d.repair_type];
+				}}
+				,{field: 'repair_content', align:'left',minWidth:200, title: '问题描述'}
+                ,{field: 'member_name', align:'left',minWidth:120, title: '提交人'}
+				,{field: 'repair_status', title: '状态', minWidth: 150,align:'left', templet:function(d){
+			       if(parseInt(d.repair_status) == 1){
+			           	return '<button class="j-table-button layui-btn-warm">待处理</button>';
+			       }else if(parseInt(d.repair_status) == 2){
+			       		return '<button class="j-table-button layui-btn-normal">处理中</button>';
+			       }else if(parseInt(d.repair_status) == 3){
+			       		return '<button class="j-table-button j-activated">已完结</button>';
 			       }
 			   }}        
-                ,{field: 'operation_time', align:'left',minWidth:100, title: '提交时间'}
-                ,{title: '操作', minWidth:280, Width:280,align:'left', templet: '#buttonTpl', fixed:'right'}
+                ,{field: 'ctime', align:'left',minWidth:100, title: '提交时间'}
+                ,{title: '操作', width:160,align:'left', templet: '#buttonTpl', fixed:'right'}
             ]]
         });
         $('#refresh').click(function(){

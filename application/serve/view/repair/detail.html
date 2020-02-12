@@ -4,7 +4,7 @@
 </style>
 <div class="layui-row layui-col-space10 j-row-box">
 	<div class="layui-col-md9 j-back-gray j-border-radius10 clearfix" style="margin-top: -10px;">
-		<form class="layui-form" action="transfer" method="post" style="background: #fff;">
+		<form class="layui-form" action="deal" method="post" style="background: #fff;">
 			<div class="layui-tab layui-tab-brief j-no-color">
 			  <ul class="layui-tab-title">
 			    <li class="layui-this">处理</li>
@@ -14,14 +14,17 @@
 				<div class="layui-card">
 					<h1 class="j-card-header">问题描述：</h1>
 					<div class="layui-card-body">
-						问题描述
+						{$data_info['repair_content']}
 					</div>
 					<h1 class="j-card-header">附件：</h1>
 					<div class="layui-card-body clearfix">
 						<ul class="j-enclosure-box j-viewer-img">
 						<li>
-							<img data-original="" src="" />
+							{volist name="data_info['imgs']" id="vo"}
+							<img data-original="" src="{$vo['file']}" />
+							{/volist}
 							<p class="j-file-name"></p>
+
 						</li>
 						</ul>
 					</div>
@@ -29,24 +32,42 @@
 					<div class="layui-card-body clearfix">
 					<div class="j-axis-main clearfix">
 						<ul class="time-axis">
+						{volist name="$repairArr" id="v"}
 							<li class="time-axis-item j-viewer-img">
 								<div class="time-axis-date"><span></span></div>
 								<div class="time-axis-title">
-									<h1>用户 【李么么】 于 2019-02-12 14:43:47 
+									<h1>{$v['chat_from_role']} 【{$v['chat_from_name']}】 于 {$v['chat_ctime']} 
 									<font style="color:#60D09C;">回复</font></h1>
 									<div class="j-remarks">
-										<label class="layui-btn layui-btn-xs layui-btn-warm">备注</label> 内容
+										<label class="layui-btn layui-btn-xs layui-btn-warm">备注</label> {$v['chat_content']}
 									</div>
-                                    <img data-original="" src="" />
+									{volist name="$v['chat_imgs']" id="vo"}
+                                    <img data-original="" src="{$vo['file']}" />
+									{/volist}
 								</div>
 							</li>
+						{/volist}
+						{if condition="$data_info['repair_status'] == 3"}
+						<li class="time-axis-item j-viewer-img">
+								<div class="time-axis-date"><span></span></div>
+								<div class="time-axis-title">
+									<h1>管理员 【{$data_info['to_uid']}】 于 {$data_info['wtime']}  
+									<font style="color:#60D09C;">完结</font></h1>
+									<div class="j-remarks">
+										<label class="layui-btn layui-btn-xs layui-btn-warm">备注</label> {$data_info['repair_remark']}
+									</div>
+									
+								</div>
+							</li>
+						{/if}
 						<ul>
 					</div>
 					</div>
+					{if condition="$data_info['repair_status'] != 3"}
 					<h1 class="j-card-header">回复：</h1>
 					<div class="layui-card-body clearfix">
 						<div  class="j-reply-textarea clearfix">
-							<textarea class="j-textarea" rows="10" name="remark" onKeyUp="keypress()" id="j_answer"></textarea>
+							<textarea class="j-textarea" rows="10" name="chat_content" onKeyUp="keypress()" id="j_answer"></textarea>
 							<div class="j-size"><label id="pinglun">200</label><span>/</span><label>200</label></div>
 						</div>
 					</div>
@@ -60,13 +81,17 @@
 							
 						</div>
 					</div>
+					{/if}
 				</div>
 			</div>
+		<input type="hidden" name="repair_id" value="{$data_info['repair_id']}">
         <div class="layui-form-item">
         	<div class="j-form-box clearfix">
         		<div class="fl">
         			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
-        			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">回复</button>
+        			{if condition="$data_info['repair_status'] != 3"}
+        			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">回复</button>
+        			{/if}
         		</div>
 			</div>	
 		</div>
@@ -78,34 +103,34 @@
 			<dt><i class="layui-icon iconfont j-icon-qingdanxinxishebeijichuxinxigongdanxinxi"></i>工单信息</dt>
 			<dd>
 				<h1>编号</h1>
-				<p>201909060001</p>
+				<p>{$data_info['repair_number']}</p>
 			</dd>
 			<dd>
 				<h1>类型</h1>
-				<p>报修-水电</p>
+				<p>{$params.repair_type[$data_info['repair_type']]}</p>
 			</dd>
 			<dd>
 				<h1>处理人</h1>
-				<p>张么么</p>
+				<p>{$data_info['to_uid']}</p>
 			</dd>
 			<dd>
 				<h1>提交时间</h1>
-				<p>2019/06/08</p>
+				<p>{$data_info['ctime']}</p>
 			</dd>
 			<dd>
 				<h1>状态</h1>
-				<p>正在处理</p>
+				<p>{$params.repair_status[$data_info['repair_status']]}</p>
 			</dd>
 		</dl>
 		<dl class="clearfix">
 			<dt><i class="layui-icon iconfont j-icon-yonghu"></i>用户信息</dt>
 			<dd>
 				<h1>提交人</h1>
-				<p>李么么</p> 
+				<p>{$memberInfo['member_name']}</p> 
 			</dd>
 			<dd>
 				<h1>所属企业</h1>
-				<p>楚天新媒科技（武汉）有限公司</p> 
+				<p>{$memberInfo['firm_name']}</p> 
 			</dd>
 		</dl>
 	</div>
@@ -114,7 +139,7 @@
     {include file="system@block/layui" /}
     <script>
 		/*上传参数设定*/
-		var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
+		var upurl = "{:url('system/Api/upload')}?input=ChatImg&group=ban&water=no"; //土地证电子版上传图片地址
 		var duotu = true; //是否为多图上传true false
     	layui.use(['form', 'func', 'upload','jquery'], function() {
     	var $ = layui.jquery, form = layui.form,upload = layui.upload;
@@ -125,7 +150,7 @@
 			url: upurl,
 			size: 1024,
 			multiple: duotu,
-			field: 'SiteImg',
+			field: 'ChatImg',
 			before: function(obj) {
 				layer.msg('图片上传中...', {
 					icon: 16,

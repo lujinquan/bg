@@ -183,7 +183,8 @@ class SystemUser extends Model
         $user = self::with('group')->where($map)->find();
         //halt($user);
         if (!$user) {
-            $this->error = '用户不存在或被禁用！';
+            $this->error = '账号不存在，请联系您所属企业管理员！';
+            //$this->error = '用户不存在或被禁用！';
             return false;
         } 
         // 密码校验
@@ -267,7 +268,8 @@ class SystemUser extends Model
         
         $user = self::where($map)->find();
         if (!$user) {
-            $this->error = '用户不存在或被禁用！';
+            $this->error = '账号不存在，请联系您所属企业管理员！';
+            //$this->error = '用户不存在或被禁用！';
             return false;
         }
 

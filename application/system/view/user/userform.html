@@ -50,7 +50,7 @@
     <div class="layui-form-item" pane="">
         <label class="layui-form-label"><i class="red">*</i>门禁：</label>
         <div class="layui-input-inline">
-          <select name="" class="field-role_id" lay-verify="required" lay-verType="tips" lay-filter="filter" type="select">
+          <select name="guard_group_id" class="field-role_id" lay-verify="required" lay-verType="tips" lay-filter="filter" type="select">
                 <option value="">请选择</option>
                 {volist name="guardArr" id="v"}
                 {if condition="$v['pid'] == 0"}

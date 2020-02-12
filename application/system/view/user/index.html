@@ -11,11 +11,11 @@
                 <input type="text" name="nick" placeholder="输入姓名" class="layui-input">
             </div>
             <div class="layui-input-inline" style="width:150px;">
-                <select name="role">
+                <select name="role_id">
                     <option value="">请选择角色</option>
-                    <option value="1">财务人员</option>
-                    <option value="2">营销人员</option>
-					<option value="3">一般员工</option>
+                    {volist name="roleArr" id="v"}
+                    <option value="{$v['id']}">{$v['name']}</option>
+                    {/volist}
                   </select>
             </div>
             <div class="layui-input-inline" style="width:150px;">
@@ -75,7 +75,7 @@
 			       }
 			   }}
                 ,{field: 'remark', minWidth:140,align:'left',title: '备注'}
-                ,{title: '操作', minWidth:280,Width:280,align:'left', templet: '#buttonTpl',fixed:'right'}
+                ,{title: '操作', width:200,align:'left', templet: '#buttonTpl',fixed:'right'}
             ]]
         });
 		// 鼠标滑过操作列
