@@ -1,14 +1,15 @@
 <!-- 在线服务/通知公告/公告管理/发布公告 -->
-<!-- <div class="layui-tab layui-tab-brief j-no-color">
-  <ul class="layui-tab-title">
-    <li class="layui-this">公告详情</li>
-  </ul>
-</div> -->
-<form class="layui-form j-top-margin j-long-words" action="{:url('edit')}" method="post">
-	<div class="layui-form-item">
-		{$data_info['title']}
+	<style>
+		.pb50 {padding-bottom: 0;}
+	</style>
+	<div id="j-news-details" class="j-news-details j-viewer-img">
+		<h1>{$data_info['title']}</h1>
+		<h2>{$data_info['cuid']} 发布于  {$data_info['ctime']} </h2>
+		<div class="j-content-size">
+			{:htmlspecialchars_decode($data_info['content'])}
+		</div>
 	</div>
-	<div class="layui-form-item">
+	<!-- <div class="layui-form-item">
 		{$data_info['cuid']} 发布于 { {$data_info['ctime']} }
 	</div>
 	<div class="layui-form-item">
@@ -18,14 +19,14 @@
 		授权级别：{$params.authorize_level[$data_info['authorize_level']]}
 	</div>
 	<div class="layui-form-item">
-		{:htmlspecialchars_decode($data_info['content'])}
-	</div>
+		
+	</div> -->
 
-	<!-- <div class="layui-form-item">
-		<div class="layui-input-block">
+	<!-- <div class="layui-form-item" style="position: fixed; right: 10px;bottom: 10px;border-top: #ccc 1px solid;width: 100%;z-index: 999;">
+		<div class="layui-input-block" style="padding-top: 10px;float: right;">
 			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
-			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确认</button>
+			<button class="layui-btn layui-btn-normal">确认</button>
 		</div>
 	</div> -->
-</form>
+<!-- </form> -->
 {include file="system@block/layui" /}
