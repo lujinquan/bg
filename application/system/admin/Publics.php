@@ -54,8 +54,8 @@ class Publics extends Common
                 case 2: //手机短信登录
                     $data       = [];
                     $code   = $this->request->post('code/d');
-
-                    $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
+                    //,['role_id','in',[1,2]]
+                    $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
                     if(!$row){
                         return $this->error('账号不存在，请联系您所属企业管理员！');
                     }
@@ -129,8 +129,8 @@ class Publics extends Common
             $username   = $this->request->post('username/s');
             $data       = [];
             $code   = $this->request->post('code/d');
-
-            $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
+            //,['role_id','in',[1,2]]
+            $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
             if(!$row){
                 return $this->error('账号不存在，请联系您所属企业管理员！');
             }
@@ -230,8 +230,13 @@ class Publics extends Common
                 if(!$row){
                     return $this->error('账号不存在，请联系您所属企业管理员！');
                 }else{
-                    if($row['last_login_ip']){
+                    // 账号未设置过密码，则为首次登录
+                    if($row['password']){
                         return $this->error('您的账号已登录过，请选择登录或忘记密码！');
+                    }
+                    // 账号是否被授予项目
+                    if(!($row->getData('pro_ids'))){
+                        return $this->error('账号未授权，请联系您所属企业管理员！');
                     }
                 }
             }
@@ -290,8 +295,8 @@ class Publics extends Common
             $username   = $this->request->post('username/s');
             $data       = [];
             $code   = $this->request->post('code/d');
-
-            $row = $model->where([['username','eq',$username],['status','eq',1],['role_id','in',[1,2]]])->find();
+            //['role_id','in',[1,2]
+            $row = $model->where([['username','eq',$username],['status','eq',1]])->find();
             if(!$row){
                 return $this->error('账号不存在，请联系您所属企业管理员！');
             }else{

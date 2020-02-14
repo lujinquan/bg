@@ -98,7 +98,7 @@ class Admin extends Common
                 $projectModel = new Project;
                 $projectArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->field('id,project_name,project_address')->select();
                //halt($login);
-
+                //获取当前登录管理员下，所有的项目
                 $this->assign('projectArr',$projectArr);
 
                 $this->_systemLog($curMenu['title']);

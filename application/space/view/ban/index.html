@@ -46,14 +46,14 @@
                 none : '暂无相关数据'
             }
             ,cols: [[ //表头
-            	{field: '', align:'left',minWidth:80, title: '序号', templet:function(d){
+            	{field: '', align:'left',width:60, title: '序号', templet:function(d){
                     return d.LAY_INDEX ;
                 }}
                 ,{field: 'ban_name', align:'left',minWidth:100, title: '楼宇名称'}
                 ,{field: 'ban_address',align:'left',minWidth:150, title: '地址'}
 				,{field: 'floor_numbers',align:'left',minWidth:100, title: '包含楼层数'}
-				,{field: 'floor_areas',align:'left',minWidth:100, title: '面积'}
-                ,{title: '操作', minWidth:280, with:280,align:'left',templet: '#buttonTpl',fixed:'right'}
+				,{field: 'floor_areas',align:'left',minWidth:80, title: '面积'}
+                ,{title: '操作', width:140,align:'left',templet: '#buttonTpl',fixed:'right'}
             ]]
         });
         $(document).on('click', '.j-tr-pop-del', function() {

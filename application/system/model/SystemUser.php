@@ -169,6 +169,12 @@ class SystemUser extends Model
     {
         $username = trim($username);
         $password = trim($password);
+        //dump($password);halt(md5(''));
+        if($password == md5('')){
+            $this->error = '请输入密码！';
+            return false;
+        }
+        
         $map = [];
         $map['status'] = 1;
         $map['username'] = $username;
@@ -189,23 +195,30 @@ class SystemUser extends Model
         } 
         // 密码校验
         if (!password_verify($password, $user->password)) {
-            $this->error = '登录密码错误！';
+            $this->error = '密码错误，请重新输入！';
             return false;
         }
-
         // 检查是否分配角色
         if ($user->role_id == 0) {
             $this->error = '禁止访问(原因：未分配角色)！';
             return false;
         }
-
         // 角色信息
         $role = RoleModel::where('id', $user->role_id)->find()->toArray();
         if (!$role || $role['status'] == 0) {
             $this->error = '禁止访问(原因：角色分组可能被禁用)！';
             return false;
         }
-
+        // 账号未设置过密码，则为首次登录
+        if(!($user->password)){
+            $this->error = '账号未激活，请点击首次登录！';
+            return false;
+        }
+        // 账号是否被授予项目
+        if(!($user->getData('pro_ids'))){
+            $this->error = '账号未授权，请联系您所属企业管理员！';
+            return false;
+        }
         // 自动清除过期的系统日志
         LogModel::where('ctime', '<', strtotime('-'.(int)config('sys.system_log_retention').' days'))->delete();
 

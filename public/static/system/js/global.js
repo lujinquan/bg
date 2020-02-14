@@ -294,9 +294,6 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
      * @attr data-form 表单DOM
      */
     form.on('submit(formSubmit)', function(data) {
-        //console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-        //console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-        //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
         var _form = '', 
             that = $(this), 
             text = that.text(),
@@ -306,18 +303,12 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         } else {
             _form = that.parents('form');
         }
-        //alert(that);
-        //console.log(data.elem.attr('j-check'));
-        // if ($(".j-check:checked").length == 0) {
-        //     layer.msg("请先选择授权项目");
-        //     return false;
-        // }
         if (that.attr('hisi-data')) {
             options = new Function('return '+ that.attr('hisi-data'))();
         } else if (that.attr('lay-data')) {
             options = new Function('return '+ that.attr('lay-data'))();
         }
-
+        console.log('调用formSubmit提交表单传递的options：',options);
         /* CKEditor专用 */
         if (typeof(CKEDITOR) != 'undefined') {
             for (instance in CKEDITOR.instances) {
@@ -330,18 +321,22 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
             url: _form.attr('action'),
             data: _form.serialize(),
             success: function(res) {
+                console.log('调用formSubmit提交表单返回的数据：',res);
                 that.text(res.msg);
+                // 后台返回错误信息
                 if (res.code == 0) {
                     that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
                     setTimeout(function(){
                         that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
                     }, 3000);
+                // 后台返回操作成功
                 } else {
                     setTimeout(function() {
                         that.text(text).prop('disabled', false);
                         if (options.callback) {
                             options.callback(that, res);
                         }
+                        //如果data-form传入了 pop = true ，则会关闭所有弹框，并且如果 refresh == true，则页面会刷新
                         if (options.pop == true) {
                             if (options.refresh == true) {
                                 parent.location.reload();
@@ -349,11 +344,82 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
                                 parent.location.href = res.url;
                             }
                             parent.layui.layer.closeAll();
-                        } else if (options.refresh == true) {
+                            return false;
+                        } 
+                        //如果data-form传入了pop = false， refresh == true ,则会在将弹出框的页面再次刷新
+                        if (options.refresh == true) {
                             if (res.url != '') {
                                 location.href = res.url;
                             } else {
                                 location.reload();
+                            }
+                        }
+                    }, 3000);
+                }
+            }
+        });
+        return false;
+    });
+
+    /**
+     * 监听表单提交()
+     * @attr action 请求地址
+     * @attr data-form 表单DOM
+     */
+    form.on('submit(formSubmitDel)', function(data) {
+        var _form = '', 
+            that = $(this), 
+            text = that.text(),
+            options = {pop: false, refresh: true, jump: false, callback: null};
+        if ($(this).attr('data-form')) {
+            _form = $(that.attr('data-form'));
+        } else {
+            _form = that.parents('form');
+        }
+        if (that.attr('hisi-data')) {
+            options = new Function('return '+ that.attr('hisi-data'))();
+        } else if (that.attr('lay-data')) {
+            options = new Function('return '+ that.attr('lay-data'))();
+        }
+        console.log('调用formSubmitDel提交表单传递的options：',options);
+        /* CKEditor专用 */
+        if (typeof(CKEDITOR) != 'undefined') {
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+        }
+        that.prop('disabled', true).text('提交中...');
+        $.ajax({
+            type: "POST",
+            url: _form.attr('action'),
+            data: _form.serialize(),
+            success: function(res) {
+                console.log('调用formSubmitDel提交表单返回的数据：',res);
+                that.text(res.msg);
+                if (res.code != 0) {
+                    that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
+                    setTimeout(function(){
+                        that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
+                    }, 3000);
+                } else {
+                    setTimeout(function() {
+                        that.text(text).prop('disabled', false);
+                        // if (options.callback) {
+                        //     options.callback(that, res);
+                        // }
+                        // if (options.pop == true) {
+                        //     if (options.refresh == true) {
+                        //         parent.location.reload();
+                        //     } else if (options.jump == true && res.url != '') {
+                        //         parent.location.href = res.url;
+                        //     }
+                        //     parent.layui.layer.closeAll();
+                        // }
+                        if (options.refresh == true) {
+                            if (res.url != '') {
+                                location.href = res.url;
+                            } else {
+                                parent.location.reload();
                             }
                         }
                     }, 3000);

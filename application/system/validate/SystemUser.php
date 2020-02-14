@@ -32,13 +32,13 @@ class SystemUser extends Validate
 
     //定义验证提示
     protected $message = [
-        'username.require' => '请输入用户名',
+        'username.require' => '请输入账号',
         'role_id.require'  => '请选择角色分组',
         'role_id.notIn'    => '禁止设置为超级管理员',
         'email.require'    => '邮箱不能为空',
         'email.email'      => '邮箱格式不正确',
         'email.unique'     => '该邮箱已存在',
-        'password.require' => '密码不能为空',
+        'password.require' => '请输入账号密码',
         'password.length'  => '密码设置无效',
         'mobile.regex'     => '手机号不正确',
     ];

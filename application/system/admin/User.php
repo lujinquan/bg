@@ -74,6 +74,8 @@ class User extends Admin
             }
             if ($roleid) {
                 $where[] = ['role_id', 'eq', $roleid];
+            }else{
+                $where[] = ['role_id', 'neq', 1];
             }
             if ($status) {
                 if($status == 1){
@@ -89,9 +91,8 @@ class User extends Admin
             // $whereOr[]    = ['pro_ids', 'like', '%'.PROJECT_ID.',%'];
             // $whereOr[]    = ['pro_ids', 'eq', PROJECT_ID];
             //halt($where);
-            $temp = UserModel::with('role')->where($where)->whereOr($whereOr)->page($page)->limit($limit)->order('ctime desc')->select();
 
-            $data['data'] = $temp;
+            $data['data'] = UserModel::with('role')->where($where)->whereOr($whereOr)->page($page)->limit($limit)->order('ctime desc')->select()->toArray();
             $data['count'] = UserModel::where($where)->whereOr($whereOr)->count('id');
             //halt(UserModel::getLastSql());
             $data['code'] = 0;

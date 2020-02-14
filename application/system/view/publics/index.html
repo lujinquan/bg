@@ -52,7 +52,9 @@
 						</div>
 						<div class="text-input">
 							<i class="layui-icon layui-icon-password blue-color"></i>
-							<input type="password" name="password" value="ctnmit" class="layui-input" placeholder="请输入密码" />
+							<!-- <input type="password" name="password" value="ctnmit" class="layui-input" placeholder="请输入密码" /> -->
+                            <input type="text" name="password_show" id="password_show" oninput="passwordChange()" class="layui-input" placeholder="请输入密码" />
+                            <input type="hidden" name="password" id="password"  value="" />
 						</div>
                         <div class="j-logon-state">
                             <a  class="f-left"  href="{:url('firstLogin')}">首次登录</a>  <a class="f-right" href="{:url('forget')}">忘记密码</a>
@@ -87,15 +89,49 @@
 <script src="__PUBLIC_JS__/particles.min.js"></script>
 <script type="text/javascript">
 window.sessionStorage.clear();
+var str = '';
+function passwordChange(){
+    var passwordText = document.getElementById("password_show").value; //获取输入的密码
+    var passwordlen = passwordText.length; //获取输入密码的长度
+    var replaceText = '';
+    //console.log('密码的长度：',passwordlen);
+
+    //根据用户输入的字符长度，创建一个同等长度的*号字符串
+    for (var i = 0; i < passwordlen; i++) {
+        replaceText += '*';
+    }
+    //如果写入的密码长度比输入的密码长度长，即用户为删除（减去字符）动作，每次截取至倒数第二个字符
+    if(str.length > passwordlen){ 
+        str = str.substring(0,str.length-1);
+    }else{ //如果写入的密码长度比输入的密码长度短，即用户为添加（输入字符）动作，每次拼接最后一个字符
+        str += passwordText.substr(passwordlen-1,1);
+    }
+    document.getElementById("password_show").value = replaceText; //用*号替换输入的字符
+    if(passwordlen){
+        document.getElementById("password").value = str; //将组装的值写入到真实的密码框中
+    }else{
+        str = '';
+        document.getElementById("password").value = '';
+    }
+    
+}
 layui.use(['form', 'layer', 'jquery', 'md5'], function() {
     var $ = layui.jquery, layer = layui.layer, form = layui.form, md5 = layui.md5, captchaUrl = '{:captcha_src()}';
+
+    // console.log(2);
+    // $('#inputpassword').bind('oninput',function(){
+    //     var v = $(this).val();
+    //     console.log(1);
+    //     console.log('输入的密码：',$('#password').val());
+    // })
+    //$('input[name="password"]').val();
     form.on('submit(formLogin)', function(data) {
         var that = $(this), _form = that.parents('form'),
             account = $('input[name="username"]').val(),
             pwd = $('input[name="password"]').val(),
             token = $('input[name="__token__"]').val(),
             captcha = $('input[name="captcha"]').val(); 
-
+        //console.log('输入的密码',pwd);
         //layer.msg('数据提交中...',{time:500000});
         that.prop('disabled', true);
         
