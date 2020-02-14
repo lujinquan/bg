@@ -357,6 +357,10 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
                             }
                         }
                     }, 3000);
+					//验证通过关闭当前弹框s
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.location.reload();
+					parent.layer.close(index);//关闭当前页
                 }
             }
         });
