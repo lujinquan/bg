@@ -5,36 +5,13 @@
 </div>
 <form class="layui-form j-top-margin j-padding-right" action="{:url()}" method="post" id="addForm">
 	<div class="layui-row  j-from-box layui-col-space30">
-		<div class="layui-col-md4">
+		<div class="layui-col-md8">
 			<label class="j-form-label"><i class="red">*</i>工位区名称：</label>
 			<div class="j-input-inline">
 				<input type="text" name="site_group_name" value="{$data_info['site_group_name']}" placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i>所属楼宇：</label>
-			<div class="j-input-inline">
-				<select name="ban_id" class="field-cid" lay-filter="ban_id" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					{volist name="banArr" id="v"}
-					<option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
-					{/volist}
-				</select>
-			</div>
-		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i> 所属楼层：</label>
-			<div class="j-input-inline">
-				<select name="floor_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
-			</div>
-		</div>
+		
 	</div>
     <div class="layui-row j-from-box layui-col-space30">
     	<div class="layui-col-md4">
@@ -81,10 +58,10 @@
 			<label class="j-form-label">入驻公司：</label>
 			<div class="j-input-inline">
 				<ul class="j-link-box">
-					{volist name="firmArr" id="v"}
+					{volist name="shackSites" id="v"}
 					<li>
 						
-						<a href="javascript:;" data-href="{if condition="$v['type'] == 1"}{:url('project/member/detail')}?id={$v['group_id']}{else /}{:url('project/firm/detail')}?id={$v['group_id']}{/if}">{$v['group_name']}</a>,
+						<a href="javascript:;" data-href="{if condition="$v['type'] == 1"}{:url('project/member/detail')}?id={$v['group_id']}{else /}{:url('project/firm/detail')}?id={$data_info['site_group_id']}{/if}">{$data_info['site_group_name']}</a>,
 						
 					</li>
 					{/volist}
@@ -100,15 +77,25 @@
     		<label class="j-form-label">工位：</label>
     		<div class="j-input-inline">
 				<ul>
-					{volist name="$data_info['sites']" id="v"}
-					{if condition="$v"}
+					{volist name="$sites" id="v"}
+					{if condition="$v['type'] > 0"}
 					<li>
-						<input type="text" name="sites[]" value="{$v}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
+						<input type="text" name="sites[]" value="{$v['site_name']}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
+						<b class="j-explain-name hide">已租</b>
+						<i class="icon-cancel j-del"></i>
+						<div  class="j-hostile hide">
+							<span  class="j-type">{if condition="$v['type'] == 1"}个人{else /}企业{/if}</span>
+							<span  class="j-name">{$v['group_name']}</span>
+						</div>
+					</li>
+					{else /}
+					<li>
+						<input type="text" name="sites[]" value="{$v['site_name']}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
 						<b class="j-explain-name hide">未租</b>
 						<i class="icon-cancel j-del"></i>
 						<div  class="j-hostile hide">
-							<span  class="j-type">企业</span>
-							<span  class="j-name">楚天新媒科技（武汉）有限公司</span>
+							<span  class="j-type"></span>
+							<span  class="j-name"></span>
 						</div>
 					</li>
 					{/if}
@@ -135,7 +122,7 @@
 								<i class="layui-icon-close-fill layui-icon"></i>
 							</div>
 							<img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
-							<input type="hidden" name="{$vo['file_name']}">
+							<input type="hidden" name="file[]" value="{$vo['id']}">
 						</dd>
 						{/volist}
 				</div>
@@ -143,6 +130,13 @@
 		</div>
 	</div>
      {:token()}
+     <div class="layui-row j-from-box layui-col-space30">
+		<div class="layui-form-item">
+			<label class="layui-form-label">楼宇、楼层</label>
+			<div id="ban_floor">			
+		    </div>
+		</div>
+	</div>
      <input type="hidden" name="site_group_id" value="{$data_info['site_group_id']}">
     <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
@@ -164,6 +158,18 @@
 			form = layui.form,
 			selectN = layui.selectN,
       		selectM = layui.selectM;
+
+  		var catIns1 = selectN({
+		  //元素容器【必填】
+		  elem: '#ban_floor'
+		  ,search:[false,true]
+		  //候选数据【必填】
+		  ,data: {:json_encode($banFloors)}
+		  //设置了长度
+		  //,width:null
+		  //默认值
+		  ,selected: [{$data_info['ban_id']},{$data_info['floor_number']}] 
+		});  
 		//工位
 		$('.j-add').click(function(){
 		    var html = `<li>
@@ -171,8 +177,8 @@
 						  <b class="j-explain-name hide">未租</b>
 						  <i class="icon-cancel j-del"></i>
 						  <div  class="j-hostile hide">
-							<span  class="j-type">企业</span>
-							<span  class="j-name">楚天新媒科技（武汉） 有限公司</span>
+							<span  class="j-type"></span>
+							<span  class="j-name"></span>
 						  </div>
 						</li>`;
 		    $('.j-add').parent().before(html);

@@ -32,7 +32,7 @@ class Ban extends Admin
             $data = [];
             $temp = $banModel->field($fields)->where($where)->page($page)->order('ctime desc')->limit($limit)->select();
             foreach($temp as &$t){
-                $f = FloorModel::where([['ban_id','eq',$t['ban_id']]])->field('group_concat(floor_number) floor_numbers,sum(floor_area) floor_areas')->find();
+                $f = FloorModel::where([['ban_id','eq',$t['ban_id']],['status','eq',1]])->field('group_concat(floor_number) floor_numbers,sum(floor_area) floor_areas')->find();
                 
                 $t['floor_numbers'] = $f['floor_numbers'];
                 $t['floor_areas'] = $f['floor_areas'];
@@ -121,9 +121,9 @@ class Ban extends Admin
                 $this->error('删除失败');
             }
         }
-        $ban_id = $this->request->param('id'); 
-        $this->assign('ban_id',$ban_id);
-        return $this->fetch();
+        $ban_id = $this->request->param('id');
+        $this->assign('id',$ban_id);
+        return $this->fetch('system@block/del_confirm');
     }
     
 }

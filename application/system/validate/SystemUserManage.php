@@ -35,7 +35,7 @@ class SystemUserManage extends Validate
     //定义验证提示
     protected $message = [
         'password.confirm' => '两次密码不一致，请核对后再输入！',
-        // 'role_id.require'  => '请选择角色分组',
+        'username.unique'  => '该账号已绑定其他公司，请先解除绑定',
         // 'role_id.notIn'    => '禁止设置为超级管理员',
         // 'email.require'    => '邮箱不能为空',
         // 'email.email'      => '邮箱格式不正确',

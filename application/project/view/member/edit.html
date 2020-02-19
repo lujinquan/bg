@@ -26,7 +26,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label"><i class="red">*</i>身份证号：</label>
     <div class="layui-input-inline">
-    <input type="text" name="member_card" value="{$data_info['member_card']}" lay-verify="required" placeholder="请输入身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
+    <input type="text" name="member_card" value="{$data_info['member_card']}" lay-verify="required|identity" placeholder="请输入身份证号" lay-verType="tips" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
@@ -87,7 +87,7 @@
   <input type="hidden" name="member_id" value="{$data_info['member_id']}">
   <div class="layui-form-item j-item-top">
     <div class="layui-input-block">
-      <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+      <a href="javascript:history.go(-1)" type="reset" class="layui-btn layui-btn-primary">取消</a>
       <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">确定</button></div>
   </div>
 </form>

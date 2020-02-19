@@ -24,10 +24,10 @@ class SiteGroup extends Validate
         'site_group_name|工位区名称'    	=> 'require',
         'site_group_type|工位区类型'    	=> 'require',
         'site_group_area|工位区面积'    	=> 'require|float',
-        'ban_id|所属楼宇'    	=> 'require|number',
-        'floor_number|所属楼层'     => 'require',
-        'sites|工位'    	=> 'require', 
-        '__token__'      	  	=> 'require|token',
+        'ban_floor|楼宇楼层'    	        => 'require|banFloorCheck',
+        //'floor_number|所属楼层'     => 'require',
+        'sites|工位'    	                => 'require', 
+        '__token__'      	  	        => 'require|token',
     ];
 
     //定义验证提示
@@ -35,16 +35,26 @@ class SiteGroup extends Validate
 
     ];
 
+    protected function banFloorCheck($value, $rule='', $data)
+    {
+        $ban_floors = explode(',',$value);
+        if(in_array('', $ban_floors)){
+            return '请选择正确的楼宇楼层';
+        }else{
+            return true; 
+        }  
+    }
+
     // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['site_group_name','site_group_type','ban_id','floor_number','site_group_area','__token__']);
+        return $this->only(['site_group_name','site_group_type','ban_floor','site_group_area','__token__']);
     }
 
     // 自定义更新场景
     public function sceneEdit()
     {
-        return $this->only(['site_group_name','ban_id','floor_number','site_group_area','__token__']);
+        return $this->only(['site_group_name','ban_floor','site_group_area','__token__']);
     }
 
     

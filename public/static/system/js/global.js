@@ -355,6 +355,10 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
                             }
                         }
                     }, 3000);
+					//验证通过关闭当前弹框s
+					// var index = parent.layer.getFrameIndex(window.name);
+					// parent.location.reload();
+					// parent.layer.close(index);//关闭当前页
                 }
             }
         });
@@ -362,11 +366,11 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
     });
 
     /**
-     * 监听表单提交()
+     * 监听表单提交
      * @attr action 请求地址
      * @attr data-form 表单DOM
      */
-    form.on('submit(formSubmitDel)', function(data) {
+    form.on('submit(formSubmitConfirm)', function(data) {
         var _form = '', 
             that = $(this), 
             text = that.text(),
@@ -381,52 +385,70 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         } else if (that.attr('lay-data')) {
             options = new Function('return '+ that.attr('lay-data'))();
         }
-        console.log('调用formSubmitDel提交表单传递的options：',options);
+        console.log('调用formSubmit提交表单传递的options：',options);
         /* CKEditor专用 */
         if (typeof(CKEDITOR) != 'undefined') {
             for (instance in CKEDITOR.instances) {
                 CKEDITOR.instances[instance].updateElement();
             }
         }
-        that.prop('disabled', true).text('提交中...');
+
+
+        //href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href');
+        layer.confirm(that.attr('data-msg'), {icon: 7,title:false, closeBtn:0,offset: 'auto', btn: ['确定','取消']}, function(index){
+            layer.close(index);
+            that.prop('disabled', true).text('提交中...');
         $.ajax({
             type: "POST",
             url: _form.attr('action'),
             data: _form.serialize(),
             success: function(res) {
-                console.log('调用formSubmitDel提交表单返回的数据：',res);
+                console.log('调用formSubmit提交表单返回的数据：',res);
                 that.text(res.msg);
-                if (res.code != 0) {
+                // 后台返回错误信息
+                if (res.code == 0) {
                     that.prop('disabled', false).removeClass('layui-btn-normal').addClass('layui-btn-danger');
                     setTimeout(function(){
                         that.removeClass('layui-btn-danger').addClass('layui-btn-normal').text(text);
                     }, 3000);
+                // 后台返回操作成功
                 } else {
                     setTimeout(function() {
                         that.text(text).prop('disabled', false);
-                        // if (options.callback) {
-                        //     options.callback(that, res);
-                        // }
-                        // if (options.pop == true) {
-                        //     if (options.refresh == true) {
-                        //         parent.location.reload();
-                        //     } else if (options.jump == true && res.url != '') {
-                        //         parent.location.href = res.url;
-                        //     }
-                        //     parent.layui.layer.closeAll();
-                        // }
+                        if (options.callback) {
+                            options.callback(that, res);
+                        }
+                        //如果data-form传入了 pop = true ，则会关闭所有弹框，并且如果 refresh == true，则页面会刷新
+                        if (options.pop == true) {
+                            if (options.refresh == true) {
+                                parent.location.reload();
+                            } else if (options.jump == true && res.url != '') {
+                                parent.location.href = res.url;
+                            }
+                            parent.layui.layer.closeAll();
+                            return false;
+                        } 
+                        //如果data-form传入了pop = false， refresh == true ,则会在将弹出框的页面再次刷新
                         if (options.refresh == true) {
                             if (res.url != '') {
                                 location.href = res.url;
                             } else {
-                                parent.location.reload();
+                                location.reload();
                             }
                         }
                     }, 3000);
+                    //验证通过关闭当前弹框s
+                    // var index = parent.layer.getFrameIndex(window.name);
+                    // parent.location.reload();
+                    // parent.layer.close(index);//关闭当前页
                 }
             }
         });
         return false;
+        });
+
+return false;
+        
     });
 
     /**

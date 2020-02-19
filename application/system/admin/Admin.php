@@ -94,10 +94,14 @@ class Admin extends Common
                     $curMenu = ['title' => '', 'url' => '', 'id' => 0];
 
                 }
-
+                // 获取引导页的项目数据
                 $projectModel = new Project;
-                $projectArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->field('id,project_name,project_address')->select();
-               //halt($login);
+                $projectArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->field('id,project_name,project_address')->select()->toArray();
+                // //待完善
+                // foreach($projectArr as $p){
+                //     
+                // }   
+                // halt($projectArr);
                 //获取当前登录管理员下，所有的项目
                 $this->assign('projectArr',$projectArr);
 

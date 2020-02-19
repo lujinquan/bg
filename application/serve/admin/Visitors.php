@@ -36,4 +36,9 @@ class Visitors extends Admin
     { 
     	return $this->fetch();
     }
+
+    public function add()
+    { 
+        return $this->fetch();
+    }
 }

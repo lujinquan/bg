@@ -1,0 +1,86 @@
+<!-- 在线服务/运营管理/空间活动管理 -->
+<div class="layui-btn-group j-add-group clearfix">
+  <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon" title="发布活动"><i class="layui-icon layui-icon-add-1"></i>发布活动</a>
+</div>
+<div class="page-toolbar j-page-toolbar clearfix">
+    <form class="layui-form layui-form-pane" action="{url('index')}"  method="get" id="hisi-table-search">
+      <div class="j-search-fl">
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="activity_title" placeholder="活动名称" class="layui-input">
+            </div>
+            <div class="layui-input-inline j-input-margin">
+                <select name="activity_type" class="visitor_type" type="select">
+                    <option value="0">活动类型</option>
+                    {volist name="params['activity_type']" id="v"}
+                    <option value="{$key}">{$v}</option>
+                    {/volist}          
+                </select>
+            </div>
+            <div class="layui-input-inline j-input-margin">
+                <input type="text" name="activity_address" placeholder="活动地点" class="layui-input">
+            </div>
+           <div class="layui-input-inline j-input-margin">
+               <input type="text" name="activity_start_time" id="activity_start_time" placeholder="活动开始时间" class="layui-input j-explain-input">
+               <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
+            <button type="reset" class="layui-btn j-btn-reset">重置</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">
+                <i class="layui-icon">&#xe615;</i>
+                搜索
+            </button>
+      </div>
+    </form>
+</div>
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="是|否" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('statusRole')}?id={{ d.id }}">
+</script>
+<script type="text/html" title="操作按钮模板" id="buttonTpl">
+  <div class="j-operation-box">
+      <a href="{:url('edit')}?id={{ d.activity_id }}" class="layui-btn layui-btn-xs layui-btn-normal">编辑</a> 
+      <a href="{:url('del')}?id={{ d.activity_id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
+  </div>
+</script>
+<script type="text/html" id="ordinal">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<table id="dataTable"></table>
+{include file="system@block/layui" /}
+<script type="text/javascript">
+    layui.use(['table', 'jquery', 'laydate'], function() {
+        var table = layui.table,laydate = layui.laydate;
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,limit: 10
+            ,skin: 'line'
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+			    {field:'ordinal', width:60, title: '序号',fixed: 'left',templet:'#ordinal'}
+                ,{field: 'activity_title', minWidth:160,align:'left',title: '活动名称'}
+				,{field: 'activity_address', minWidth:160,align:'left',title: '活动地点'}
+				,{field: 'activity_type', minWidth:100,align:'left',title: '活动类型', templet:function(d){
+                    return params.activity_type[d.activity_type];
+                }}
+				,{field: 'activity_sponsor', minWidth:120,align:'left',title: '主办方'}
+				//,{field: 'activity_status', title: '显示', minWidth: 100,align:'left', templet: '#statusTpl'}
+				,{field: 'activity_cuid', width:80,align:'left',title: '发布人'}
+                ,{field: 'activity_ctime',minWidth: 150,align:'left', title: '发布时间'}
+                ,{title: '操作', width:120,align:'left', templet: '#buttonTpl'}
+            ]]
+        });
+        //日期
+        laydate.render({
+            elem: '#activity_start_time'
+            ,type: 'date'
+            ,ready: function(date){
+                $('.layui-laydate li').click(function () {
+                   $('.laydate-btns-confirm').trigger('click');
+                });
+            }
+        });
+    });
+</script>

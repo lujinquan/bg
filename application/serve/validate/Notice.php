@@ -32,4 +32,6 @@ class Notice extends Validate
         'content.require'    => '内容不能为空',
     ];
 
+   
+
 }

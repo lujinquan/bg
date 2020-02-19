@@ -1,25 +1,17 @@
 <!-- 在线服务/通知公告/公告管理/发布公告 -->
+<style>
+	.pb50 {padding-bottom: 0;}
+</style>
 <!-- <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
     <li class="layui-this">公告详情</li>
   </ul>
 </div> -->
-<form class="layui-form j-top-margin j-long-words" action="{:url('add')}" method="post">
-	<div class="layui-form-item">
-		{$data_info['title']}
-	</div>
-	<div class="layui-form-item">
-		{$data_info['cuid']} 发表于 { {$data_info['ctime']} }
-	</div>
-	<div class="layui-form-item">
-		{:htmlspecialchars_decode($data_info['content'])}
-	</div>
-	
-	<!-- <div class="layui-form-item">
-		<div class="layui-input-block">
-			<a href="javascript:history.go(-1)" class="layui-btn layui-btn-primary">取消</a>
-			<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formStep">确认</button>
+<div id="j-news-details" class="j-news-details j-viewer-img">
+		<h1>{$data_info['title']}</h1>
+		<h2>{$data_info['cuid']} 发布于  {$data_info['ctime']} </h2>
+		<div class="j-content-size">
+			{:htmlspecialchars_decode($data_info['content'])}
 		</div>
-	</div> -->
-</form>
+	</div>
 {include file="system@block/layui" /}

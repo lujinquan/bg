@@ -193,6 +193,11 @@ class SystemUser extends Model
             //$this->error = '用户不存在或被禁用！';
             return false;
         } 
+        // 账号未设置过密码，则为首次登录
+        if(!($user->password)){
+            $this->error = '账号未激活，请点击首次登录！';
+            return false;
+        }
         // 密码校验
         if (!password_verify($password, $user->password)) {
             $this->error = '密码错误，请重新输入！';
@@ -209,13 +214,9 @@ class SystemUser extends Model
             $this->error = '禁止访问(原因：角色分组可能被禁用)！';
             return false;
         }
-        // 账号未设置过密码，则为首次登录
-        if(!($user->password)){
-            $this->error = '账号未激活，请点击首次登录！';
-            return false;
-        }
+        
         // 账号是否被授予项目
-        if(!($user->getData('pro_ids'))){
+        if(!($user->getData('pro_ids')) && ($user->role_id != 1)){
             $this->error = '账号未授权，请联系您所属企业管理员！';
             return false;
         }

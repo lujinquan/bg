@@ -35,7 +35,7 @@ class Floor extends Model
         }
         // 检索地址
         if(isset($data['floor_number']) && $data['floor_number']){
-            $where[] = ['b.floor_number','eq',$data['floor_number']];
+            $where[] = ['a.floor_number','eq',$data['floor_number']];
         }
         $where[] = ['a.status','eq',1];
         $where[] = ['b.project_id','eq',PROJECT_ID];

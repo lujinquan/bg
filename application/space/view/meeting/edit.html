@@ -62,7 +62,7 @@
                  <i class="layui-icon-close-fill layui-icon"></i>
                </div>
                <img data-original="{$vo['file']}" src="{$vo['file']}" class="img" />
-               <input type="hidden" name="{$vo['file_name']}">
+               <input type="hidden" name="file[]" value="{$vo['id']}">
              </dd>
              {/volist}
            </div>
@@ -167,7 +167,7 @@
 {include file="system@block/layui" /}
 <script>
   var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];  
-  var doorData = [{"id":1,"name":"门禁1"},{"id":2,"name":"门禁2"},{"id":3,"name":"门禁3"},{"id":4,"name":"门禁4"},{"id":5,"name":"门禁5"},{"id":6,"name":"门禁6"}]; 
+  var doorData = [{"id":1,"name":"门禁设备1"},{"id":2,"name":"门禁设备2"},{"id":3,"name":"门禁设备3"},{"id":4,"name":"门禁设备4"},{"id":5,"name":"门禁设备5"},{"id":6,"name":"门禁设备6"}]; 
   /*上传参数设定*/
   var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=space&water=no"; //上传楼层平面图
   var duotu = true; //是否为多图上传true false
@@ -252,6 +252,15 @@
   		console.log('被选中的楼层id：'+seletedFloorNumber);
   	}
 
+    var formData1 = '{$data_info['facility_ids']}';
+    if(formData1){
+      var strs1 = formData1.split("|"); 
+      var seletedFacilityIDS = strs1.filter(function(s){
+        return s && s.trim();
+      }); 
+      console.log('被选中的楼层id：'+seletedFacilityIDS);
+    }
+
     //多选标签-基本配置
     var tagIns1 = selectM({
       //元素容器【必填】
@@ -270,6 +279,7 @@
 	  elem: '#door_equipment'
 	  //候选数据【必填】
 	  ,data: doorData
+    ,selected: seletedFacilityIDS
 	  //,max:10
 	  ,width:400
 	  //添加验证

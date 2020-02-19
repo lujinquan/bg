@@ -252,7 +252,7 @@ class User extends Admin
             return $this->error('权限不足');
         }
         $projectModel = new Project;
-        $proArr = $projectModel->where([['status','eq',1]])->column('id,project_name');
+        $proArr = $projectModel->where([['status','eq',1],['group_id','eq',GROUP_ID]])->column('id,project_name');
         if ($this->request->isPost()) {
 
             $data = $this->request->post();
@@ -292,14 +292,15 @@ class User extends Admin
         }
         $id   = $this->request->param('id/d');
         $model = new UserModel();
-        $pro_ids = $model->where([['id','eq',$id]])->value('pro_ids');
-        if (!$pro_ids) {
+        //如果登录过，表示帐户已激活，则不能删除
+        $last_login_ip = $model->where([['id','eq',$id]])->value('last_login_ip');
+        if (!$last_login_ip) {
             if ($model->del($id)) {
                 return $this->success('删除成功');
             }
             return $this->error($model->getError());
         } else {
-            return $this->error('请先移除授权');
+            return $this->error('账户已激活，无法删除');
         }
         
     }

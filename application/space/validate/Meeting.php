@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | 基于ThinkPHP5开发
 // +----------------------------------------------------------------------
@@ -23,8 +24,7 @@ class Meeting extends Validate
     protected $rule = [
         'meet_name|会议室名称'    	=> 'require',
         'meet_area|面积'    	=> 'require|float',
-        'ban_id|楼宇'    	=> 'require|number',
-        'floor_number|楼层'     => 'require',
+        'ban_floor|楼宇楼层'                => 'require|banFloorCheck',
         'meet_unit_price|单价'    	=> 'require|float',
         'order_start_time|可预约起始时间'      => 'require',
         'order_end_time|可预约结束时间'        => 'require',
@@ -36,6 +36,16 @@ class Meeting extends Validate
 
     ];
 
+    protected function banFloorCheck($value, $rule='', $data)
+    {
+        $ban_floors = explode(',',$value);
+        if(in_array('', $ban_floors)){
+            return '请选择正确的楼宇楼层';
+        }else{
+            return true; 
+        }  
+    }
+ 
     // 自定义更新场景
     public function sceneAdd()
     {

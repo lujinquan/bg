@@ -97,8 +97,20 @@ class Floor extends Admin
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel->updateAnnexEtime($data['file']);
+            }else{
+                $data['imgs'] = '';
             }
+            
             $FloorModel = new FloorModel();
+            $count = $FloorModel->where([
+                ['floor_id','neq',$data['floor_id']],
+                ['ban_id','eq',$data['ban_id']],
+                ['floor_number','eq',$data['floor_number']]
+            ])->count('floor_id');
+            //halt($count);
+            if($count > 0){
+                return $this->error('当前楼层已被录入');
+            }
             // 入库
             if (!$FloorModel->allowField(true)->update($data)) {
                 return $this->error('编辑失败');
@@ -136,8 +148,8 @@ class Floor extends Admin
             }
         }
         $floor_id = $this->request->param('id'); 
-        $this->assign('floor_id',$floor_id);
-        return $this->fetch();
+        $this->assign('id',$floor_id);
+        return $this->fetch('system@block/del_confirm');
     }
 
 }

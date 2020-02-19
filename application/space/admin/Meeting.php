@@ -15,9 +15,9 @@ namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
-use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
 use app\space\model\Meeting as MeetingModel;
+use app\common\model\SystemAnnex as AnnexModel;
 
 class Meeting extends Admin
 {
@@ -63,6 +63,9 @@ class Meeting extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $ban_floors = explode(',',$data['ban_floor']);
+            $data['ban_id'] = $ban_floors[0];
+            $data['floor_number'] = $ban_floors[1];
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
@@ -76,7 +79,9 @@ class Meeting extends Admin
             }
             return $this->success('新增成功');
         }
-
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
         return $this->fetch();
     }
 
@@ -93,6 +98,8 @@ class Meeting extends Admin
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel->updateAnnexEtime($data['file']);
+            }else{
+                $data['imgs'] = '';
             }
             $MeetingModel = new MeetingModel;
             // 入库
@@ -105,6 +112,7 @@ class Meeting extends Admin
         $row = MeetingModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $this->assign('data_info',$row);
+        //halt($row);
         return $this->fetch();
     }
 

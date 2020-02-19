@@ -20,7 +20,7 @@ class Ban extends Model
 
     public function floor()
     {
-        return $this->hasMany('floor', 'ban_id', 'ban_id')->field('floor_number');
+        return $this->hasMany('floor', 'ban_id', 'ban_id')->field('floor_id,floor_number');
     }
 
     public function checkWhere($data)
@@ -43,5 +43,26 @@ class Ban extends Model
 
         return $where;
     }
+
+    /**
+     * [获取楼宇楼层联动数据]
+     */
+    public function banFloors()
+    {
+        $bans = self::where([['project_id','eq',PROJECT_ID],['status','eq',1]])->select();
+        $data = [];
+        foreach ($bans as $k => $v) {
+            $s = [
+                'id' => $v->ban_id,
+                'name' => $v->ban_name,  
+            ];
+            $s['children'] = $v->floor()->where([['status','eq',1]])->field('floor_number as id,floor_number as name')->select()->toArray(); //直接用楼层号当做id
+            $data[] = $s;
+        }
+        //halt($data);
+        return $data;
+    }
+
+
     
 }

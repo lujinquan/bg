@@ -51,8 +51,65 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
           <a href="javascript:history.go(-1)"  class="layui-btn layui-btn-primary">取消</a>
-          <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="formSubmit">提交</button>
+          <!-- <a href="{:url('addUserManage')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-remove">移除授权</a> -->
+          <button class="layui-btn layui-btn-normal" data-msg="是否新增账号，并授权管理员权限？" lay-submit="" lay-filter="formSubmitConfirm">提交</button>
         </div>
      </div>
 </form>
 {include file="block/layui" /}
+<script type="text/javascript">
+    layui.use(['table','jquery'], function() {
+        var $ = layui.$
+        ,table = layui.table;
+        //确认
+    $(document).on('click', '.j-add', function() {
+      //获取当前选择列数据
+      var names = $(this).parents("tr").find("td:eq(1)").text();
+      console.log(names);
+      $(".layui-layer-btn").after($(".layui-layer-btn1"));
+        var that = $(this),
+            href = !that.attr('data-href') ? that.attr('href') : that.attr('data-href'),
+            data_msg = that.attr('data-msg') ? that.attr('data-msg') : '是否确认移除用户'+ names + '全部项目的授权？';
+        refresh = !that.attr('refresh') ? 'true' : that.attr('refresh');
+        layer.confirm(data_msg, {icon: 7,title:false, closeBtn:0,offset: 'auto', btn: ['确定','取消']}, function(index){
+            if (!href) {
+                layer.msg('请设置data-href参数');
+                return false;
+            }
+           if (!that.attr('confirm')) {
+               layer.msg('数据提交中...', {time:500000});
+               $.get(href, {}, function(res) {
+                   layer.msg(res.msg, {}, function() {
+                       if (refresh == 'true' || refresh == 'yes') {
+                           if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
+                               location.href = res.url;
+                           } else {
+                               location.reload();
+                           }
+                       }
+                   });
+               });
+               layer.close();
+           } else {
+               layer.confirm(that.attr('confirm'), {title:false, closeBtn:0}, function(index){
+                   layer.msg('数据提交中...', {time:500000});
+                   $.get(href, {}, function(res) {
+                       layer.msg(res.msg, {}, function() {
+                           if (refresh == 'true') {
+                               if (typeof(res.url) != 'undefined' && res.url != null && res.url != '') {
+                                   location.href = res.url;
+                               } else {
+                                   location.reload();
+                               }
+                           }
+                       });
+                   });
+                   layer.close(index);
+               });
+           }
+           return false;
+        });
+        return false;
+    });
+  });
+    </script>

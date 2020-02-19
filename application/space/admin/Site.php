@@ -10,17 +10,16 @@
 // | Author: Lucas <598936602@qq.com>，开发者QQ群：*
 // +----------------------------------------------------------------------
 
-
 namespace app\space\admin;
 
 use think\Db;
 use app\system\admin\Admin;
-use app\common\model\SystemAnnex as AnnexModel;
 use app\space\model\Ban as BanModel;
-use app\space\model\Floor as FloorModel;
-use app\space\model\SiteGroup as SiteGroupModel;
 use app\space\model\Site as SiteModel;
+use app\space\model\Floor as FloorModel;
 use app\project\model\Shack as ShackModel;
+use app\common\model\SystemAnnex as AnnexModel;
+use app\space\model\SiteGroup as SiteGroupModel;
 
 class Site extends Admin
 {
@@ -49,6 +48,9 @@ class Site extends Admin
             foreach ($temps as $k => &$v) {
                 // 统计方式【待优化】
                 $v['shack_num'] = ShackModel::where([['site_group','like','%|'.$v['site_group_id'].'|%'],['shack_status','eq',1]])->count();
+                if(!$v['shack_num']){
+                    $v['shack_num'] = '——';
+                }
                 
             }
             //halt($temps);
@@ -71,19 +73,29 @@ class Site extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $ban_floors = explode(',',$data['ban_floor']);
+            $data['ban_id'] = $ban_floors[0];
+            $data['floor_number'] = $ban_floors[1];
             // 附件处理
             if(isset($data['file'])){
                 $AnnexModel = new AnnexModel;
                 $data['imgs'] = implode(',',$data['file']);  
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
-            $SiteGroupModel = new SiteGroupModel;
+            // 统计工位数
+            if(isset($data['sites']) && $data['sites']){
+                $data['site_num'] = count($data['sites']);
+            }else{
+                $data['site_num'] = 0;
+            }
             unset($data['site_id']);
+
             // 工位区入库
+            $SiteGroupModel = new SiteGroupModel;
             $row = $SiteGroupModel->allowField(true)->create($data);
             if($row){
                 // 如果新增的工位区为联合工位区，且添加了工位
-                if(isset($data['sites']) && $data['sites']){
+                if($data['site_num']){
                     $sitesApplyData = [];
                     foreach($data['sites'] as $k => $v){
                         $sitesApplyData[$k]['site_group_id'] = $row['site_group_id'];
@@ -98,6 +110,9 @@ class Site extends Admin
             }
             
         }
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
         return $this->fetch();
     }
 
@@ -115,6 +130,8 @@ class Site extends Admin
             if(isset($data['file'])){ 
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel->updateAnnexEtime($data['file']);
+            }else{
+                $data['imgs'] = '';
             }
             $SiteGroupModel = new SiteGroupModel();
             // 入库
@@ -137,29 +154,57 @@ class Site extends Admin
         $id = input('param.id/d');
         $row = SiteGroupModel::get($id)->toArray();
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
-        $row['sites'] = SiteModel::where([['site_group_id','eq',$row['site_group_id']],['status','eq',1]])->column('site_id,site_name');
+        //$row['sites'] = SiteModel::where([['site_group_id','eq',$row['site_group_id']]])->column('site_id,site_name');
+        $sites = SiteModel::where([['site_group_id','eq',$row['site_group_id']]])->field('site_id,site_name')->select()->toArray();
 
+        //$row['sites']
 
         //获取入驻公司&个体户
-        $shackArr = ShackModel::with(['member','firm'])->where([['site_group','like','%|'.$row['site_group_id'].'|%'],['shack_status','eq',1]])->field('firm_id,member_id')->select();
+        //$shackArr = ShackModel::with(['member','firm'])->where([['site_group','like','%|'.$row['site_group_id'].'|%'],['shack_status','eq',1]])->field('sites,firm_id,member_id')->select();
+        $shackArr = ShackModel::with(['member','firm'])->where([['site_group','like','%|'.$row['site_group_id'].'|%'],['shack_status','eq',1]])->field('sites,firm_id,member_id')->select()->toArray();
         $firmArr = [];
+        $shackSites = [];
         foreach ($shackArr as $k => $v) {
+
             if($v['member_id']){
-                $firmArr[] = [
-                    'group_id' => $v['member_id'],
-                    'type' => 1,
-                    'group_name' => $v['member_name'],
-                ];
+                $group_id = $v['member_id'];
+                $type = 1;
+                $group_name = $v['member_name'];
+                
             }
             if($v['firm_id']){
-                $firmArr[] = [
-                    'group_id' => $v['firm_id'],
-                    'type' => 1,
-                    'group_name' => $v['firm_name'],
-                ];
+                $group_id = $v['firm_id'];
+                $type = 2;
+                $group_name = $v['firm_name'];
+            }
+            if($v['sites']){
+                $siteArr =explode('|',trim($v['sites'],'|'));
+                //halt($siteArr);
+                foreach($siteArr as $s){
+                    $shackSites[$s] = [
+                        'group_id' => $group_id,
+                        'type' => $type,
+                        'group_name' => $group_name,
+                    ];
+                }
             }
         }
-        $this->assign('firmArr',$firmArr);
+        //halt($shackSites);
+        foreach ($sites as &$site) {
+            if(isset($shackSites[$site['site_id']])){ //如果当前工位已被入驻
+                $site['group_id'] = $shackSites[$site['site_id']]['group_id'];
+                $site['type'] = $shackSites[$site['site_id']]['type'];
+                $site['group_name'] = $shackSites[$site['site_id']]['group_name'];
+            }else{
+                $site['type'] = 0;
+            }
+        }
+        //dump($sites);halt($shackArr);
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
+        $this->assign('shackSites',$shackSites); //工位入驻数据
+        $this->assign('sites',$sites); //工位数据
         $this->assign('data_info',$row);
         return $this->fetch();
     }

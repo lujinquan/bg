@@ -12,41 +12,15 @@
           </div>
         </div>
      </div>
-  <div class="layui-form-item">
-      <div class="layui-inline">
-        <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
-        <div class="layui-input-inline">
-          <select name="ban_id" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
-              <option value="">请选择</option>
-              {volist name="banArr" id="v"}
-              <option value="{$v['ban_id']}">{$v['ban_name']}</option>
-              {/volist}
-          </select>
+ 
+  <div class="layui-row j-from-box layui-col-space30">
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i class="red">*</i>楼宇、楼层</label>
+      <div id="ban_floor">      
         </div>
-      </div>
+    </div>
   </div>
- <!-- 多楼层选择 <div class="layui-form-item">
-        <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
-        <div class="layui-input-block" id="floor_number"  lay-verType="tips"></div>
-  </div> -->
-  <div class="layui-form-item">
-      <div class="layui-inline">
-        <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
-        <div class="layui-input-inline">
-          <select name="floor_number" class="field-cid" type="select">
-              <option value="">请选择</option>
-              <option value="1">1楼</option>
-              <option value="2">2楼</option>
-              <option value="3">3楼</option>
-              <option value="4">4楼</option>
-              <option value="5">5楼</option>
-              <option value="6">6楼</option>
-              <option value="7">7楼</option>
-              <option value="8">8楼</option>
-          </select>
-        </div>
-      </div>
-  </div>
+
    <div class="layui-form-item j-positions-size">
       <div class="layui-inline">
         <label class="layui-form-label"><i class="red">*</i>会议室图片：</label>
@@ -94,12 +68,8 @@
    <div class="layui-form-item">
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-		 <div class="layui-input-block" id="door_equipment"  lay-verType="tips"></div>
-        <!-- <div class="layui-input-block j-input-facilities">
-			 <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone"  lay-verType="tips" lay-skin="primary" title="设备1">
-			 <input type="checkbox" name="facility_ids[]" value="2" lay-verify="require|choiceone"  lay-verType="tips" lay-skin="primary" title="设备2">
-			 <input type="checkbox" name="facility_ids[]" value="3" lay-verify="require|choiceone"  lay-verType="tips" lay-skin="primary" title="设备3">
-         </div> -->
+		    <div class="layui-input-block" id="door_equipment"  lay-verType="tips"></div>
+
        </div>
    </div>
    <div class="layui-form-item">
@@ -157,9 +127,9 @@
 {include file="system@block/layui" /}
 <script>
   var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];  
-  var doorData = [{"id":1,"name":"门禁1"},{"id":2,"name":"门禁2"},{"id":3,"name":"门禁3"},{"id":4,"name":"门禁4"},{"id":5,"name":"门禁5"},{"id":6,"name":"门禁6"}]; 
+  var doorData = [{"id":1,"name":"门禁设备1"},{"id":2,"name":"门禁设备2"},{"id":3,"name":"门禁设备3"},{"id":4,"name":"门禁设备4"},{"id":5,"name":"门禁设备5"},{"id":6,"name":"门禁设备6"}]; 
   /*上传参数设定*/
-  var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=ban&water=no"; //上传楼层平面图
+  var upurl = "{:url('system/Api/upload')}?input=MeetImg&group=ban&water=no"; //上传会议室平面图
   var duotu = true; //是否为多图上传true false
    layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
     var laydate = layui.laydate,
@@ -175,9 +145,7 @@
 			   if ($("input[name='door_ids[]']:checked").length == 0) {
 					 return '请选择路径门禁';
 			   } 
-			  
 			} ,
-
 			//验证会议室图片
 			conferenceroom: function () {
 				var img=$.trim($(".j-viewer-img").html());
@@ -223,40 +191,32 @@
     $(document).on("click", ".upload_img_list dd i", function() {
       $(this).parents("dd").remove();
     })
-    //多选标签-所属楼层
-    var tagIns1 = selectM({
-      //元素容器【必填】
-      elem: '#floor_number'
-      //候选数据【必填】
-      ,data: tagData
-      //,max:10
-      ,width:400
-      //添加验证
-      ,verify:'required'      
+    //联动-楼宇楼层
+    var catIns1 = selectN({ 
+        elem: '#ban_floor' //元素容器【必填】
+        ,search:[false,true]
+        ,data: {:json_encode($banFloors)} //候选数据【必填】 
+        ,verify:'required' //添加验证
     }); 
-	//多选标签-门禁设备
-	var tagIns2 = selectM({
-	  //元素容器【必填】
-	  elem: '#door_equipment'
-	  //候选数据【必填】
-	  ,data: doorData
-	  //,max:10
-	  ,width:400
-	  //添加验证
-	  ,verify:'required'      
-	}); 
-     //时间选择器
-      laydate.render({
+	   //多选标签-门禁设备
+    var tagIns2 = selectM({
+  	   elem: '#door_equipment' //元素容器【必填】
+  	   ,data: doorData //候选数据【必填】
+  	   ,width:400
+  	   ,verify:'required' //添加验证   
+	 }); 
+    //时间选择器
+    laydate.render({
 		  elem: '#test14'
 		  ,type: 'time'
 		  ,format: 'HH:mm'
-      });
-      laydate.render({
-		elem: '#test15'
-		,type: 'time'
-		,format: 'HH:mm'
-	  });
-});
+    });
+    laydate.render({
+    		elem: '#test15'
+    		,type: 'time'
+    		,format: 'HH:mm'
+    	  });
+    });
   //图片查看
   /* $(".j-viewer-img").on("click",function(){
     $(this).viewer({

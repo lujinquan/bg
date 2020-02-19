@@ -1,5 +1,9 @@
 <style>
     .page-tab-content{margin: 40px;}
+		.j-details-from{
+		 overflow-y: auto;
+     max-height: 350px;
+		}
 </style>
 <div class="layui-tab layui-tab-brief j-no-color">
   <ul class="layui-tab-title">
@@ -30,7 +34,7 @@
 	     <div class="layui-inline">
 	       <label class="layui-form-label">状态：</label>
 	       <div class="layui-input-inline">
-	        <div class="j-words-border">已激活</div>
+	        <div class="j-words-border">{if condition="$data_info['last_login_ip']"}已{else /}未{/if}激活</div>
 	       </div>
 	     </div>
 	  </div> 
@@ -39,7 +43,7 @@
           <label class="layui-form-label"><i class="red">*</i>职务：</label>
           <div class="layui-input-inline">
             <!-- <input type="tel" name="post" lay-verify="required" placeholder="请输入职务" autocomplete="off" class="layui-input field-post"> -->
-			<div class="j-words-border">社区经理</div>
+			<div class="j-words-border">{$data_info['post']}</div>
           </div>
         </div>
     </div>
@@ -47,7 +51,7 @@
         <div class="layui-inline">
           <label class="layui-form-label">备注：</label>
           <div class="layui-input-inline">
-            <textarea name="remark" placeholder="备注描述" class="layui-textarea field-remark"></textarea>
+            <textarea name="remark" placeholder="备注描述" class="layui-textarea field-remark">{$data_info['remark']}</textarea>
           </div>
         </div>
     </div>   

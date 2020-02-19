@@ -11,30 +11,7 @@
 				<input type="text" name="site_group_name"  placeholder="请输入名称" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i> 所属楼宇：</label>
-			<div class="j-input-inline">
-				<select name="ban_id" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					{volist name="banArr" id="v"}
-					<option value="{$v['ban_id']}">{$v['ban_name']}</option>
-					{/volist}
-				</select>
-			</div>
-		</div>
-		<div class="layui-col-md4">
-			<label class="j-form-label"><i class="red">*</i> 所属楼层：</label>
-			<div class="j-input-inline">
-				<select name="floor_number" class="field-cid" lay-verify="required" lay-verType="tips" type="select">
-					<option value="">请选择</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
-			</div>
-		</div>
+		
 		<!-- <div class="layui-col-md4">
 			<label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
         	<div class="layui-input-block" id="floor_number"></div>
@@ -110,7 +87,7 @@
 	<div class="layui-row j-from-box layui-col-space30">
 		<div class="layui-form-item">
 			<label class="layui-form-label">楼宇、楼层</label>
-			<div id="cat_ids1">			
+			<div id="ban_floor">			
 		    </div>
 		</div>
 	</div>
@@ -124,34 +101,33 @@
 </form>
 {include file="system@block/layui" /}
 <script>
-	//var tagData = [{"id":1,"name":"1楼"},{"id":2,"name":"2楼"},{"id":3,"name":"3楼"},{"id":4,"name":"4楼"},{"id":5,"name":"5楼"},{"id":6,"name":"6楼"}];
-	/*上传参数设定*/
 	var upurl = "{:url('system/Api/upload')}?input=SiteImg&group=ban&water=no"; //土地证电子版上传图片地址
 	var duotu = true; //是否为多图上传true false
+
 	//联动数据
-	var catData = [{
-		"id": 1,
-		"name": "周边旅游",
-		"children": [{
-			"id": 24,
-			"name": "广东",
-			"status": 1,
-		}]
-	}, {
-		"id": 5,
-		"name": "国内旅游",
-		"children": [{
-			"id": 8,
-			"name": "华北地区",
-		}]
-	}, {
-		"id": 10,
-		"name": "出境旅游",
-		"children": [{
-			"id": 11,
-			"name": "东南亚",
-		}]
-	}];
+	// var catData = [{
+	// 	"id": 1,
+	// 	"name": "周边旅游",
+	// 	"children": [{
+	// 		"id": 24,
+	// 		"name": "广东",
+	// 		"status": 1,
+	// 	}]
+	// }, {
+	// 	"id": 5,
+	// 	"name": "国内旅游",
+	// 	"children": [{
+	// 		"id": 8,
+	// 		"name": "华北地区",
+	// 	}]
+	// }, {
+	// 	"id": 10,
+	// 	"name": "出境旅游",
+	// 	"children": [{
+	// 		"id": 11,
+	// 		"name": "东南亚",
+	// 	}]
+	// }];
 	
 	layui.use(['jquery', 'laydate', 'upload', 'form','selectN','selectM'], function() {
 		var laydate = layui.laydate,
@@ -163,23 +139,27 @@
 			
 			var catIns1 = selectN({
 			  //元素容器【必填】
-			  elem: '#cat_ids1'
+			  elem: '#ban_floor'
 			  ,search:[false,true]
 			  //候选数据【必填】
-			  ,data: catData
+			  ,data: {:json_encode($banFloors)}
+			  //设置了长度
+			  //,width:null
+			  //默认值
+			  //,selected: [6,10,11] 
 			});  
-			form.on('submit(formSubmit)',function(data){
-			  console.log('catIns1 当前选中的值名：',catIns1.selected);
-			  console.log('catIns1 当前选中的值：',catIns1.values);
-			  console.log('catIns1 当前选中的名：',catIns1.names);
-			  console.log('catIns1 当前最后一个选中值：',catIns1.lastValue);
-			  console.log('catIns1 当前最后一个选中名：',catIns1.lastName);
-			  console.log('catIns1 当前最后一个是否已选：',catIns1.isSelected);
-			  console.log('');
+			// form.on('submit(formSubmit)',function(data){
+			//   console.log('catIns1 当前选中的值名：',catIns1.selected);
+			//   console.log('catIns1 当前选中的值：',catIns1.values);
+			//   console.log('catIns1 当前选中的名：',catIns1.names);
+			//   console.log('catIns1 当前最后一个选中值：',catIns1.lastValue);
+			//   console.log('catIns1 当前最后一个选中名：',catIns1.lastName);
+			//   console.log('catIns1 当前最后一个是否已选：',catIns1.isSelected);
+			//   console.log('');
 			  
-			  var formData = data.field;
-			  console.log('表单对象：',formData);
-			})
+			//   var formData = data.field;
+			//   console.log('表单对象：',formData);
+			// })
 			 
 			//通过js动态选择
 			$('.set1').click(function(){

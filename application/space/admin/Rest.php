@@ -88,6 +88,13 @@ class Rest extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            // 附件
+            if(isset($data['file'])){ 
+                $data['imgs'] = implode(',',$data['file']);
+                $AnnexModel->updateAnnexEtime($data['file']);
+            }else{
+                $data['imgs'] = '';
+            }
             $RestModel = new RestModel();
             // 入库
             if (!$RestModel->allowField(true)->update($data)) {
