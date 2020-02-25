@@ -71,7 +71,7 @@
     		</div>
     	</div>
     </div>
-	<div class="layui-row j-from-box layui-col-space30 e-house j-workbays">
+	<div class="layui-row j-from-box layui-col-space30 e-house j-workbays-1">
 		<div class="layui-col-md12">
 			<label class="j-form-label"><i class="red">* </i>参与人员：</label>
 			<div class="j-input-inline">
@@ -148,6 +148,13 @@
 		$(".j-workbays").each(function(){
 			$(this).find('.j-add').click(function(){
 				var html = '<li><input type="text" name="activity_sponsor[]" value="" autocomplete="off" lay-verify="required" lay-verType="tips"  placeholder="请输入" class="layui-input"><i class="icon-cancel j-del"></i></li>';
+				$(this).parent().before(html);
+			});
+		})
+		//参与人员
+		$(".j-workbays-1").each(function(){
+			$(this).find('.j-add').click(function(){
+				var html = '<li><input type="text" name="activity_participants[]" value="" autocomplete="off" lay-verify="required" lay-verType="tips"  placeholder="请输入" class="layui-input"><i class="icon-cancel j-del"></i></li>';
 				$(this).parent().before(html);
 			});
 		})
