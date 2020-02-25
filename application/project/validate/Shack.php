@@ -45,13 +45,13 @@ class Shack extends Validate
     // 公司入驻
     public function sceneAddfirm()
     {
-        //return $this->only(['firm_name','firm_manager','firm_tel','firm_registered_capital','firm_legaler','firm_established_time','firm_registered_address']);
+        return $this->only(['shack_start_time','shack_end_time','guard']);
     }
 
     // 个人入驻
     public function sceneAddpersion()
     {
-        return $this->only(['member_card']);
+        return $this->only(['member_card','shack_start_time','shack_end_time','guard']);
     }
 
     // 自由工位入驻
@@ -63,7 +63,7 @@ class Shack extends Validate
     // 其他场地入驻
     public function sceneAddrest()
     {
-        //return $this->only(['firm_manager','firm_tel']);
+        return $this->only(['member_card','shack_start_time','shack_end_time','guard']);
     }
     
 }

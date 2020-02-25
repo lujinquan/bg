@@ -40,13 +40,13 @@ class Activity extends Validate
      // 自定义更新场景
     public function sceneAdd()
     {
-        return $this->only(['activity_title', 'activity_type','activity_start_time','__token__','activity_end_time', 'activity_address','activity_sponsor','activity_participantss','file']);
+        return $this->only(['activity_title', 'activity_type','activity_start_time','__token__','activity_end_time', 'activity_address','activity_sponsor','activity_participants','file']);
     }
 
     // 自定义更新场景
     public function sceneEdit()
     {
-        return $this->only(['activity_title', 'activity_type','activity_start_time','__token__','activity_end_time', 'activity_address','activity_sponsor','activity_participantss','file'])->remove('activity_title', ['unique']);
+        return $this->only(['activity_title', 'activity_type','activity_start_time','__token__','activity_end_time', 'activity_address','activity_sponsor','activity_participants','file'])->remove('activity_title', ['unique']);
     }
 
 }
