@@ -11,11 +11,15 @@
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
 					  <input type="text" name="group_name" placeholder="企业名称" class="layui-input">
 				  </div>
-				  <div class="layui-input-inline j-input-margin" style="width:150px;">
+				  <!-- <div class="layui-input-inline j-input-margin" style="width:150px;">
 					  <input type="text" name="ctime" placeholder="操作时间" class="layui-input">
-				  </div>
+				  </div> -->
+				  <div class="layui-input-inline j-input-margin">
+               <input type="text" name="ctime" id="notice_time" placeholder="操作时间" class="layui-input j-explain-input">
+			   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
+           </div>
 				  <div class="layui-input-inline j-input-margin" style="width:150px;">
-					  <select name="ban_id"  lay-verType="tips" class="field-cid" type="select">
+					  <select name="shack_type"  lay-verType="tips" class="field-cid" type="select">
 		  			    <option value="">类型</option>
 		  			    {volist name="params['shack_type']" id="v"}
 		                <option value="{$key}">{$v}</option>
@@ -44,9 +48,20 @@
 	<script type="text/html" id="toolbar"></script>
 </div>
 <script type="text/javascript">
-    layui.use(['table','jquery'], function() {
+    layui.use(['table','laydate','jquery'], function() {
         var $ = layui.$
+        	,laydate = layui.laydate
 		    ,table = layui.table;
+		  //日期
+		  laydate.render({
+		    elem: '#notice_time'
+		    ,format: 'yyyy/MM/dd'
+		    ,ready: function(date){
+			    $('.layui-laydate li').click(function () {
+			       $('.laydate-btns-confirm').trigger('click');
+			    });
+			}
+		  });
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口

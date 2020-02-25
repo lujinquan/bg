@@ -56,6 +56,7 @@ class Meeting extends Admin
 
     public function add()
     {
+
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
@@ -112,6 +113,9 @@ class Meeting extends Admin
         $row = MeetingModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         $this->assign('data_info',$row);
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
         //halt($row);
         return $this->fetch();
     }

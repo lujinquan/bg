@@ -53,25 +53,29 @@
 	</script>
 	<script type="text/html" id="toolbar"></script>
 </div>
+{if condition="$tiList"}
 <div class="j-unread-news">
 	<div class="j-popup-box hide">
 		<div class="j-title clearfix">
-			<span class="fl"><i class="layui-icon iconfont j-icon-laba"></i> 未读消息（20）</span>
+			<span class="fl"><i class="layui-icon iconfont j-icon-laba"></i> 未读消息（{:count($tiList)}）</span>
 			<span class="fr">X</span>
 		</div>
 		<div class="j-popup-con">
 			<ol>
+				{volist name="$tiList" id="vo"}
+				<li><a href="{$vo['ti_url']}&ti_id={$vo['ti_id']}" >{$vo['ti_title']}</a></li>
+				{/volist}
+				<!-- <li>您有新的报修待处理，单号：201929875647</li>
 				<li>您有新的报修待处理，单号：201929875647</li>
 				<li>您有新的报修待处理，单号：201929875647</li>
 				<li>您有新的报修待处理，单号：201929875647</li>
-				<li>您有新的报修待处理，单号：201929875647</li>
-				<li>您有新的报修待处理，单号：201929875647</li>
-				<li>您有新的报修待处理，单号：201929875647</li>
+				<li>您有新的报修待处理，单号：201929875647</li> -->
 			</ol>
 		</div>
 	</div>
-	 <div class="j-popup-tips"><i class="layui-icon iconfont j-icon-laba"></i>（20）您有新的报事报修待处理</div>
+	 <div class="j-popup-tips"><i class="layui-icon iconfont j-icon-laba"></i>（{:count($tiList)}）您有新的报事报修待处理</div>
 </div>
+{/if}
 <!-- 完结报修 -->
 
 <script type="text/javascript">

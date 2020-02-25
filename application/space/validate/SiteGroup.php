@@ -26,7 +26,7 @@ class SiteGroup extends Validate
         'site_group_area|工位区面积'    	=> 'require|float',
         'ban_floor|楼宇楼层'    	        => 'require|banFloorCheck',
         //'floor_number|所属楼层'     => 'require',
-        'sites|工位'    	                => 'require', 
+        'sites|工位'    	                => 'sitesCheck', 
         '__token__'      	  	        => 'require|token',
     ];
 
@@ -45,6 +45,15 @@ class SiteGroup extends Validate
         }  
     }
 
+    protected function sitesCheck($value, $rule='', $data)
+    {
+        if(in_array('',$value)){
+            return '请正确填写工位名称';
+        }
+        return true;
+        //halt($value);
+    }
+
     // 自定义更新场景
     public function sceneAdd()
     {
@@ -54,7 +63,7 @@ class SiteGroup extends Validate
     // 自定义更新场景
     public function sceneEdit()
     {
-        return $this->only(['site_group_name','ban_floor','site_group_area','__token__']);
+        return $this->only(['site_group_name','ban_floor','sites','site_group_area','__token__']);
     }
 
     

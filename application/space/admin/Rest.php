@@ -40,6 +40,7 @@ class Rest extends Admin
             $getData = $this->request->get();
             $RestModel = new RestModel;
             $where = $RestModel->checkWhere($getData);
+            //halt($where);
             $fields = 'a.rest_id,a.rest_name,a.rest_type,a.floor_number,a.rest_volume,b.ban_id,b.ban_name';
             $data = [];
             $data['data'] = Db::name('space_rest')->alias('a')->join('space_ban b','a.ban_id = b.ban_id','left')->field($fields)->where($where)->page($page)->order('a.ctime desc')->limit($limit)->select();
@@ -66,6 +67,9 @@ class Rest extends Admin
                 $AnnexModel = new AnnexModel;
                 $AnnexModel->updateAnnexEtime($data['file']);
             }
+            $ban_floors = explode(',',$data['ban_floor']);
+            $data['ban_id'] = $ban_floors[0];
+            $data['floor_number'] = $ban_floors[1];
             $RestModel = new RestModel;
             unset($data['rest_id']);
             //halt($data);
@@ -75,6 +79,9 @@ class Rest extends Admin
             }
             return $this->success('新增成功');
         }
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
         return $this->fetch();
     }
 
@@ -106,6 +113,10 @@ class Rest extends Admin
         $row = RestModel::get($id);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         //halt($row);
+        $BanModel = new BanModel;
+        $banFloors = $BanModel->banFloors();
+        $this->assign('banFloors',$banFloors);
+        
         $this->assign('data_info',$row);
         return $this->fetch();
     }

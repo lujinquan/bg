@@ -15,33 +15,25 @@
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>场地类型：</label>
-          <div class="layui-input-inline">
-			<div class="j-words-border">会员类</div> <!-- 此处为静态需要绑定-->
-            <!-- <select name="rest_type" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
-				{volist name="params['rest_type']" id="v"}
-				<option value="{$key}" {if condition="$data_info['rest_type'] == $key"}selected{/if}>{$v}</option>
-				{/volist}
-			</select> -->
+          <div class="layui-input-inline  j-name">
+            <select name="rest_type" lay-verify="required"  lay-verType="tips" lay-filter="field_type" class="field-cid" type="select">
+            	<option value="">请选择</option>
+  			    {volist name="params['rest_type']" id="v"}
+  			    <option value="{$key}" {if condition="$key == $data_info['rest_type']"}selected{/if}>{$v}</option>
+  			    {/volist}
+      			</select>
+				<div class="j-tips">( <i class="layui-icon layui-icon-tips"></i> <label class="j-tips-name">用户办理入驻后即可进入并使用会员类场地，类似自由工位区</label> )</div>
           </div>
         </div>
     </div>
-	<div class="layui-form-item">
-	    <div class="layui-inline">
-	      <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
-	      <div class="layui-input-inline">
-	        <select name="ban_id" lay-verify="required"  lay-verType="tips" class="field-cid" type="select">
-  			    <option value="">请选择</option>
-  			    {volist name="banArr" id="v"}
-  			    <option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
-  			    {/volist}
-  			</select>
-	      </div>
-	    </div>
-	</div>
-	<div class="layui-form-item">
-	      <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
-	      <div class="layui-input-block" id="floor_number"></div>
-	</div>
+    <div class="layui-row j-from-box layui-col-space30">
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i class="red">*</i>楼宇、楼层</label>
+      <div id="ban_floor">      
+      </div>
+
+    </div>
+  </div>
     <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>可预约时段：</label>
@@ -57,12 +49,7 @@
 	 <div class="layui-form-item">
 	     <div class="layui-col-md8">
 	       <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-		   <div class="layui-input-block" id="door_equipment"  lay-verType="tips"></div><!-- 此处为静态，需要绑数据 -->
-	       <!-- <div class="layui-input-block j-input-facilities">
-   			 <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone"  lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
-			 <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
-			 <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
-	       </div> -->
+		   <div class="layui-input-block" id="facility_ids"  lay-verType="tips"></div>
 	     </div>
 	 </div>
 	 <div class="layui-form-item">
@@ -83,11 +70,11 @@
 	       </div>
 	     </div>
 	  </div>
-	  <div class="layui-form-item">
+	  <!-- <div class="layui-form-item">
 	      <div class="layui-inline">
 	        <label class="layui-form-label">入驻人员：</label>
 	        <div class="layui-input-inline">
-	  		<div class="j-words-border">张三，李四</div> <!-- 此处为静态需要绑定-->
+	  		<div class="j-words-border"></div> 
 	        </div>
 	      </div>
 	  </div>
@@ -95,10 +82,10 @@
 	      <div class="layui-inline">
 	        <label class="layui-form-label">入驻人数：</label>
 	        <div class="layui-input-inline">
-	  		<div class="j-words-border">12</div> <!-- 此处为静态需要绑定-->
+	  		<div class="j-words-border"></div> 
 	        </div>
 	      </div>
-	  </div>
+	  </div> -->
 	 <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">面积：</label>
@@ -168,13 +155,24 @@
 							 return '请选择门禁设备';
 				 }
 			  }, */
-				choiceroute: function () {
-				   if ($("input[name='door_ids[]']:checked").length == 0) {
-						 return '请选择路径门禁';
-				   } 
+				// choiceroute: function () {
+				//    if ($("input[name='door_ids[]']:checked").length == 0) {
+				// 		 return '请选择路径门禁';
+				//    } 
 				  
-				}
+				// }
 					
+		});
+		 var catIns1 = selectN({
+		  //元素容器【必填】
+		  elem: '#ban_floor'
+		  ,search:[false,true]
+		  //候选数据【必填】
+		  ,data: {:json_encode($banFloors)}
+		  //设置了长度
+		  //,width:null
+		  //默认值
+		  ,selected: [{$data_info['ban_id']},{$data_info['floor_number']}] 
 		});
 		//场地图片
 		upload.render({
@@ -221,25 +219,34 @@
 			console.log('被选中的楼层id：'+seletedFloorNumber);
 		}
 		
+    var formData1 = '{$data_info['facility_ids']}';
+    if(formData1){
+      var strs1 = formData1.split("|"); 
+      var seletedFacilityIDS = strs1.filter(function(s){
+        return s && s.trim();
+      }); 
+      console.log('被选中的门禁设备id：'+seletedFacilityIDS);
+    }
 		//console.log(formData);
 		//多选标签-基本配置
-		var tagIns1 = selectM({
-		  //元素容器【必填】
-		  elem: '#floor_number'
-		  //候选数据【必填】
-		  ,data: tagData
-		  ,selected: seletedFloorNumber
-		  //,max:10
-		  ,width:400
-		  //添加验证
-		  ,verify:'required'      
-		}); 
+		// var tagIns1 = selectM({
+		//   //元素容器【必填】
+		//   elem: '#floor_number'
+		//   //候选数据【必填】
+		//   ,data: tagData
+		//   ,selected: seletedFloorNumber
+		//   //,max:10
+		//   ,width:400
+		//   //添加验证
+		//   ,verify:'required'      
+		// }); 
 		//多选标签-门禁设备
 		var tagIns2 = selectM({
 		  //元素容器【必填】
-		  elem: '#door_equipment'
+		  elem: '#facility_ids'
 		  //候选数据【必填】
 		  ,data: doorData
+		  ,selected: seletedFacilityIDS
 		  //,max:10
 		  ,width:400
 		  //添加验证

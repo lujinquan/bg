@@ -1,15 +1,14 @@
 <?php
 
 // +----------------------------------------------------------------------
-// | 基于ThinkPHP5开发
+// | 基础框架永久免费开源
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2021 http://www.mylucas.com.cn
 // +----------------------------------------------------------------------
-// | 基础框架永久免费开源
+// | Author: Lucas <598936602@qq.com>
 // +----------------------------------------------------------------------
-// | Author: Lucas <598936602@qq.com>，开发者QQ群：*
+// | Motto: There is only one kind of failure in the world is to give up .
 // +----------------------------------------------------------------------
-
 
 namespace app\serve\admin;
 
@@ -26,9 +25,6 @@ class Activity extends Admin
     protected function initialize()
     {
         parent::initialize();
-
-        // $banArr = BanModel::where([['status','eq',1],['project_id','eq',PROJECT_ID]])->field('ban_id,ban_name')->select();
-        // $this->assign('banArr',$banArr);
     }
 
     public function index()
@@ -63,12 +59,9 @@ class Activity extends Admin
             $ActivityModel = new ActivityModel;
             $data['activity_cuid'] = ADMIN_ID;
             $data['project_id'] = PROJECT_ID;
-            //$data['ctime'] = time();
             $data['activity_content'] = htmlspecialchars($data['activity_content']);
             if(isset($data['file'])){ //附件
                 $data['activity_imgs'] = $data['file'];
-                // $AnnexModel = new AnnexModel;
-                // $AnnexModel->updateAnnexEtime($data['file']);
             }
             // 入库
             if (!$ActivityModel->allowField(true)->create($data)) {
@@ -116,6 +109,53 @@ class Activity extends Admin
         return $this->fetch();
     }
 
+   /**
+    * 2020-02-19 19:55:15
+    * ============================================================================
+    * xxxx管理系统V1.0 
+    * 版权所有 2006-2017 xxx有限公司，并保留所有权利
+    * 官方网址: http://www.xxx.com
+    * ============================================================================
+    * @author: Lucas 
+    * @createTime: $1
+    * $Last update: 2017-3-14
+   */
+  
+   /**
+    * $2
+    * =====================================
+    * @author  Lucas 
+    * email:   598936602@qq.com 
+    * Website  address:  www.mylucas.com.cn
+    * =====================================
+    * 创建时间: $1
+    * @return  返回值  $3
+    * @version 版本  1.0
+    */
+
+   /**
+    * 
+    * =====================================
+    * @author  Lucas 
+    * email:   598936602@qq.com 
+    * Website  address:  www.mylucas.com.cn
+    * =====================================
+    * 创建时间: 2020-02-19 20:25:13
+    * @return  返回值  
+    * @version 版本  1.0
+    */
+   
+   /**
+    * 
+    * =====================================
+    * @author  Lucas 
+    * email:   598936602@qq.com 
+    * Website  address:  www.mylucas.com.cn
+    * =====================================
+    * 创建时间: 2020-02-19 20:29:59 <-- 这里输入 ctrl + shift + . 自动生成当前时间戳
+    * @return  返回值  
+    * @version 版本  1.0
+    */
    
 
     /**
@@ -134,7 +174,7 @@ class Activity extends Admin
     }
 
     /**
-     * 删除活动
+     * 删除活动【假删】
      * @author Lucas <598936602@qq.com>
      * @return mixed
      */

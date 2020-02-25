@@ -21,7 +21,7 @@ class Rest extends Model
     public function setFacilityIdsAttr($value)
     {
         if (empty($value)) return '';
-        return '|'.implode('|',$value).'|';
+        return '|'.str_replace(',', '|', $value).'|';
     }
 
     public function setDoorIdsAttr($value)
@@ -56,7 +56,7 @@ class Rest extends Model
         }
         // 检索楼层
         if(isset($data['floor_number']) && $data['floor_number']){
-            $where[] = ['a.floor_number','like','%|'.$data['floor_number'].'|%'];
+            $where[] = ['a.floor_number','eq',$data['floor_number']];
         }
         $where[] = ['a.status','eq',1];
         $where[] = ['b.project_id','eq',PROJECT_ID];

@@ -21,7 +21,7 @@ class Meeting extends Model
     public function setFacilityIdsAttr($value)
     {
         if (empty($value)) return '';
-        return '|'.implode('|',$value).'|';
+        return '|'.str_replace(',', '|', $value).'|';
     }
 
     public function setDoorIdsAttr($value)

@@ -16,6 +16,7 @@ namespace app\serve\admin;
 use think\Db;
 use app\system\admin\Admin;
 use app\space\model\Ban as BanModel;
+use app\system\model\SystemTidings as SystemTidingsModel;
 //use app\serve\model\Chat as ChatModel;
 use app\serve\model\Repair as RepairModel;
 use app\project\model\Member as MemberModel;
@@ -34,6 +35,10 @@ class Repair extends Admin
 
     public function index()
     { 
+        //获取报事报修推送消息
+        $SystemTidingsModel = new SystemTidingsModel;
+        $tiList = $SystemTidingsModel->getTiList($ti_type = 2);
+        
         if ($this->request->isAjax()) {
             $page = input('param.page/d', 1);
             $limit = input('param.limit/d', 10);
@@ -49,6 +54,7 @@ class Repair extends Admin
             return json($data);
 
         }
+        $this->assign('tiList',$tiList);
     	return $this->fetch();
     }
 
@@ -136,6 +142,13 @@ class Repair extends Admin
             }
         }
         //halt($repairArr);
+        
+        //标记推送的消息为已读
+        $ti_id = input('ti_id');
+        if($ti_id){
+            $SystemTidingsModel = new SystemTidingsModel;
+            $tiList = $SystemTidingsModel->tabToAlreadyRead($ti_id);                               
+        }
         
         //halt($memberInfo);
         // 获取会员信息 

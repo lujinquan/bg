@@ -13,6 +13,13 @@
 		</div>
 		
 	</div>
+	<div class="layui-row j-from-box layui-col-space30">
+		<div class="layui-col-md12">
+			<label class="layui-form-label"><i class="red">*</i>楼宇、楼层</label>
+			<div class="j-input-inline" id="ban_floor">			
+		    </div>
+		</div>
+	</div>
     <div class="layui-row j-from-box layui-col-space30">
     	<div class="layui-col-md4">
 			<label class="j-form-label"><i class="red">*</i>工位区类型：</label>
@@ -29,6 +36,9 @@
 				<input type="text" name="site_num" value="{$data_info['site_num']}" placeholder="请输入" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
+		
+	</div>
+	<div class="layui-row j-from-box layui-col-space30">
 		<div class="layui-col-md4">
 			<label class="j-form-label">工位区面积：</label>
 			<div class="j-input-inline">
@@ -44,11 +54,14 @@
 				<input type="text" name="workbay_group_remarks" value="{$data_info['site_group_remark']}" placeholder="备注描述..." lay-verType="tips" autocomplete="off" class="layui-input">
 			</div>
 		</div>
+		
+	</div>
+	<div class="layui-row j-from-box layui-col-space30">
 		<div class="layui-col-md4">
 			<label class="j-form-label">入驻人数：</label>
 			<div class="j-input-inline">
 				<div class="j-words-border">
-					12
+					
 				</div>
 			</div>
 		</div>
@@ -72,6 +85,8 @@
 			</div>
 		</div>
 	</div>
+	<!-- 联合工位区才可以添加工位 -->
+	{if condition="$data_info['site_group_type'] == 1"}
     <div class="layui-row j-from-box layui-col-space30 e-house j-workbays">
     	<div class="layui-col-md12">
     		<label class="j-form-label">工位：</label>
@@ -93,10 +108,10 @@
 						<input type="text" name="sites[]" value="{$v['site_name']}" autocomplete="off"   placeholder="请输入工位名称" class="layui-input j-explain-input">
 						<b class="j-explain-name hide">未租</b>
 						<i class="icon-cancel j-del"></i>
-						<div  class="j-hostile hide">
+						<!-- <div  class="j-hostile hide">
 							<span  class="j-type"></span>
 							<span  class="j-name"></span>
-						</div>
+						</div> -->
 					</li>
 					{/if}
 					{/volist}
@@ -107,6 +122,7 @@
     		</div>
     	</div>
     </div>
+    {/if}
 	<div class="layui-row j-from-box layui-col-space30">
 		<div class="layui-col-md12">
 			<label class="j-form-label">工位区图片：</label>
@@ -130,13 +146,13 @@
 		</div>
 	</div>
      {:token()}
-     <div class="layui-row j-from-box layui-col-space30">
+     <!-- <div class="layui-row j-from-box layui-col-space30">
 		<div class="layui-form-item">
 			<label class="layui-form-label">楼宇、楼层</label>
 			<div id="ban_floor">			
 		    </div>
 		</div>
-	</div>
+	</div> -->
      <input type="hidden" name="site_group_id" value="{$data_info['site_group_id']}">
     <div class="layui-form-item j-top-formmargin">
         <div class="layui-input-block">
@@ -176,10 +192,7 @@
 			              <input type="text" name="sites[]" value="" autocomplete="off"  placeholder="请输入工位名称" class="layui-input">
 						  <b class="j-explain-name hide">未租</b>
 						  <i class="icon-cancel j-del"></i>
-						  <div  class="j-hostile hide">
-							<span  class="j-type"></span>
-							<span  class="j-name"></span>
-						  </div>
+						  
 						</li>`;
 		    $('.j-add').parent().before(html);
 		});

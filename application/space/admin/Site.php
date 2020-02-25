@@ -126,6 +126,9 @@ class Site extends Admin
             if($result !== true) {
                 return $this->error($result);
             }
+            $ban_floors = explode(',',$data['ban_floor']);
+            $data['ban_id'] = $ban_floors[0];
+            $data['floor_number'] = $ban_floors[1];
             // 附件
             if(isset($data['file'])){ 
                 $data['imgs'] = implode(',',$data['file']);
@@ -133,6 +136,16 @@ class Site extends Admin
             }else{
                 $data['imgs'] = '';
             }
+            
+            // 统计工位数
+            if(!isset($data['site_num'])){
+                if(isset($data['sites']) && $data['sites']){
+                    $data['site_num'] = count($data['sites']);
+                }else{
+                    $data['site_num'] = 0;
+                }
+            }
+            
             $SiteGroupModel = new SiteGroupModel();
             // 入库
             if (!$SiteGroupModel->allowField(true)->update($data)) {
@@ -153,6 +166,7 @@ class Site extends Admin
         }
         $id = input('param.id/d');
         $row = SiteGroupModel::get($id)->toArray();
+        //halt($row);
         $row['imgs'] = AnnexModel::changeFormat($row['imgs']);
         //$row['sites'] = SiteModel::where([['site_group_id','eq',$row['site_group_id']]])->column('site_id,site_name');
         $sites = SiteModel::where([['site_group_id','eq',$row['site_group_id']]])->field('site_id,site_name')->select()->toArray();
@@ -196,9 +210,10 @@ class Site extends Admin
                 $site['type'] = $shackSites[$site['site_id']]['type'];
                 $site['group_name'] = $shackSites[$site['site_id']]['group_name'];
             }else{
-                $site['type'] = 0;
+                $site['type'] = 0; //表示未被入驻
             }
         }
+
         //dump($sites);halt($shackArr);
         $BanModel = new BanModel;
         $banFloors = $BanModel->banFloors();
@@ -213,7 +228,7 @@ class Site extends Admin
     {
         $ids = $this->request->param('id/a'); 
         // 删除工位区前提条件： 1、无个人或企业入驻，2、
-        $res = SiteGroupModel::where([['ban_id','in',$ids]])->update(['status'=>0]);
+        $res = SiteGroupModel::where([['site_group_id','in',$ids]])->update(['status'=>0]);
         if($res){
             $this->success('删除成功');
         }else{

@@ -44,19 +44,27 @@ class Shack extends Admin
             $data = [];
             $fields = 'b.firm_name,b.firm_coupon_num,c.member_name,from_unixtime(a.shack_start_time,\'%Y-%m-%d\') shack_start_time,from_unixtime(a.shack_end_time,\'%Y-%m-%d\') shack_end_time,a.shack_status,a.shack_type,a.id,from_unixtime(a.ctime) ctime,d.nick';
             $data = [];
-            $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->join('system_user d','a.cuid = d.id','left')->where($where)->field($fields)->page($page)->order('a.ctime desc')->limit($limit)->select();
-            foreach ($temps as $k => &$v) {
+            $temps = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->join('system_user d','a.cuid = d.id','left')->where($where)->field($fields)->order('a.ctime desc')->limit($limit)->select();
+            $searchData = [];
+            foreach ($temps as $k => $v) {
                 if($v['member_name']){
                     $v['group_name'] = $v['member_name'];
                 }
                 if($v['firm_name']){
                     $v['group_name'] = $v['firm_name'];
                 }
-                //$v['shack_type'] = explode('|',$v['shack_type']);
+                if(isset($getData['group_name']) && $getData['group_name']){
+                    if(strpos($v['group_name'], $getData['group_name']) === false){
+                        continue;
+                    }
+                    $searchData[] = $v;
+                }else{
+                    $searchData[] = $v;  
+                }
             }
-            $data['data']  = array_slice($temps, ($page- 1) * $limit, $limit);
+            $data['data']  = array_slice($searchData, ($page- 1) * $limit, $limit);
             //halt($where);
-            $data['count'] = Db::name('project_shack')->alias('a')->join('member_firm b','a.firm_id = b.firm_id','left')->join('member c','a.member_id = c.member_id','left')->where($where)->count('id');
+            $data['count'] = count($searchData);
             $data['code'] = 0;
             $data['msg'] = '';
             return json($data);
@@ -245,13 +253,13 @@ class Shack extends Admin
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 数据验证
-            // $result = $this->validate($data, 'Shack.add');
-            // if($result !== true) {
-            //     return $this->error($result);
-            // }
-            if(empty($data['shack_start_time']) || empty($data['shack_end_time']) || (strtotime($data['shack_start_time']) >= strtotime($data['shack_end_time']))){
-                return $this->error('请选择正确的入驻时间！');
+            $result = $this->validate($data, 'Shack.'.$data['shack_classify']);
+            if($result !== true) {
+                return $this->error($result);
             }
+            // if(empty($data['shack_start_time']) || empty($data['shack_end_time']) || (strtotime($data['shack_start_time']) >= strtotime($data['shack_end_time']))){
+            //     return $this->error('请选择正确的入驻时间！');
+            // }
             if(isset($data['file'])){ //附件
                 $data['imgs'] = implode(',',$data['file']);
                 $AnnexModel = new AnnexModel;
@@ -282,9 +290,10 @@ class Shack extends Admin
                     'floor' => $data['floor'],
                     'guard' => $data['guard'],
                 ];
-            }else{
-                return $this->error('请设置门禁');
             }
+            // else{
+            //     return $this->error('请设置门禁');
+            // }
             $data['cuid'] = ADMIN_ID;
             $data['shack_type'] = [1]; // 1为承租，数组中可有多个
 

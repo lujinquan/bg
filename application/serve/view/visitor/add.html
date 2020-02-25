@@ -31,7 +31,7 @@
 	     <div class="layui-inline">
 	  	 <label class="layui-form-label"><i class="red">*</i>访问时间：</label>
 	  	 <div class="layui-input-inline">
-	  	   <input type="text" name="coupon_issue_time"  placeholder="请选择时间" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input" id="test2">
+	  	   <input type="text" name="visitor_time"  placeholder="请选择时间" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input" id="test2">
 	  	   <b class="j-explain-name"><i class="layui-icon layui-icon-date"></i></b>
 	  	 </div>
 	     </div>
@@ -40,17 +40,24 @@
         <div class="layui-inline">
           <label class="layui-form-label"><i class="red">*</i>访问对象：</label>
           <div class="layui-input-inline">
-            <select name="ban_id" class="field-cid" lay-verify="required" lay-verType="tips" lay-search="" type="select">
-				<option value="0">请选择</option>
-				<option value="1">对象1</option>
+            <select name="member_id" class="field-cid" lay-verify="required" lay-verType="tips" lay-search="" type="select">
+	            <option value="">请选择</option>
+	            <{volist name="$members" id="vo"}
+	            <option value="{$vo['member_id']}">{$vo['member_name']}</option>
+	            {/volist}
 			</select>
           </div>
         </div>
     </div>
     <div class="layui-form-item layui-col-md6">
           <label class="layui-form-label">访问目的：</label>
-          <div class="layui-input-block">
-            <input type="text" name="visitor_objective"  placeholder="" lay-verType="tips" autocomplete="off" class="layui-input">
+          <div class="layui-input-inline">
+            <select name="visitor_purpose_type" class="field-cid" lay-verify="required" lay-verType="tips" lay-search="" type="select">
+	            <option value="">请选择</option>
+	            <{volist name="params['visitor_purpose_type']" id="vo"}
+	            <option value="{$key}">{$vo}</option>
+	            {/volist}
+			</select>
           </div>
      </div>
     <div class="layui-form-item">

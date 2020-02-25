@@ -12,40 +12,18 @@
           </div>
         </div>
      </div>
-  <div class="layui-form-item">
-      <div class="layui-inline">
-        <label class="layui-form-label"><i class="red">*</i>所属楼宇：</label>
-        <div class="layui-input-inline">
-          <select name="ban_id" lay-verify="required" lay-verType="tips" class="field-cid" type="select">
-              <option value="">请选择</option>
-              {volist name="banArr" id="v"}
-              <option value="{$v['ban_id']}" {if condition="$data_info['ban_id'] == $v['ban_id']"}selected{/if}>{$v['ban_name']}</option>
-              {/volist}
-          </select>
-        </div>
-      </div>
-  </div>
+  
   <!-- <div class="layui-form-item">
         <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
         <div class="layui-input-block" id="floor_number"></div>
   </div> -->
-  <div class="layui-form-item">
-      <div class="layui-inline">
-        <label class="layui-form-label"><i class="red">*</i>所属楼层：</label>
-        <div class="layui-input-inline">
-          <select name="floor_number" class="field-cid" type="select">
-              <option value="">请选择</option>
-              <option value="1"{if condition="$data_info['floor_number'] == 1"}selected{/if}>1楼</option>
-              <option value="2"{if condition="$data_info['floor_number'] == 2"}selected{/if}>2楼</option>
-              <option value="3"{if condition="$data_info['floor_number'] == 3"}selected{/if}>3楼</option>
-              <option value="4"{if condition="$data_info['floor_number'] == 4"}selected{/if}>4楼</option>
-              <option value="5"{if condition="$data_info['floor_number'] == 5"}selected{/if}>5楼</option>
-              <option value="6"{if condition="$data_info['floor_number'] == 6"}selected{/if}>6楼</option>
-              <option value="7"{if condition="$data_info['floor_number'] == 7"}selected{/if}>7楼</option>
-              <option value="8"{if condition="$data_info['floor_number'] == 8"}selected{/if}>8楼</option>
-          </select>
-        </div>
+<div class="layui-row j-from-box layui-col-space30">
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i class="red">*</i>楼宇、楼层</label>
+      <div id="ban_floor">      
       </div>
+
+    </div>
   </div>
   <div class="layui-form-item j-positions-size">
       <div class="layui-inline">
@@ -102,12 +80,8 @@
    <div class="layui-form-item">
        <div class="layui-col-md8">
          <label class="layui-form-label"><i class="red">*</i>门禁设备：</label>
-		 <div class="layui-input-block" id="door_equipment"  lay-verType="tips"></div>
-         <!-- <div class="layui-input-block j-input-facilities">
-			 <input type="checkbox" name="facility_ids[]" value="1" lay-verify="require|choiceone" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|1|') !== false"}checked{/if} title="设备1">
-		    <input type="checkbox" name="facility_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|2|') !== false"}checked{/if} title="设备2">
-		    <input type="checkbox" name="facility_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['facility_ids'],'|3|') !== false"}checked{/if} title="设备3">
-         </div> -->
+		 <div class="layui-input-block" id="facility_ids"  lay-verType="tips"></div>
+        
        </div>
    </div>
    <div class="layui-form-item">
@@ -124,16 +98,9 @@
        <div class="layui-col-md8">
          <label class="layui-form-label">选择设备：</label>
          <div class="layui-input-block j-indent-equipment">
-         <input type="checkbox" name="item_ids[]" value="1" lay-verify="require|equipment" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|1|') !== false"}checked{/if} title="WI-FI">
-         <input type="checkbox" name="item_ids[]" value="2" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|2|') !== false"}checked{/if} title="投影仪">
-         <input type="checkbox" name="item_ids[]" value="3" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|3|') !== false"}checked{/if} title="智能电视">
-         <input type="checkbox" name="item_ids[]" value="4" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|4|') !== false"}checked{/if} title="电脑">
-         <input type="checkbox" name="item_ids[]" value="5" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|5|') !== false"}checked{/if} title="白板">
-         <input type="checkbox" name="item_ids[]" value="6" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|6|') !== false"}checked{/if} title="杯子">
-         <input type="checkbox" name="item_ids[]" value="7" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|7|') !== false"}checked{/if} title="饮水机">
-         <input type="checkbox" name="item_ids[]" value="8" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|8|') !== false"}checked{/if} title="沙发">
-         <input type="checkbox" name="item_ids[]" value="9" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|9|') !== false"}checked{/if} title="卫生间">
-         <input type="checkbox" name="item_ids[]" value="10" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|10|') !== false"}checked{/if} title="远程会议">
+          {volist name="params['item_ids']" id="vo"}
+          <input type="checkbox" name="item_ids[]" value="{$key}" lay-verify="require|equipment" lay-verType="tips" lay-skin="primary" {if condition="strpos($data_info['item_ids'],'|'.$key.'|') !== false"}checked{/if} title="{$vo}">
+          {/volist}
          </div>
        </div>
    </div>
@@ -143,7 +110,7 @@
           <label class="layui-form-label">面积：</label>
           <div class="layui-input-inline">
             <input type="number" name="meet_area" value="{$data_info['meet_area']}" placeholder="请输入面积" lay-vertype="tips" autocomplete="off" class="layui-input j-explain-input">
-      <b class="j-explain-name">m²</b>
+            <b class="j-explain-name">m²</b>
           </div>
         </div>
      </div>
@@ -185,17 +152,17 @@
 					 return '请选择门禁设备';
 		   }
 		}, */
-			choiceroute: function () {
-			   if ($("input[name='door_ids[]']:checked").length == 0) {
-					 return '请选择路径门禁';
-			   } 
+			// choiceroute: function () {
+			//    if ($("input[name='door_ids[]']:checked").length == 0) {
+			// 		 return '请选择路径门禁';
+			//    } 
 			  
-			}/* ,
-			equipment: function () {
-			   if ($("input[name='item_ids[]']:checked").length == 0) {
-					 return '请选择设备';
-			   } 
-			} */,
+			// }/* ,
+			// equipment: function () {
+			//    if ($("input[name='item_ids[]']:checked").length == 0) {
+			// 		 return '请选择设备';
+			//    } 
+			// } ,
 			//验证会议室图片
 			conferenceroom: function () {
 				var img=$.trim($(".j-viewer-img").html());
@@ -258,25 +225,24 @@
       var seletedFacilityIDS = strs1.filter(function(s){
         return s && s.trim();
       }); 
-      console.log('被选中的楼层id：'+seletedFacilityIDS);
+      console.log('被选中的门禁设备id：'+seletedFacilityIDS);
     }
 
-    //多选标签-基本配置
-    var tagIns1 = selectM({
+    var catIns1 = selectN({
       //元素容器【必填】
-      elem: '#floor_number'
+      elem: '#ban_floor'
+      ,search:[false,true]
       //候选数据【必填】
-      ,data: tagData
-      ,selected: seletedFloorNumber
-      //,max:10
-      ,width:400
-      //添加验证
-      ,verify:'required'      
+      ,data: {:json_encode($banFloors)}
+      //设置了长度
+      //,width:null
+      //默认值
+      ,selected: [{$data_info['ban_id']},{$data_info['floor_number']}] 
     }); 
 	//多选标签-门禁设备
 	var tagIns2 = selectM({
 	  //元素容器【必填】
-	  elem: '#door_equipment'
+	  elem: '#facility_ids'
 	  //候选数据【必填】
 	  ,data: doorData
     ,selected: seletedFacilityIDS

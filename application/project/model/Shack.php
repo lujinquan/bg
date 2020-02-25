@@ -49,24 +49,31 @@ class Shack extends Model
         if(!$data){
             $data = request()->param();
         }  
-        // 检索楼宇名称
-        // if(isset($data['ban_name']) && $data['ban_name']){
-        //     $where[] = ['ban_name','like','%'.$data['ban_name'].'%'];
-        // }
+        //检索入驻类型
+        if(isset($data['shack_type']) && $data['shack_type']){
+            $where[] = ['a.shack_type','like','%|'.$data['shack_type'].'|%'];
+        }
         // 检索地址
         // if(isset($data['ban_address']) && $data['ban_address']){
         //     $where[] = ['ban_address','like','%'.$data['ban_address'].'%'];
         // }
         //$where[] = ['shack_status','eq',1];
+        
+        // 检索发布时间
+        if(isset($data['ctime']) && $data['ctime']){
+            $start = strtotime($data['ctime']);
+            $end = strtotime($data['ctime'])+3600*24;
+            $where[] = ['a.ctime','between',[$start,$end]];
+        }
         if(isset($data['group'])){
             if($data['group'] == 'y'){
-                $where[] = ['shack_status','eq',1];
+                $where[] = ['a.shack_status','eq',1];
             }else{
-                $where[] = ['shack_status','eq',0];
+                $where[] = ['a.shack_status','eq',0];
             }
 
         }else{
-            $where[] = ['shack_status','eq',1];
+            $where[] = ['a.shack_status','eq',1];
         }
         
 

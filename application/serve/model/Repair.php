@@ -4,7 +4,6 @@ namespace app\serve\model;
 
 use think\Model;
 use app\project\model\member;
-//use app\project\model\Member as MemberModel;
 use app\system\model\SystemUser as UserModel;
 
 
